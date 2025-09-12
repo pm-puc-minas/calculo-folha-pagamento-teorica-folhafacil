@@ -2,7 +2,3 @@
 
 # Folha-Facil
 Um projeto sobre sistema de gestão de folha de pagamento para um software de gestão de recursos humanos de uma empresa
-## 📂 Documentos do Projeto
-
-- [📄 Cartões CRC (PDF)](https://docs.google.com/document/d/1jECQP8iePNn9iFMzpHQogJ0VfQ9wSnGwTz8_DlcVYts/edit?usp=sharing)
-- [📄 Especificações (PDF)](docs/requisitos/Especificações.pdf)
