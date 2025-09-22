@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+    --color-main-100: oklch(0.7412 0.0586 243.81);
+	--color-main-500: oklch(0.5575 0.0993 245.19);
+	--color-main-700: oklch(0.463 0.0865 245.51);
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	border: none;
+	height: 100%;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

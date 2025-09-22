@@ -1,0 +1,48 @@
+<div class="flex h-screen">
+  <div
+    [ngClass]="isExpanded ? 'w-64' : 'w-16'"
+    class="bg-main-500 text-white flex flex-col transition-all duration-300 ease-in-out"
+  >
+    <div class="flex items-center space-x-4 p-4">
+        <div class="bg-blue-300 text-blue-900 font-bold rounded-md w-8 h-8 flex items-center justify-center">
+            F
+        </div>
+        <span *ngIf="isExpanded" class="font-bold">Folha Fácil</span>
+    </div>
+
+    <nav class="flex-1">
+      <ul>
+        <li class="p-4 md-4" *ngFor="let item of routes">
+          @if(isExpanded){
+            <div>
+              <app-mini-menu-nav
+              [routes]="item">
+              </app-mini-menu-nav>
+            </div>
+          }
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Rodapé -->
+    <div class="flex items-center justify-between p-4">
+      <div *ngIf="isExpanded" class="flex f-row cursor-pointer">
+        <span class="mr-4">Artur.Coelho</span>
+        <mat-icon (click)="logOut()">exit_to_app</mat-icon>
+      </div>
+      <button
+        mat-icon-button
+        (click)="toggleSidebar()"
+        class="cursor-pointer p-2 rounded-md transition"
+      >
+        <mat-icon>{{ isExpanded ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+    
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="flex-1 p-6 w-full">
+    <router-outlet></router-outlet>
+  </div>
+</div>

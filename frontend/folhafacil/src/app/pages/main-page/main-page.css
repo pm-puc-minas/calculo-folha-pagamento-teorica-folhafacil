@@ -1,0 +1,23 @@
+:host{
+    width: 100%;
+    height: 100%;
+}
+
+.example-container {
+  width: 15%;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: #3C79AA;
+}
+
+.example-sidenav {
+    width: 80%;
+    background-color: #3C79AA;
+}

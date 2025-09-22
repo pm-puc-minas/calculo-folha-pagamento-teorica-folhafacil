@@ -1,0 +1,54 @@
+import { Routes } from '@angular/router';
+import { MainPage } from './pages/main-page/main-page';
+import { FuncionariosPage } from './pages/admin/funcionarios-page/funcionarios-page';
+import { FolhaSalarialPage } from './pages/admin/folha-salarial-page/folha-salarial-page';
+import { LoginPage } from './pages/login-page/login-page';
+import { RoleGuard } from './guard/RoleGuard.guard';
+import { HoraExtraPage } from './pages/funcionario/hora-extra-page/hora-extra-page';
+import { NoPermissionPage } from './pages/no-permission-page/no-permission-page';
+
+export const routes: Routes = [
+	{ path: "", redirectTo: "login", pathMatch: "full" },
+	{
+		path: "login",
+		component: LoginPage,
+	},
+	{
+		path: "no-permission",
+		component: NoPermissionPage,
+	},
+	{ 
+		path: "main", 
+		component: MainPage,
+		children: [
+			{
+				path: "admin",
+				children: [
+					{
+						path: "funcionarios",
+						component: FuncionariosPage,
+						canActivate: [RoleGuard],
+						data: { role : 'ADMIN'}
+					},
+					{
+						path: "folha-salarial",
+						component: FolhaSalarialPage,
+						canActivate: [RoleGuard],
+						data: { role : 'ADMIN'}
+					},
+				],
+			},
+			{
+				path: "funcionario",
+				children: [
+					{
+						path: "hora-extra",
+						component: HoraExtraPage,
+						canActivate: [RoleGuard],
+						data: { role : 'USER'}
+					},
+				]
+			}
+		]
+	},
+];

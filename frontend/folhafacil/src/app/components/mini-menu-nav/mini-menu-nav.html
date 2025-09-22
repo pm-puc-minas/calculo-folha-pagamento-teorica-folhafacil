@@ -1,0 +1,29 @@
+<div class="w-56 bg-blue-700 rounded-lg overflow-hidden">
+    <div
+    class="flex items-center justify-between px-4 py-2 bg-main-700 text-white font-bold cursor-pointer"
+    (click)="toggleMenu()"
+    >
+        <span>{{ routes.title }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 transform transition-transform duration-300"
+              [ngClass]="{ 'rotate-180': open }"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            </svg>
+    </div>
+
+    <div *ngIf="open" class="flex flex-col">
+        <a
+        *ngFor="let route of routes.routes"
+        [routerLink]="route.route"
+        routerLinkActive="select"
+        class="px-4 py-2 bg-white text-black cursor-pointer hover:bg-main-100 transition"
+        >
+          {{ route.name }}
+        </a>
+    </div>
+</div>
