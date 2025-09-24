@@ -12,13 +12,13 @@ public class TesteController {
         return "Endpoint público, sem autenticação";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('FF_FOLHA_SALARIAL_LISTAR')")
     @GetMapping("/admin")
     public String adminEndpoint() {
         return "Somente usuários com ROLE_admin podem acessar";
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('FF_HORA_EXTRA_LISTAR')")
     @GetMapping("/user")
     public String userEndpoint() {
         return "Somente usuários com ROLE_user podem acessar";

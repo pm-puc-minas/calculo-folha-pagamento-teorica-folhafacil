@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.4
@@ -7,5 +9,13 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://folha-facil-postgre.postgres.database.azure.com:5432/postgres?sslmode=require
+      KC_DB_USERNAME: folhafaciladm
+      KC_DB_PASSWORD: ff.A0001
     command:
       - start-dev
+      - --http-enabled=true
+      - --http-port=8080
+      - --hostname-strict=false
+    restart: unless-stopped

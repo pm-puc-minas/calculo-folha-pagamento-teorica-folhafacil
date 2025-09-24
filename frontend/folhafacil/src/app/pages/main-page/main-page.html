@@ -27,7 +27,7 @@
     <!-- Rodapé -->
     <div class="flex items-center justify-between p-4">
       <div *ngIf="isExpanded" class="flex f-row cursor-pointer">
-        <span class="mr-4">Artur.Coelho</span>
+        <span class="mr-4">{{ keyclaockService.getFirstName() }}.{{ keyclaockService.getLastName() }}</span>
         <mat-icon (click)="logOut()">exit_to_app</mat-icon>
       </div>
       <button

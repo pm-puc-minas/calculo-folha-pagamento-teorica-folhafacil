@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 export class KeyCloackService {
   private keycloakUrl = 'http://localhost:8081/realms/folha-facil-realm/protocol/openid-connect/token';
   private clientId = 'folha-facil-app'; 
-  private clientSecret = 'VV0eGLbv2roXt6zqydW3BDLzZGau349I'; 
+  private clientSecret = 'xjLWnPHFsMmc61h6ZiBRKZDmuA4yzZTe'; 
   private storageKey = 'access_token';
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -40,10 +40,12 @@ export class KeyCloackService {
   }
 
   getToken(): string | null {
+    if (typeof window === "undefined") return null;
     return localStorage.getItem(this.storageKey);
   }
 
   isAuthenticated(): boolean {
+    console.log(!!this.getToken())
     return !!this.getToken();
   }
 
@@ -66,6 +68,32 @@ export class KeyCloackService {
     return [...realmRoles, ...resourceRoles].includes(role);
   }
 
+  hasRoles(requiredRoles: string[]): boolean {
+    const decoded = this.getDecodedToken();
+    if (!decoded) return false;
+
+    const realmRoles = decoded?.realm_access?.roles || [];
+    const resourceRoles = decoded?.resource_access?.[this.clientId]?.roles || [];
+
+    const userRoles = [...realmRoles, ...resourceRoles];
+
+    return requiredRoles.every(role => userRoles.includes(role));
+  }
+
+  
+  hasAnyRole(requiredRoles: string[]): boolean {
+    const decoded = this.getDecodedToken();
+    if (!decoded) return false;
+
+    const realmRoles = decoded?.realm_access?.roles || [];
+    const resourceRoles = decoded?.resource_access?.[this.clientId]?.roles || [];
+
+    const userRoles = [...realmRoles, ...resourceRoles];
+
+    return requiredRoles.some(role => userRoles.includes(role));
+  }
+
+
   getUserRoles(): string[] {
     const decoded = this.getDecodedToken();
     if (!decoded) return [];
@@ -74,5 +102,20 @@ export class KeyCloackService {
     const resourceRoles = decoded?.resource_access?.[this.clientId]?.roles || [];
 
     return [...realmRoles, ...resourceRoles];
+  }
+
+  getFirstName(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.given_name || null;
+  }
+
+  getLastName(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.family_name || null;
+  }
+
+  getFullName(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.name || null;
   }
 }

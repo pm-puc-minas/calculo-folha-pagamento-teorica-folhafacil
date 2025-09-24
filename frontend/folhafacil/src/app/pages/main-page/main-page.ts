@@ -33,40 +33,48 @@ export class MainPage {
 
   ngOnInit(){
     this.hasAdmin()
-    this.hasUser()
+    this.hasFuncionario()
   }
 
   hasAdmin(){
-    if(this.keyclaockService.hasRole('ADMIN')){
       const route : MiniMenuNavItem = {
         title: "Admin",
-          routes: [
-            {
-              name: 'Funcionarios',
-              route: 'admin/funcionarios'
-            },
-            {
-              name: 'Folha Salarial',
-              route: 'admin/folha-salarial'
-            }
-          ]
+        routes: []
       }
-      this.routes.push(route)
-    }
+
+      if(this.keyclaockService.hasRole("FF_FUNCIONARIOS_LISTAR")){
+          route.routes.push({
+            name: 'Funcionarios',
+            route: 'admin/funcionarios'
+          })
+      }
+
+      if(this.keyclaockService.hasRole("FF_FOLHA_SALARIAL_LISTAR")){
+        route.routes.push({
+          name: 'Folha Salarial',
+          route: 'admin/folha-salarial'
+        })
+      }
+
+      if(route.routes.length > 0){
+        this.routes.push(route)
+      }
   }
 
-  hasUser(){
+  hasFuncionario(){
     const route : MiniMenuNavItem = {
       title: "Funcionario",
-      routes: [
-        {
-          name: 'Hora Extra',
-          route: 'funcionario/hora-extra'
-        },
-      ]
+      routes: []
     }
 
-    if(this.keyclaockService.hasRole('USER')){
+    if(this.keyclaockService.hasRole("FF_HORA_EXTRAS_LISTAR")){
+      route.routes.push({
+        name: 'Hora Extra',
+        route: 'funcionario/hora-extra'
+      })
+    }
+
+    if(route.routes.length > 0){
       this.routes.push(route)
     }
   }

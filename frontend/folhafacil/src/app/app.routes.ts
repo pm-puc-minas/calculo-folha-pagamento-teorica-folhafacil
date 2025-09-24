@@ -3,7 +3,7 @@ import { MainPage } from './pages/main-page/main-page';
 import { FuncionariosPage } from './pages/admin/funcionarios-page/funcionarios-page';
 import { FolhaSalarialPage } from './pages/admin/folha-salarial-page/folha-salarial-page';
 import { LoginPage } from './pages/login-page/login-page';
-import { RoleGuard } from './guard/RoleGuard.guard';
+import { RoleCanMatch, AuthCanMatch } from './auth/auth.guard';
 import { HoraExtraPage } from './pages/funcionario/hora-extra-page/hora-extra-page';
 import { NoPermissionPage } from './pages/no-permission-page/no-permission-page';
 
@@ -12,6 +12,7 @@ export const routes: Routes = [
 	{
 		path: "login",
 		component: LoginPage,
+		canActivate: [AuthCanMatch]
 	},
 	{
 		path: "no-permission",
@@ -20,6 +21,7 @@ export const routes: Routes = [
 	{ 
 		path: "main", 
 		component: MainPage,
+		canActivate:[RoleCanMatch],
 		children: [
 			{
 				path: "admin",
@@ -27,14 +29,14 @@ export const routes: Routes = [
 					{
 						path: "funcionarios",
 						component: FuncionariosPage,
-						canActivate: [RoleGuard],
-						data: { role : 'ADMIN'}
+						canActivate: [RoleCanMatch],
+						data: { role : 'FF_FUNCIONARIOS_LISTAR'}
 					},
 					{
 						path: "folha-salarial",
 						component: FolhaSalarialPage,
-						canActivate: [RoleGuard],
-						data: { role : 'ADMIN'}
+						canActivate: [RoleCanMatch],
+						data: { role : 'FF_FOLHA_SALARIAL_LISTAR'}
 					},
 				],
 			},
@@ -44,8 +46,8 @@ export const routes: Routes = [
 					{
 						path: "hora-extra",
 						component: HoraExtraPage,
-						canActivate: [RoleGuard],
-						data: { role : 'USER'}
+						canActivate: [RoleCanMatch],
+						data: { role : 'FF_HORA_EXTRAS_LISTAR'}
 					},
 				]
 			}
