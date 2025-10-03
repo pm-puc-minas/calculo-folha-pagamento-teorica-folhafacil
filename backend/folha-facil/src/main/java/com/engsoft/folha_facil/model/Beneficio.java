@@ -1,27 +1,20 @@
 package com.engsoft.folha_facil.model;
+import com.engsoft.folha_facil.model.BeneficioTipo;
 
 public class Beneficio {
 
-    private double valeTransporte;
-    private double valeAlimentacao;
-    private double periculosidade;
-    private int grausInsalubridade;
-    private double insalubridade;
-    private double desconto;
-    private float valorDiarioVA;
+    private BeneficioTipo tipo;
+    private double valor;
+  
 
-    public Beneficio() {}
-
-    public Beneficio(double valeTransporte, double valeAlimentacao, double periculosidade, int grausInsalubridade,
-                     double insalubridade, double desconto, float valorDiarioVA) {
-        this.valeTransporte = valeTransporte;
-        this.valeAlimentacao = valeAlimentacao;
-        this.periculosidade = periculosidade;
-        this.grausInsalubridade = grausInsalubridade;
-        this.insalubridade = insalubridade;
-        this.desconto = desconto;
-        this.valorDiarioVA = valorDiarioVA;
+    public Beneficio(BeneficioTipo tipo, double valor){
+        this.tipo = tipo;
+        this.valor = verificarValor(valor);
     }
+    
+    // getters
+    public BeneficioTipo getTipo() {return tipo;}
+    public double getValor() { return valor;}
 
     // Métodos do diagrama (stubs)
     public double calcularPericulosidade(Funcionario funcionario) {
@@ -49,19 +42,13 @@ public class Beneficio {
         return 0.0;
     }
 
-    // Getters e Setters
-    public double getValeTransporte() { return valeTransporte; }
-    public void setValeTransporte(double valeTransporte) { this.valeTransporte = valeTransporte; }
-    public double getValeAlimentacao() { return valeAlimentacao; }
-    public void setValeAlimentacao(double valeAlimentacao) { this.valeAlimentacao = valeAlimentacao; }
-    public double getPericulosidade() { return periculosidade; }
-    public void setPericulosidade(double periculosidade) { this.periculosidade = periculosidade; }
-    public int getGrausInsalubridade() { return grausInsalubridade; }
-    public void setGrausInsalubridade(int grausInsalubridade) { this.grausInsalubridade = grausInsalubridade; }
-    public double getInsalubridade() { return insalubridade; }
-    public void setInsalubridade(double insalubridade) { this.insalubridade = insalubridade; }
-    public double getDesconto() { return desconto; }
-    public void setDesconto(double desconto) { this.desconto = desconto; }
-    public float getValorDiarioVA() { return valorDiarioVA; }
-    public void setValorDiarioVA(float valorDiarioVA) { this.valorDiarioVA = valorDiarioVA; }
+    // Verifcadores
+
+     private double verificarValor(double valor){
+        if(valor <= 0 ){
+            throw new IllegalArgumentException("Benefício está sem valor!");
+        }
+        return valor;
+    }
+
 }

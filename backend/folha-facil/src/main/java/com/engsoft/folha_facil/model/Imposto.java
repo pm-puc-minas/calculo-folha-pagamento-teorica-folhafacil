@@ -1,5 +1,8 @@
 package com.engsoft.folha_facil.model;
 
+import java.util.Date;
+import java.util.List;
+
 public class Imposto {
 
     private double INSS;
@@ -17,16 +20,16 @@ public class Imposto {
     }
 
     // Métodos do diagrama (stubs)
-    public void calcularINSS(Funcionario funcionario) {
-        // TODO: calcular INSS
+    public void calcularINSS(Funcionario f) {
+
+    }
+    
+    public void calcularFGTS(Funcionario f) {
+        
     }
 
-    public void calcularFGTS(Funcionario funcionario) {
-        // TODO: calcular FGTS
-    }
-
-    public void calcularIRRF(Funcionario funcionario) {
-        // TODO: calcular IRRF
+    public void calcularIRRF(Funcionario f) {
+        
     }
 
     public void calcularDescontoTotal() {
@@ -42,4 +45,33 @@ public class Imposto {
     public void setIRRF(double IRRF) { this.IRRF = IRRF; }
     public double getDescontoTotal() { return descontoTotal; }
     public void setDescontoTotal(double descontoTotal) { this.descontoTotal = descontoTotal; }
+
+    //método que verificam os valores.
+    private static double verificaNegativo(String campo, double valor) {
+        if (valor < 0) throw new IllegalArgumentException(campo + " não pode ser negativo");
+        return valor;
+    }
+
+    private static int verificaNegativo(String campo, int valor) {
+        if (valor < 0) throw new IllegalArgumentException(campo + " não pode ser negativo");
+        return valor;
+    }
+
+    private static <E> List<E> verificaListaMinima(String campo, List<E> valor){
+        if(valor == null || valor.size() < 1) throw new IllegalArgumentException(campo + "deve conter ao menos 1 benefício!");
+        return valor;
+    }
+
+    private static String verificaStringVazia(String campo, String valor){
+        if (valor == null || valor.trim().isEmpty()){
+            throw new IllegalArgumentException(campo + " não pode ficar vazio!");
+        }
+        return valor;
+    }
+
+    private static Date verificarDataNula(String campo, Date valor){
+        if (valor == null) throw new IllegalArgumentException(campo + "não pode ser nula");
+        return valor;
+    }
+
 }

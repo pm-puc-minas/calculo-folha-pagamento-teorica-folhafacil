@@ -15,6 +15,10 @@ public class FuncionarioRepository {
     public List<Funcionario> listarTodos(){
         return new ArrayList<>(funcionarios);
     }
+
+    public Funcionario buscarPorCPF(String cpf){
+        return funcionarios.stream().filter(f -> f.getCpf() == cpf).findFirst().orElse(null);
+    }
 }
 
 
