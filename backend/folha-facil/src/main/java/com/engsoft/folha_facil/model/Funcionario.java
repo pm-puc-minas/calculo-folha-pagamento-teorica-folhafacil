@@ -84,7 +84,7 @@ public class Funcionario {
     public void setBairro(String bairro) { this.bairro = verificaStringVazia("bairro", bairro); }
     public void setNumero(int numero) { this.numero = verificaNegativo("numero", numero); }
     public void setEmail(String email) { this.email = verificaStringVazia("email", email); }
-    
+
     public void setPlanoBeneficios(List<Beneficio> planoBeneficios) 
     { this.planoBeneficios = planoBeneficios;}
 

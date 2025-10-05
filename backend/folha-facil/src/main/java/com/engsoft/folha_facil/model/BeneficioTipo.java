@@ -1,8 +1,19 @@
 package com.engsoft.folha_facil.model;
 
 public enum BeneficioTipo {
-    VALE_TRANSPORTE,
-    VALE_ALIMENTACAO,
-    PERICULOSIDADE,
-    INSALUBRIDADE
+    VALE_TRANSPORTE(true),
+    VALE_ALIMENTACAO(false),
+    PERICULOSIDADE(true),
+    INSALUBRIDADE(true);
+    
+
+    private final boolean monetario;
+
+    BeneficioTipo(boolean monetario){
+        this.monetario = monetario;
+    }   
+
+    public boolean isMonetario(){
+        return monetario;
+    }
 }
