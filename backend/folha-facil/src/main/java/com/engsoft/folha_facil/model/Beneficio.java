@@ -5,41 +5,22 @@ public class Beneficio {
 
     private BeneficioTipo tipo;
     private double valor;
+    private double desconto;
   
 
-    public Beneficio(BeneficioTipo tipo, double valor){
+    public Beneficio(BeneficioTipo tipo, double valor, double desconto){
         this.tipo = tipo;
         this.valor = verificarValor(valor);
+        this.desconto = verificarValor(desconto);
     }
     
     // getters
     public BeneficioTipo getTipo() {return tipo;}
     public double getValor() { return valor;}
+    public double getDesconto() {return desconto;}
 
-    // Métodos do diagrama (stubs)
-    public double calcularPericulosidade(Funcionario funcionario) {
-        // TODO: calcular periculosidade
-        return 0.0;
-    }
-
-    public double calcularInsalubridade(int grausInsalubridade, Funcionario funcionario) {
-        // TODO: calcular insalubridade
-        return 0.0;
-    }
-
-    public float descontoBeneficios() {
-        // TODO: calcular desconto total de benefícios
-        return 0f;
-    }
-
-    public double calcularValeTransporte(Funcionario funcionario) {
-        // TODO: calcular vale transporte
-        return 0.0;
-    }
-
-    public double calcularValeAlimentacao(Funcionario funcionario) {
-        // TODO: calcular vale alimentação
-        return 0.0;
+    public void setDesconto(double desconto) {
+        this.desconto = desconto;
     }
 
     // Verifcadores

@@ -1,3 +1,16 @@
 
 
 1 - Atualizar o UML, agora tem o Beneficio no ENUM e também o Auth para logar no sistema! arumar as classes também!
+
+
+
+
+   public Beneficio calcularValeAlimentacao(Funcionario funcionario, int mes, int ano) {
+        boolean trabalhaSabado = funcionario.trabalhaSabado(); // pode vir do cargo, contrato, etc.
+        int diasUteis = funcionarioService.calcularDiasUteis(mes, ano, trabalhaSabado);
+
+        double valorDiario = 25.0; // exemplo
+        double valorTotal = diasUteis * valorDiario;
+
+        return new Beneficio(BeneficioTipo.VALE_ALIMENTACAO, valorTotal, 0.0);
+    } Tirar esse boolean e colocar direto como atributo no método!

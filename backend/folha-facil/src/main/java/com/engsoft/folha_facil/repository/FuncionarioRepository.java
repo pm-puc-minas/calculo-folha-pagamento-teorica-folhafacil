@@ -8,17 +8,6 @@ public class FuncionarioRepository {
     
     private List<Funcionario> funcionarios = new ArrayList<>();
 
-    public void salvar(Funcionario f){
-        funcionarios.add(f);
-    }
-
-    public List<Funcionario> listarTodos(){
-        return new ArrayList<>(funcionarios);
-    }
-
-    public Funcionario buscarPorCPF(String cpf){
-        return funcionarios.stream().filter(f -> f.getCpf() == cpf).findFirst().orElse(null);
-    }
 }
 
 

@@ -19,6 +19,7 @@ public class Funcionario {
     private Date dataAdmissao;
     private double salarioBase;
     private int horasSemanais;
+    private int diasTrabalhadosMes;
     private Beneficio valeTransporte;
     private List<Beneficio> planoBeneficios = new ArrayList<>();
     private int numDependentes;
@@ -27,7 +28,7 @@ public class Funcionario {
     public Funcionario(String nome, String cpf, String cargo, String telefone,
                        String rua, String bairro, int numero, String email,
                        Date dataNascimento, Date dataAdmissao, double salarioBase,
-                       int horasSemanais, double valorValeTransporte,
+                       int horasSemanais, double valorValeTransporte, double desconto,
                        List<Beneficio> planoBeneficios, int numDependentes,
                        double pensaoAlimenticia) {
 
@@ -48,9 +49,9 @@ public class Funcionario {
         this.horasSemanais = verificaNegativo("horasSemanais", horasSemanais);
 
         // Benefícios
-        this.valeTransporte = new Beneficio(BeneficioTipo.VALE_TRANSPORTE, valorValeTransporte);
+        this.valeTransporte = new Beneficio(BeneficioTipo.VALE_TRANSPORTE, valorValeTransporte,desconto);
 
-        this.planoBeneficios = verificaListaMinima("planoBeneficio", planoBeneficios);
+        this.planoBeneficios = planoBeneficios;
 
         // Campos opcionais
         this.numDependentes = numDependentes;
@@ -85,7 +86,7 @@ public class Funcionario {
     public void setEmail(String email) { this.email = verificaStringVazia("email", email); }
     
     public void setPlanoBeneficios(List<Beneficio> planoBeneficios) 
-    { this.planoBeneficios = verificaListaMinima("palnoBenefício", planoBeneficios); }
+    { this.planoBeneficios = planoBeneficios;}
 
 
     public void setSalarioBase(double salarioBase){this.salarioBase = verificaNegativo("SalarioBase", salarioBase);}
@@ -107,10 +108,6 @@ public class Funcionario {
         return valor;
     }
 
-    private static <E> List<E> verificaListaMinima(String campo, List<E> valor){
-        if(valor == null || valor.size() < 1) throw new IllegalArgumentException(campo + "deve conter ao menos 1 benefício!");
-        return valor;
-    }
 
     private static String verificaStringVazia(String campo, String valor){
         if (valor == null || valor.trim().isEmpty()){
