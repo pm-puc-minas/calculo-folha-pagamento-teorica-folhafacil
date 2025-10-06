@@ -51,7 +51,7 @@ public class Funcionario {
         // Benefícios
         this.valeTransporte = new Beneficio(BeneficioTipo.VALE_TRANSPORTE, valorValeTransporte,desconto);
 
-        this.planoBeneficios = planoBeneficios;
+        this.planoBeneficios = (planoBeneficios != null) ? planoBeneficios : new ArrayList<>();
 
         // Campos opcionais
         this.numDependentes = numDependentes;
@@ -85,6 +85,8 @@ public class Funcionario {
     public void setNumero(int numero) { this.numero = verificaNegativo("numero", numero); }
     public void setEmail(String email) { this.email = verificaStringVazia("email", email); }
 
+    public void setValeTransporte(Beneficio valeTransporte) {
+    this.valeTransporte = valeTransporte;}
     public void setPlanoBeneficios(List<Beneficio> planoBeneficios) 
     { this.planoBeneficios = planoBeneficios;}
 
