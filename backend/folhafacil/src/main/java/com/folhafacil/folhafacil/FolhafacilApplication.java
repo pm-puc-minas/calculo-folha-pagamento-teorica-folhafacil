@@ -9,5 +9,4 @@ public class FolhafacilApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FolhafacilApplication.class, args);
 	}
-
 }
