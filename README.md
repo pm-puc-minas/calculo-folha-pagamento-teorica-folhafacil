@@ -1,7 +1,7 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=20401669&assignment_repo_type=AssignmentRepo)
 
 ```markdown
-# Folha-Fácil
+# Folha-Fácil 
 
 Sistema de apoio para cálculo de folha de pagamento — implementação em Java, com backend modularizado, dados de exemplo e testes automatizados. Este README documenta o que será entregue na 2ª sprint e contém todas as instruções e evidências que a disciplina exige.
 
@@ -80,7 +80,34 @@ Recomendações de cobertura (já implementadas/para verificação):
 - Não subir dados reais dos funcionários (use o funcionarios.json de exemplo ou anonimizado).
 - Se solicitado, gerar JavaDoc e anexar link/artefato.
 
-9. Créditos   
+9. Arquitetura e Modularização  
+A aplicação segue o padrão de arquitetura em camadas, visando separação de responsabilidades e fácil manutenção.  
+- **Camada Model:** contém as classes que representam o domínio da aplicação (Funcionário, Contrato, Provento, Desconto).  
+- **Camada Service:** contém as regras de negócio e serviços de cálculo (interfaces e implementações concretas).  
+- **Camada Core/Abstract:** contém classes abstratas e utilitárias que concentram comportamentos comuns entre diferentes tipos de funcionários.  
+- **Camada Test:** responsável por garantir a qualidade do código através de testes unitários automatizados.  
+
+Essa estrutura modular facilita futuras expansões, como integração com banco de dados ou criação de uma API REST.
+
+---
+
+10. Design Patterns Utilizados  
+Para garantir extensibilidade e reutilização de código, o projeto faz uso de alguns padrões de projeto (Design Patterns):  
+- **Strategy:** utilizado no cálculo da folha para permitir múltiplas estratégias de cálculo conforme o tipo de funcionário.  
+- **Template Method:** aplicado nas classes abstratas que definem etapas padrão para o cálculo de proventos e descontos.  
+- **Factory Method:** usado para criar instâncias de funcionários com base em seu tipo de vínculo (CLT, PJ, Temporário).  
+
+Esses padrões reforçam os princípios de POO e tornam o sistema mais flexível e sustentável a longo prazo.
+
+---
+
+11. Tratamento de Exceções e Validações  
+O sistema implementa um tratamento de exceções robusto para garantir execução segura:  
+- **Exceções tratadas:** erros de leitura de arquivo JSON, campos ausentes ou inválidos, formatos incorretos e valores fora dos limites esperados.  
+- **Validações:** antes do cálculo da folha, o sistema valida dados obrigatórios como nome, cargo, tipo de contrato e salário base.  
+- **Logs:** os erros e avisos são registrados em console (ou arquivo, futuramente), facilitando a depuração e manutenção.
+
+12. Créditos   
 - Contribuidores:
   - Marcos de Oliveira Antunes
   - Matheus Henrique Tavares Malta
