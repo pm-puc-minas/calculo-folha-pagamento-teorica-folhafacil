@@ -1,21 +1,33 @@
 package com.engsoft.folha_facil.repository;
 
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.model.FolhaPagamento;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Date;
+
 public class FolhaPagamentoRepository {
-    private List<FolhaPagamento> folhas = new ArrayList<>();
+    private static final String FILE_PATH = "folhas_pagamento.json";
+    private static final Gson gson = new Gson();
     
-    public void salvar(FolhaPagamento folha){
-        folhas.add(folha);
+    public List<FolhaPagamento> findAll(){
+        try(Reader reader = new FileReader(FILE_PATH)){
+            List<FolhaPagamento> list = gson.fromJson(reader, new TypeToken<List<FolhaPagamento>>(){}.getType());
+            return (list != null) ? list : new ArrayList();
+        }
+        catch (Exception e){
+            return new ArrayList();
+        }
     }
 
-    public List<FolhaPagamento> listarTodas(){
-        return new ArrayList<>(folhas);
+    public void save(FolhaPagamento folha){
+        Boolean
     }
+
 
     public List<FolhaPagamento> buscarPorFuncionario(Funcionario funcionario){
         return folhas.stream().filter(f -> f.getFuncionario().equals(funcionario)).collect(Collectors.toList());

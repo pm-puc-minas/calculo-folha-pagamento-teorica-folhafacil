@@ -12,7 +12,7 @@ public class ImpostoService {
     }
 
     public Imposto calcularImpostos(String funcionario){
-        Funcionario f = funcionarioRepository.buscarPorCPF(funcionario);
+        Funcionario f = funcionarioRepository.findByCpf(funcionario);
         if(f == null){
             throw new IllegalArgumentException("Funcionario do CPF " + funcionario + "não foi encontrado.");
         }

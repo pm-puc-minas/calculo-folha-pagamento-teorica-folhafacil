@@ -3,6 +3,9 @@ import com.engsoft.folha_facil.model.BeneficioTipo;
 
 public class Beneficio {
 
+
+    private Long id;
+
     private BeneficioTipo tipo;
     private double valor;
     private double desconto;
@@ -11,10 +14,13 @@ public class Beneficio {
     public Beneficio(BeneficioTipo tipo, double valor, double desconto){
         this.tipo = tipo;
         this.valor = verificarValor(valor);
-        this.desconto = verificarValor(desconto);
+        this.desconto = desconto;
     }
     
     // getters
+
+    public Long getId() { return id; }
+
     public BeneficioTipo getTipo() {return tipo;}
     public double getValor() { return valor;}
     public double getDesconto() {return desconto;}

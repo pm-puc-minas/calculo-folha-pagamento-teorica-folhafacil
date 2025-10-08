@@ -5,6 +5,8 @@ import java.util.List;
 
 public class DepartamentoRH {
 
+    private Long id;
+
     private List<Funcionario> funcionarios = new ArrayList<>();
     private List<Beneficio> beneficios = new ArrayList<>();
     private FolhaPagamento folhaPagamento;
@@ -19,59 +21,10 @@ public class DepartamentoRH {
         this.folhaPagamento = folhaPagamento;
         if (impostos != null) this.impostos = impostos;
     }
-
-    // Métodos do diagrama (stubs)
-    public void controlarBeneficios() {
-        // TODO: lógica de controle
-    }
-
-    public void controlarFolhaPagamento() {
-        // TODO: lógica de controle
-    }
-
-    public String gerarRelatorioConsolidado() {
-        // TODO: gerar relatório
-        return "";
-    }
-
-    public void cadastrarFuncionario(Funcionario funcionario) {
-        // TODO: cadastrar
-    }
-
-    public void alterarFuncionario(Funcionario funcionario) {
-        // TODO: alterar
-    }
-
-    public void excluirFuncionario(Funcionario funcionario) {
-        // TODO: excluir
-    }
-
-    public void cadastrarBeneficio(Beneficio beneficio) {
-        // TODO: cadastrar
-    }
-
-    public void alterarBeneficio(Beneficio beneficio) {
-        // TODO: alterar
-    }
-
-    public void excluirBeneficio(Beneficio beneficio) {
-        // TODO: excluir
-    }
-
-    public void revisarFolhaPagamento(FolhaPagamento folha) {
-        // TODO: revisar
-    }
-
-    public void aprovarFolhaPagamento(FolhaPagamento folha) {
-        // TODO: aprovar
-    }
-
-    public boolean validarConformidadeLegal() {
-        // TODO: validações legais
-        return true;
-    }
-
     // Getters e Setters
+    
+    public Long getId() { return id; }
+
     public List<Funcionario> getFuncionarios() { return funcionarios; }
     public void setFuncionarios(List<Funcionario> funcionarios) { this.funcionarios = funcionarios; }
     public List<Beneficio> getBeneficios() { return beneficios; }
