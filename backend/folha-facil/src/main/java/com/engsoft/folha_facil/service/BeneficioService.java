@@ -4,6 +4,8 @@ import com.engsoft.folha_facil.model.Beneficio;
 import com.engsoft.folha_facil.model.BeneficioTipo;
 import com.engsoft.folha_facil.model.Funcionario;
 
+import java.util.*;
+
 
 public class BeneficioService {
 
@@ -21,6 +23,22 @@ public class BeneficioService {
         return beneficio;
     }
      // Métodos do diagrama (stubs)
+
+    public void removerBeneficio(Funcionario funcionario, BeneficioTipo tipo){
+        if(funcionario == null) throw new IllegalArgumentException("Funcionário nuo");
+        if(tipo == null) throw new IllegalArgumentException("Tipo de benefício nulo");
+        if(tipo == BeneficioTipo.VALE_TRANSPORTE) {
+            throw new IllegalArgumentException("Vale transporte é um benefício obrigatório");
+        }
+        
+        boolean removed = funcionario.getPlanoBeneficios()
+                .removeIf(b -> b.getTipo() == tipo);
+
+        if(!removed){
+            throw new IllegalArgumentException("Beneficio " + tipo + " Não encontrado!");
+        }
+    }
+    
     public Beneficio calcularPericulosidade(Funcionario funcionario) {
         if(funcionario.getSalarioBase() <= 0)
             throw new IllegalArgumentException("O funcionário precisa de um salario!");

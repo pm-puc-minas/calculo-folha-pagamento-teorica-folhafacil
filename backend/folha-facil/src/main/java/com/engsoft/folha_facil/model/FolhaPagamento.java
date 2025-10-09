@@ -6,6 +6,8 @@ import java.util.List;
 
 public class FolhaPagamento {
 
+    private Long id;
+
     private Funcionario funcionario;
     private double salarioLiquido;
     private Imposto imposto;
@@ -35,6 +37,8 @@ public class FolhaPagamento {
     public List<FolhaPagamento> consultarHistorico() {
         return new ArrayList<>(historicoPagamentos);
     }
+
+    public Long getId() { return id; }
 
     // Getters e Setters
     public Funcionario getFuncionario() { return funcionario; }

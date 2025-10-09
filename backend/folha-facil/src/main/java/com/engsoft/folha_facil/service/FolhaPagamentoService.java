@@ -17,7 +17,7 @@ public class FolhaPagamentoService {
     }
 
     public FolhaPagamento consuFolhaPagamento(FolhaPagamento fp){
-        return repository.listarTodas().stream().filter(f -> f.equals(fp)).findFirst().orElse(null);
+        return repository.findAll().stream().filter(f -> f.equals(fp)).findFirst().orElse(null);
     }
     
     public double consultarDescontos(FolhaPagamento fp){
@@ -43,31 +43,36 @@ public class FolhaPagamentoService {
         double valorHora = salarioBruto/220.0;
         double adicionarHoraExtra = valorHora * 1.5 * fp.getHoraExtra();
 
-        double totalBenficios = 0.0;
+        double totalBeneficios = 0.0;
         if(fp.getBeneficios() != null){
             for(int i = 0; i < fp.getBeneficios().size(); i++){
-                totalBenficios += fp.getBeneficios().get(i).getValor();
+                totalBeneficios += fp.getBeneficios().get(i).getValor();
             }
         }
 
         //calcula salario final
-        double salarioLiquido = salarioBruto - imposto.getDescontoTotal() - descontoFaltas
+        double salarioLiquido = salarioBruto - imposto.getDescontoTotal() - descontoFaltas + adicionarHoraExtra + totalBeneficios;
+
+        fp.setSalarioLiquido(salarioLiquido);
+        fp.setImposto(imposto);
+
+        return salarioLiquido;
     }
 
+
     public List<FolhaPagamento> consultarHistoricoFuncionario(Funcionario funcionario){
-        return repository.buscarPorFuncionario(funcionario);
+        return repository.findByFuncionario(funcionario);
     }
 
     public List<FolhaPagamento> consultarPorCPF(String cpf){
-        return repository.buscarPorCPF(cpf);
+        return repository.findByCpf(cpf);
     }
 
     public List<FolhaPagamento> consutarPorPeriodo(Date inicio, Date fim){
-        return repository.buscarPorPeriodo(inicio ,fim);
+        return repository.findByPeriodo(inicio ,fim);
     }
 
-    public boolean removerFolha(FolhaPagamento fp){
-        return repository.remover(fp);
+    public void removerFolha(long id){
+        repository.delete(id);
     }
-
 }
