@@ -40,17 +40,18 @@ public class ImpostoService {
 
         //calcular IRRF
         double irrf;
+        double baseIRRF = salario - inss;
 
-        if(salario <= 2112.00){
+        if(baseIRRF <= 2112.00){
             irrf = 0.0;
-        }else if(salario <= 2826.65){
-            irrf = salario * 0.075 - 158.40;
-        }else if(salario <= 3751.05){
-            irrf = salario * 0.15 - 370.40;
-        }else if(salario <= 4664.68){
-            irrf = salario * 0.225 - 651.73;
+        }else if(baseIRRF <= 2826.65){
+            irrf = (baseIRRF * 0.075) - 158.40;
+        }else if(baseIRRF <= 3751.05){
+            irrf = (baseIRRF * 0.15) - 370.40;
+        }else if(baseIRRF <= 4664.68){
+            irrf = (baseIRRF * 0.225) - 651.73;
         }else{
-            irrf = salario * 0.275 - 884.96;
+            irrf = (baseIRRF * 0.275) - 884.96;
         }
 
         if(irrf < 0) irrf = 0.0;
