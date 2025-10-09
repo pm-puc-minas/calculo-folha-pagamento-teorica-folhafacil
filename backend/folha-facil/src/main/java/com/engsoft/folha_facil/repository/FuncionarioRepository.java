@@ -6,8 +6,6 @@ import com.engsoft.folha_facil.model.Funcionario;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
-import java.nio.channels.WritableByteChannel;
-import java.util.*;
 
 public class FuncionarioRepository {
     

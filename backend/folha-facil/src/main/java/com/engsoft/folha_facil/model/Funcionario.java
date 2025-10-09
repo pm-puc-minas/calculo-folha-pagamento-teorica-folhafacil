@@ -1,15 +1,5 @@
 package com.engsoft.folha_facil.model;
 
-import com.engsoft.folha_facil.model.*;
-
-import jakarta.annotation.Generated;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

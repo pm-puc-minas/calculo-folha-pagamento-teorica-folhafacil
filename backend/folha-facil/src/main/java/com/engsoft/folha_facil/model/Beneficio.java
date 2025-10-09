@@ -1,5 +1,4 @@
 package com.engsoft.folha_facil.model;
-import com.engsoft.folha_facil.model.BeneficioTipo;
 
 public class Beneficio {
 

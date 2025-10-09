@@ -4,15 +4,12 @@ import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.repository.FuncionarioRepository;
 import com.engsoft.folha_facil.model.*;
 
-import lombok.EqualsAndHashCode.Include;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.*;
 
-import org.springframework.util.unit.DataUnit;
 
 
 public class FuncionarioService {
@@ -30,7 +27,7 @@ public class FuncionarioService {
                                     List<Beneficio> planoBeneficios,
                                     int numDependentes, double pensaoAlimenticia){
 
-        Funcionario existente = funcionarioRepository.findByCpf(cpf);
+        Funcionario existente = FuncionarioRepository.findByCpf(cpf);
              if (existente != null) {
              throw new IllegalArgumentException("Já existe um funcionário cadastrado com este CPF: " + cpf);
         }
@@ -40,35 +37,35 @@ public class FuncionarioService {
                                     valorValeTransporte, 0.0, planoBeneficios,
                                     numDependentes, pensaoAlimenticia);
 
-        funcionarioRepository.save(f);
+        FuncionarioRepository.save(f);
         return f;
     }
 
     // Alterar funcionário   
     public void alterarFuncionario(Funcionario fAtualizado) {
         if (fAtualizado != null && fAtualizado.getId() != null) {
-        funcionarioRepository.save(fAtualizado);
+        FuncionarioRepository.save(fAtualizado);
         }
     }
 
     // Excluir funcionário
     public void excluirFuncionario(Long id) {
-        funcionarioRepository.delete(id); 
+        FuncionarioRepository.delete(id); 
     }
 
     //Listar todos
     public List<Funcionario> listarFuncionarios() {
-        return funcionarioRepository.findAll(); 
+        return FuncionarioRepository.findAll(); 
     }
 
     // Buscar por ID
     public Funcionario buscarFuncionarioPorId(Long id) {
-        return funcionarioRepository.findById(id);
+        return FuncionarioRepository.findById(id);
     }
 
     // Buscar por CPF
     public Funcionario busFuncionarioporCpf(String id){
-        return funcionarioRepository.findByCpf(id);
+        return FuncionarioRepository.findByCpf(id);
     }
 
     public int contarDiasUteis(int mes, int ano, boolean incluirSabado){

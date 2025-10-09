@@ -1,5 +1,7 @@
 package com.engsoft.folha_facil.service;
 
+import com.engsoft.folha_facil.model.Beneficio;
+import com.engsoft.folha_facil.model.BeneficioTipo;
 import com.engsoft.folha_facil.model.FolhaPagamento;
 import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.model.Imposto;
@@ -17,7 +19,7 @@ public class FolhaPagamentoService {
     }
 
     public FolhaPagamento consuFolhaPagamento(FolhaPagamento fp){
-        return repository.findAll().stream().filter(f -> f.equals(fp)).findFirst().orElse(null);
+        return FolhaPagamentoRepository.findAll().stream().filter(f -> f.equals(fp)).findFirst().orElse(null);
     }
     
     public double consultarDescontos(FolhaPagamento fp){
@@ -43,12 +45,11 @@ public class FolhaPagamentoService {
         double valorHora = salarioBruto/220.0;
         double adicionarHoraExtra = valorHora * 1.5 * fp.getHoraExtra();
 
-        double totalBeneficios = 0.0;
-        if(fp.getBeneficios() != null){
-            for(int i = 0; i < fp.getBeneficios().size(); i++){
-                totalBeneficios += fp.getBeneficios().get(i).getValor();
-            }
-        }
+        double totalBeneficios = fp.getBeneficios() == null ? 0.0 :
+            fp.getBeneficios().stream()
+                .filter(b -> b.getTipo() != BeneficioTipo.VALE_TRANSPORTE && b.getTipo() != BeneficioTipo.VALE_ALIMENTACAO)
+                .mapToDouble(Beneficio::getValor)
+                .sum();
 
         //calcula salario final
         double salarioLiquido = salarioBruto - imposto.getDescontoTotal() - descontoFaltas + adicionarHoraExtra + totalBeneficios;
@@ -59,20 +60,19 @@ public class FolhaPagamentoService {
         return salarioLiquido;
     }
 
-
     public List<FolhaPagamento> consultarHistoricoFuncionario(Funcionario funcionario){
-        return repository.findByFuncionario(funcionario);
+        return FolhaPagamentoRepository.findByFuncionario(funcionario);
     }
 
     public List<FolhaPagamento> consultarPorCPF(String cpf){
-        return repository.findByCpf(cpf);
+        return FolhaPagamentoRepository.findByCpf(cpf);
     }
 
     public List<FolhaPagamento> consutarPorPeriodo(Date inicio, Date fim){
-        return repository.findByPeriodo(inicio ,fim);
+        return FolhaPagamentoRepository.findByPeriodo(inicio, fim);
     }
 
     public void removerFolha(long id){
-        repository.delete(id);
+        FolhaPagamentoRepository.delete(id);
     }
 }
