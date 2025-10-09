@@ -1,11 +1,11 @@
-package com.engsoft.folha_facil;
+package com.folhafacil.folhafacil;
 
-import com.engsoft.folha_facil.model.Funcionario;
-import com.engsoft.folha_facil.model.Beneficio;
-import com.engsoft.folha_facil.model.BeneficioTipo;
-import com.engsoft.folha_facil.repository.FuncionarioRepository;
-import com.engsoft.folha_facil.service.BeneficioService;
-import com.engsoft.folha_facil.service.FuncionarioService;
+import com.folhafacil.folhafacil.model.Funcionario;
+import com.folhafacil.folhafacil.model.Beneficio;
+import com.folhafacil.folhafacil.model.BeneficioTipo;
+import com.folhafacil.folhafacil.repository.FuncionarioRepository;
+import com.folhafacil.folhafacil.service.BeneficioService;
+import com.folhafacil.folhafacil.service.FuncionarioService;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.engsoft.folha_facil.model;
+package com.folhafacil.folhafacil.model;
 
 public class Beneficio {
 
