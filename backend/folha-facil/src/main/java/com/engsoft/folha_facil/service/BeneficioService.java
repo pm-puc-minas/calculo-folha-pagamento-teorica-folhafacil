@@ -48,9 +48,9 @@ public class BeneficioService {
     }
 
     public Beneficio calcularInsalubridade(int grausInsalubridade, Funcionario funcionario) {
-        if(grausInsalubridade != 10 || grausInsalubridade != 20 || grausInsalubridade != 40 )
+        if(grausInsalubridade != 10 && grausInsalubridade != 20 && grausInsalubridade != 40 )
             throw new IllegalArgumentException("Valor de grau de insalibridade inválido, deve ser 10,20 ou 40.");
-        double adicional = funcionario.getSalarioBase() * (grausInsalubridade/100);
+        double adicional = funcionario.getSalarioBase() * (grausInsalubridade/100.0);
         return adicionarBeneficio(funcionario, BeneficioTipo.INSALUBRIDADE, adicional, 0.0);
     } 
 
