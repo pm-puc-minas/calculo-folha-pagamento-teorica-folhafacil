@@ -12,20 +12,25 @@ import java.util.Date;
 public class FolhaPagamentoService {
 
     private FolhaPagamentoRepository repository;
-    private ImpostoService impostoService;
+    public ImpostoService impostoService;
 
     public FolhaPagamentoService(FolhaPagamentoRepository repo){
         this.repository = repo;
     }
 
-  public FolhaPagamento gerarFolha(Funcionario funcionario, int mes, int ano) {
-        // Implemente a lógica de geração da folha conforme necessário
-        // Exemplo básico:
-        FolhaPagamento folha = new FolhaPagamento();
-        folha.setFuncionario(funcionario);
-        // Defina outros campos conforme sua lógica de negócio
-        return folha;
+public FolhaPagamento gerarFolha(Funcionario funcionario, int mes, int ano) {
+    FolhaPagamento folha = new FolhaPagamento();
+    folha.setFuncionario(funcionario);
+    folha.setSalarioBruto(funcionario.getSalarioBase());
+    folha.setDiasFaltados(0);
+    folha.setHoraExtra(0); 
+    folha.setBeneficios(funcionario.getPlanoBeneficios());
+    
+    if (impostoService != null) {
+        consultarSalarioLiquido(folha);
     }
+    return folha;
+}
   
 
     public FolhaPagamento consuFolhaPagamento(FolhaPagamento fp){
