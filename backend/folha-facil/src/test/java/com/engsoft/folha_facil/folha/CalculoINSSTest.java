@@ -12,10 +12,10 @@ import java.sql.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculoINSSTest {
+    FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
+    ImpostoService impostoService = new ImpostoService(funcionarioRepository);
     @Test
     void testeCalcularINSSFaixa1() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
         Funcionario f = new Funcionario("João Silva",
             "111.222.333-44",
             "Auxiliar",
@@ -42,8 +42,6 @@ public class CalculoINSSTest {
 
     @Test
     void testeCalcularINSSFaixa2() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
         Funcionario f = new Funcionario("Maria Souza",
             "555.666.777-88",
             "Assistente",
@@ -70,8 +68,6 @@ public class CalculoINSSTest {
 
     @Test
     void testeCalcularINSSFaixa3() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
         Funcionario f = new Funcionario("Carlos Lima",
             "999.888.777-66",
             "Coordenador",
@@ -100,8 +96,6 @@ public class CalculoINSSTest {
 
     @Test
     void testeCalcularINSSFaixa4() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
         Funcionario f = new Funcionario("Ana Paula",
             "333.444.555-66",
             "Gerente",
@@ -131,8 +125,6 @@ public class CalculoINSSTest {
 
     @Test
     void testeCalcularINSSFaixaMaxima() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
         Funcionario f = new Funcionario("Pedro Alves",
             "777.888.999-00",
             "Diretor",

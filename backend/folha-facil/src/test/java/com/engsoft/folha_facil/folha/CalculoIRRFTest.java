@@ -12,7 +12,7 @@ import com.engsoft.folha_facil.repository.FuncionarioRepository;
 import com.engsoft.folha_facil.service.ImpostoService;
 
 public class CalculoIRRFTest {
-        @Test
+    @Test
     void testeCalcularINSSFaixaMaxima() {
         FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
         ImpostoService impostoService = new ImpostoService(funcionarioRepository);
