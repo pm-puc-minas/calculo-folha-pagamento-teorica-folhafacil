@@ -21,40 +21,44 @@ public class ImpostoService {
         double salario = f.getSalarioBase();
 
         //calcular INSS
+        double inss;
         if(salario <= 1412.00){
-            imposto.setINSS(salario * 0.075);
+            inss = salario * 0.075;
         }else if(salario <= 2666.68){
-            imposto.setINSS(salario * 0.09);
+            inss = (1412.00 * 0.075) + ((salario - 1412.00) * 0.09);
         }else if(salario <= 4000.03){
-            imposto.setINSS(salario * 0.12);
-        }else{
-            imposto.setINSS(salario * 0.14);
+            inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((salario - 2666.68) * 0.12);
+        }else if(salario <= 7786.02){
+            inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((salario - 4000.03) * 0.14);
+        }else {
+            inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((7786.02 - 4000.03) * 0.14);
         }
+        imposto.setINSS(inss);
 
         //calcular FGTS
         imposto.setFGTS(salario * 0.08);
 
         //calcular IRRF
-        double IRRF;
+        double irrf;
 
         if(salario <= 2112.00){
-            IRRF = 0.0;
+            irrf = 0.0;
         }else if(salario <= 2826.65){
-            IRRF = salario * 0.075 - 158.40;
+            irrf = salario * 0.075 - 158.40;
         }else if(salario <= 3751.05){
-            IRRF = salario * 0.15 - 370.40;
+            irrf = salario * 0.15 - 370.40;
         }else if(salario <= 4664.68){
-            IRRF = salario * 0.225 - 651.73;
+            irrf = salario * 0.225 - 651.73;
         }else{
-            IRRF = salario * 0.275 - 884.96;
+            irrf = salario * 0.275 - 884.96;
         }
 
-        if(IRRF < 0) IRRF = 0.0;
+        if(irrf < 0) irrf = 0.0;
 
-        imposto.setIRRF(IRRF);
+        imposto.setIRRF(irrf);
 
         //calcular Desconto Total
-        imposto.setDescontoTotal(imposto.getINSS() + imposto.getFGTS() + imposto.getIRRF());
+        imposto.setDescontoTotal(inss + imposto.getFGTS() + irrf);
 
         return imposto;
     }

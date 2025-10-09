@@ -26,7 +26,7 @@ public class FolhaPagamentoRepository {
     }
 
     // Salvar ou atualizar
-    public void save(FolhaPagamento folha){
+    public static void save(FolhaPagamento folha){
         List<FolhaPagamento> folhas = findAll();
 
         boolean updated = false;
