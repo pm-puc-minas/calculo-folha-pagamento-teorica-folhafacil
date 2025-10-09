@@ -18,6 +18,16 @@ public class FolhaPagamentoService {
         this.repository = repo;
     }
 
+  public FolhaPagamento gerarFolha(Funcionario funcionario, int mes, int ano) {
+        // Implemente a lógica de geração da folha conforme necessário
+        // Exemplo básico:
+        FolhaPagamento folha = new FolhaPagamento();
+        folha.setFuncionario(funcionario);
+        // Defina outros campos conforme sua lógica de negócio
+        return folha;
+    }
+  
+
     public FolhaPagamento consuFolhaPagamento(FolhaPagamento fp){
         return FolhaPagamentoRepository.findAll().stream().filter(f -> f.equals(fp)).findFirst().orElse(null);
     }

@@ -77,11 +77,15 @@ public class BeneficioService {
         return adicionarBeneficio(funcionario, BeneficioTipo.VALE_TRANSPORTE, valorVT, descontoVT);
     }
 
-    public Beneficio calcularValeAlimentacao(Funcionario funcionario, int mes, int ano, boolean trabalhaSabado, double valorDiario) {
+    public Beneficio calcularValeAlimentacao(Funcionario funcionario, 
+    int mes, int ano, boolean trabalhaSabado, double valorDiario) {
             int diasUteis = funcionarioService.contarDiasUteis(mes, ano, trabalhaSabado);
 
             double valorTotal = diasUteis * valorDiario;
         
             return adicionarBeneficio(funcionario, BeneficioTipo.VALE_ALIMENTACAO, valorTotal, 0.0);
     }
+
+    
+
 }
