@@ -5,6 +5,7 @@ import com.engsoft.folha_facil.model.BeneficioTipo;
 import com.engsoft.folha_facil.model.Funcionario;
 
 
+
 public class BeneficioService {
 
     private final FuncionarioService funcionarioService;
@@ -21,6 +22,22 @@ public class BeneficioService {
         return beneficio;
     }
      // Métodos do diagrama (stubs)
+
+    public void removerBeneficio(Funcionario funcionario, BeneficioTipo tipo){
+        if(funcionario == null) throw new IllegalArgumentException("Funcionário nuo");
+        if(tipo == null) throw new IllegalArgumentException("Tipo de benefício nulo");
+        if(tipo == BeneficioTipo.VALE_TRANSPORTE) {
+            throw new IllegalArgumentException("Vale transporte é um benefício obrigatório");
+        }
+        
+        boolean removed = funcionario.getPlanoBeneficios()
+                .removeIf(b -> b.getTipo() == tipo);
+
+        if(!removed){
+            throw new IllegalArgumentException("Beneficio " + tipo + " Não encontrado!");
+        }
+    }
+    
     public Beneficio calcularPericulosidade(Funcionario funcionario) {
         if(funcionario.getSalarioBase() <= 0)
             throw new IllegalArgumentException("O funcionário precisa de um salario!");
@@ -60,11 +77,15 @@ public class BeneficioService {
         return adicionarBeneficio(funcionario, BeneficioTipo.VALE_TRANSPORTE, valorVT, descontoVT);
     }
 
-    public Beneficio calcularValeAlimentacao(Funcionario funcionario, int mes, int ano, boolean trabalhaSabado, double valorDiario) {
+    public Beneficio calcularValeAlimentacao(Funcionario funcionario, 
+    int mes, int ano, boolean trabalhaSabado, double valorDiario) {
             int diasUteis = funcionarioService.contarDiasUteis(mes, ano, trabalhaSabado);
 
             double valorTotal = diasUteis * valorDiario;
         
             return adicionarBeneficio(funcionario, BeneficioTipo.VALE_ALIMENTACAO, valorTotal, 0.0);
     }
+
+    
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Imposto {
 
+    private Long id;
+
     private double INSS;
     private double FGTS;
     private double IRRF;
@@ -19,24 +21,9 @@ public class Imposto {
         this.descontoTotal = descontoTotal;
     }
 
-    // Métodos do diagrama (stubs)
-    public void calcularINSS(Funcionario f) {
-
-    }
-    
-    public void calcularFGTS(Funcionario f) {
-        
-    }
-
-    public void calcularIRRF(Funcionario f) {
-        
-    }
-
-    public void calcularDescontoTotal() {
-        // TODO: somar descontos
-    }
-
     // Getters e Setters
+    public Long getId() { return id; }
+
     public double getINSS() { return INSS; }
     public void setINSS(double INSS) { this.INSS = INSS; }
     public double getFGTS() { return FGTS; }

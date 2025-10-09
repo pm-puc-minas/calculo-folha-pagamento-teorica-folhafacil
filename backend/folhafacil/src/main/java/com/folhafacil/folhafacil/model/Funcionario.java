@@ -1,11 +1,13 @@
 package com.engsoft.folha_facil.model;
 
-import com.engsoft.folha_facil.model.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Funcionario {
+
+
+    private long id;
 
     private String nome;
     private String cpf;
@@ -59,6 +61,9 @@ public class Funcionario {
     }
 
     // Getters
+
+    public Long getId() { return id; }
+
     public String getNome() { return nome; }
     public int getHorasSemanais() { return horasSemanais; }
     public String getCpf() { return cpf; }
@@ -141,14 +146,16 @@ public class Funcionario {
 
     // Vale Transporte
     if (valeTransporte != null) {
-        System.out.println("Vale Transporte: " + valeTransporte.getValor());
+        System.out.println("=== Vale Transporte ===");
+        System.out.println("Valor: " + valeTransporte.getValor());
+        System.out.println("Desconto: " + valeTransporte.getDesconto());
     }
 
     // Benefícios adicionais
     if (planoBeneficios != null && !planoBeneficios.isEmpty()) {
         System.out.println("=== Benefícios Adicionais ===");
         for (Beneficio b : planoBeneficios) {
-            System.out.println(b.getTipo() + ": " + b.getValor());
+            System.out.println(b.getTipo() + ": " + b.getValor() + " | Desconto: " + b.getDesconto());
         }
     }
 

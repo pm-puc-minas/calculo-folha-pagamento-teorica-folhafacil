@@ -6,6 +6,8 @@ import java.util.List;
 
 public class FolhaPagamento {
 
+    private Long id;
+
     private Funcionario funcionario;
     private double salarioLiquido;
     private Imposto imposto;
@@ -32,34 +34,11 @@ public class FolhaPagamento {
         this.dataPagamento = dataPagamento;
     }
 
-    // Métodos do diagrama (stubs)
-    public double calcularSalarioBruto() {
-        // TODO: implementar cálculo
-        return 0.0;
-    }
-
-    public double calcularDescontos() {
-        // TODO: implementar cálculo
-        return 0.0;
-    }
-
-    public double calcularSalarioLiquido() {
-        // TODO: implementar cálculo
-        return 0.0;
-    }
-
-    public void registrarPagamento() {
-        // TODO: registrar pagamento e mover para histórico
-    }
-
-    public String gerarRelatorio() {
-        // TODO: gerar relatório textual
-        return "";
-    }
-
     public List<FolhaPagamento> consultarHistorico() {
         return new ArrayList<>(historicoPagamentos);
     }
+
+    public Long getId() { return id; }
 
     // Getters e Setters
     public Funcionario getFuncionario() { return funcionario; }

@@ -3,47 +3,69 @@ package com.engsoft.folha_facil;
 import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.model.Beneficio;
 import com.engsoft.folha_facil.model.BeneficioTipo;
+import com.engsoft.folha_facil.repository.FuncionarioRepository;
+import com.engsoft.folha_facil.service.BeneficioService;
+import com.engsoft.folha_facil.service.FuncionarioService;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Main{
+public class Main {
+
     public static void main(String[] args) {
-        System.out.println("Rodando local sem Spring Boot");
+        // 1️⃣ Criar funcionário
+
+        List<Beneficio> beneficios = new ArrayList<>();
+        beneficios.add(new Beneficio(BeneficioTipo.VALE_ALIMENTACAO, 20.0, 0.0));
+        beneficios.add(new Beneficio(BeneficioTipo.PERICULOSIDADE, 100.0, 0.0));
+
         
-        Beneficio vt = new Beneficio(BeneficioTipo.VALE_TRANSPORTE, 250);
-        Beneficio va = new Beneficio(BeneficioTipo.VALE_ALIMENTACAO, 650);
-
-        List<Beneficio> extras = new ArrayList<>();
-        extras.add(va);
-
-
-        Funcionario f = new Funcionario(
-                "Pedro", 
-                "123.456.789-00", 
-                "Dev", 
-                "31 99999-9999",
-                "Rua X", 
-                "Bairro Y", 
-                123, 
-                "email@email.com",
-                new Date(95, 7, 20), // data de nascimento
-                new Date(125, 0, 1), // data de admissão
-                4500.0, // salário
-                40,     // horas semanais
-                250.0,  // valor do Vale Transporte
-                extras, // benefícios adicionais
-                0,      // número de dependentes
-                0.0     // pensão alimentícia
+        Funcionario f1 = new Funcionario(
+            "Pedro Vieira",
+            "12345678900",
+            "Analista",
+            "31999999999",
+            "Rua A",
+            "Bairro B",
+            100,
+            "pedro@email.com",
+            new Date(),
+            new Date(),
+            3000.0,
+            40,
+            150.0,
+            0.0,
+            beneficios,
+            0,
+            0.0
         );
 
-         System.out.println("Funcionário criado: " + f.getNome());
+        BeneficioService beneficioService = new BeneficioService(new FuncionarioService());
 
+        beneficioService.calcularValeTransporte(f1);
 
-        
-        f.imprimirDados();
+        // 2️⃣ Salvar funcionário
+        FuncionarioRepository.save(f1);
+        System.out.println("Funcionário salvo com sucesso!");
 
-        // Exercite seu código aqui (ex.: instanciar Funcionario, chamar setters, etc.)
+        // 3️⃣ Listar todos
+        System.out.println("=== Todos os funcionários ===");
+        FuncionarioRepository.findAll().forEach(func -> 
+            System.out.println(func.getId() + " - " + func.getNome())
+        );
+
+        // 4️⃣ Buscar por ID
+        Funcionario buscado = FuncionarioRepository.findById(f1.getId());
+        System.out.println("Funcionário buscado: " + (buscado != null ? buscado.getNome() : "Não encontrado"));
+
+        // 5️⃣ Atualizar funcionário
+        f1.setCargo("Desenvolvedor");
+        FuncionarioRepository.save(f1);
+        System.out.println("Cargo atualizado: " + FuncionarioRepository.findById(f1.getId()).getCargo());
+
+        f1.imprimirDados();;
+
     }
 }
+
