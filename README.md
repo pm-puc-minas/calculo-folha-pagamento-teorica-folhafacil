@@ -102,11 +102,11 @@ json
 
 4. Como compilar, testar e executar (comandos prontos)
 
-**Observação:** os comandos abaixo usam o wrapper Maven presente em `backend/folha-facil`, portanto **não é obrigatório ter o Maven instalado globalmente**.
+Observação: os comandos abaixo usam o wrapper Maven presente em `backend/folha-facil`, portanto não é obrigatório ter o Maven instalado globalmente.
 
 ###  No Linux/macOS:
 
-- **Tornar o wrapper executável (uma vez):**
+- Tornar o wrapper executável (uma vez):
   ```bash
   chmod +x backend/folha-facil/mvnw
 
@@ -126,9 +126,9 @@ No Windows (PowerShell ou cmd):
 
 5. Aplicação dos conceitos de POO (Herança, Polimorfismo, Interfaces, Classes Abstratas)
 
-O projeto demonstra os principais conceitos de **Programação Orientada a Objetos (POO)** de forma prática:
+O projeto demonstra os principais conceitos de Programação Orientada a Objetos (POO) de forma prática:
 
-* **Herança**: A classe `Funcionario` é a base comum para diferentes tipos de vínculos (CLT, PJ, Estagiário).
+* Herança: A classe `Funcionario` é a base comum para diferentes tipos de vínculos (CLT, PJ, Estagiário).
     Exemplo:
     ```java
     public class FuncionarioCLT extends Funcionario {
@@ -136,27 +136,25 @@ O projeto demonstra os principais conceitos de **Programação Orientada a Objet
     }
     ```
 
-* **Polimorfismo**: O método `calcularFolha()` no serviço aceita diferentes tipos de funcionários, aplicando a lógica correta de acordo com o tipo em tempo de execução.
+* Polimorfismo: O método `calcularFolha()` no serviço aceita diferentes tipos de funcionários, aplicando a lógica correta de acordo com o tipo em tempo de execução.
 
-* **Interfaces**: A interface `CalculadoraFolha` define o contrato para o cálculo de salários, sendo implementada por classes concretas como `CalculadoraFolhaCLT` e `CalculadoraFolhaPJ`.
+* Interfaces: A interface `CalculadoraFolha` define o contrato para o cálculo de salários, sendo implementada por classes concretas como `CalculadoraFolhaCLT` e `CalculadoraFolhaPJ`.
 
-* **Classes Abstratas**: A classe abstrata `Beneficio` contém atributos e métodos comuns a todos os tipos de benefícios (como vale-transporte, alimentação e periculosidade).
+* Classes Abstratas: A classe abstrata `Beneficio` contém atributos e métodos comuns a todos os tipos de benefícios (como vale-transporte, alimentação e periculosidade).
 
 Essas implementações estão localizadas principalmente nos pacotes:
 
 * `backend/folha-facil/src/main/java/com/engsoft/folhafacil/model`
 * `backend/folha-facil/src/main/java/com/engsoft/folhafacil/service`
 
----
-
 6. Testes unitários
 
-Os testes unitários foram implementados com **JUnit 5**, garantindo a verificação automática das regras de negócio.
+Os testes unitários foram implementados com JUnit 5, garantindo a verificação automática das regras de negócio.
 
-* **Localização**:
+* Localização:
     `backend/folha-facil/src/test/java/com/engsoft/folhafacil/`
 
-* **Principais testes**:
+* Principais testes:
     * `CalculoFolhaServiceTest` $\rightarrow$ valida o cálculo de salário líquido e descontos.
     * `FuncionarioTest` $\rightarrow$ garante que os dados do funcionário sejam lidos corretamente do JSON.
     * `DescontoINSSTest` $\rightarrow$ verifica as faixas de contribuição e arredondamentos.
@@ -165,8 +163,6 @@ Os testes unitários foram implementados com **JUnit 5**, garantindo a verifica�
 
 ```bash
 ./backend/folha-facil/mvnw -f backend/folha-facil test
-
----
 
 7. Entregáveis exigidos pela 2ª sprint — checklist 
 - [x] Código-fonte atualizado no repositório GitHub (backend/folha-facil)  
@@ -180,7 +176,7 @@ Os testes unitários foram implementados com **JUnit 5**, garantindo a verifica�
 
 9. Estrutura do Repositório (itens relevantes)
 
-A estrutura do projeto foi organizada para garantir **clareza, modularidade e fácil manutenção**.  
+A estrutura do projeto foi organizada para garantir clareza, modularidade e fácil manutenção.  
 A seguir, estão descritos os principais diretórios e arquivos que compõem o sistema de folha de pagamento.
 calculo-folha-pagamento-teorica-folhafacil/
 ├── backend/
@@ -236,36 +232,36 @@ calculo-folha-pagamento-teorica-folhafacil/
 ##  Descrição das principais partes do repositório
 
 ### 🔹 `pom.xml`
-Arquivo de configuração do **Maven**, define as dependências do projeto (JUnit, Gson, etc.), o Java versionado (17), e as metas de build e teste.
+Arquivo de configuração do Maven, define as dependências do projeto (JUnit, Gson, etc.), o Java versionado (17), e as metas de build e teste.
 
 ### 🔹 `mvnw` e `mvnw.cmd`
 Wrappers do Maven que permitem compilar e testar o projeto sem precisar instalar o Maven globalmente.
 
 ###  `src/main/java/com/engsoft/folhafacil/`
 Código-fonte principal da aplicação.  
-Dividido em **camadas**, seguindo o padrão de **arquitetura em camadas (MVC)**.
+Dividido em camadas, seguindo o padrão de arquitetura em camadas (MVC).
 
-- **`model/`** → Define as entidades centrais do domínio (ex.: `Funcionario`, `Beneficio`, `Desconto`).  
+- `model/` → Define as entidades centrais do domínio (ex.: `Funcionario`, `Beneficio`, `Desconto`).  
   Responsável por armazenar os atributos e comportamentos dos objetos do sistema.
 
-- **`service/`** → Contém a lógica de negócio, cálculos e regras de processamento.  
+- `service/` → Contém a lógica de negócio, cálculos e regras de processamento.  
   Exemplo: a classe `CalculoFolhaService` realiza o cálculo do salário líquido aplicando descontos e benefícios.
 
-- **`controller/`** → Controla o fluxo da aplicação, sendo o ponto central de execução do sistema.  
+- `controller/` → Controla o fluxo da aplicação, sendo o ponto central de execução do sistema.  
   Exemplo: `FolhaController.java` faz a leitura dos dados, chama o serviço de cálculo e exibe os resultados.
 
-- **`repository/`** → Gerencia o acesso aos dados de funcionários e benefícios.  
+- `repository/` → Gerencia o acesso aos dados de funcionários e benefícios.  
   Exemplo: `FuncionarioRepository.java` lê e grava informações a partir do arquivo `funcionarios.json`.
 
-- **`util/`** → Contém classes auxiliares, como `JsonReader.java`, responsável por converter arquivos JSON em objetos Java.
+- `util/` → Contém classes auxiliares, como `JsonReader.java`, responsável por converter arquivos JSON em objetos Java.
 ###  `src/main/resources/`
 Armazena recursos usados pela aplicação, como arquivos de configuração e dados de exemplo.
 
-- **`funcionarios.json`** → Arquivo de entrada com a lista de funcionários e suas informações (salário base, benefícios, dependentes, etc.).  
+- `funcionarios.json` → Arquivo de entrada com a lista de funcionários e suas informações (salário base, benefícios, dependentes, etc.).  
   É utilizado pelo sistema para gerar a folha de pagamento de forma automatizada.
 
 ###  `src/test/java/`
-Contém os **testes unitários automatizados** utilizando o **JUnit 5**.  
+Contém os testes unitários automatizados utilizando o JUnit 5.  
 Cada pacote espelha a estrutura da aplicação principal, garantindo que todas as classes de negócio sejam testadas.
 
 Exemplo:
@@ -273,19 +269,19 @@ Exemplo:
 - `FuncionarioTest.java` → Testa a integridade e consistência dos dados do funcionário.
 
 ###  `frontend/`
-Contém uma interface web simples, usada para **exibir relatórios e resultados do cálculo da folha**.  
+Contém uma interface web simples, usada para exibir relatórios e resultados do cálculo da folha.  
 Embora o foco do projeto esteja no backend, esta camada demonstra integração com HTML, CSS e JavaScript.
 
-- **`index.html`** → Página principal da interface.  
-- **`css/style.css`** → Define o estilo visual da aplicação.  
-- **`js/main.js`** → Manipula eventos e faz a comunicação com o backend (futura API REST).
+- `index.html` → Página principal da interface.  
+- `css/style.css` → Define o estilo visual da aplicação.  
+- `js/main.js` → Manipula eventos e faz a comunicação com o backend (futura API REST).
 
 ###  `docs/`
 Diretório dedicado à documentação técnica e diagramas UML.
 
-- **`diagramas/`** → Contém o diagrama de classes e o diagrama de casos de uso da aplicação.
+- `diagramas/` → Contém o diagrama de classes e o diagrama de casos de uso da aplicação.
 
-Esses arquivos são úteis para a **apresentação e explicação da arquitetura** do projeto durante a avaliação.
+Esses arquivos são úteis para a apresentação e explicação da arquitetura do projeto durante a avaliação.
 
 ###  `README.md`
 Arquivo principal de documentação do projeto (este arquivo), descrevendo:
