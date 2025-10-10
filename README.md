@@ -10,15 +10,14 @@ Status: pronto para entrega da 2ª sprint (código no diretório backend/folha-f
 1. Sobre o Projeto
 Este repositório contém a implementação do módulo de cálculo de folha pensado para uso didático. A implementação está em Java e organizada para facilitar teste, revisão e demonstração das técnicas de modularização e POO exigidas pela disciplina.
 
-2. Estrutura do repositório (itens relevantes)
-- backend/folha-facil/  
-  - mvnw, mvnw.cmd, .mvn/      -> wrapper Maven incluído (não é necessário Maven instalado globalmente)  
-  - pom.xml                    -> configuração do projeto Java/Maven  
-  - src/main/java/...          -> código-fonte Java (pacote raiz: com.engsoft)  
-  - src/test/java/...          -> testes unitários (JUnit)  
-- funcionarios.json            -> dados de exemplo (entrada para demo/testes)  
-- frontend/                    -> espaço para frontend (se houver)  
-- docs/                        -> documentação complementar (diagramas, etc.)
+2. Arquitetura e Modularização  
+A aplicação segue o padrão de arquitetura em camadas, visando separação de responsabilidades e fácil manutenção.  
+- **Camada Model:** contém as classes que representam o domínio da aplicação (Funcionário, Contrato, Provento, Desconto).  
+- **Camada Service:** contém as regras de negócio e serviços de cálculo (interfaces e implementações concretas).  
+- **Camada Core/Abstract:** contém classes abstratas e utilitárias que concentram comportamentos comuns entre diferentes tipos de funcionários.  
+- **Camada Test:** responsável por garantir a qualidade do código através de testes unitários automatizados.  
+
+Essa estrutura modular facilita futuras expansões, como integração com banco de dados ou criação de uma API REST.
 
 3. Como compilar, testar e executar (comandos prontos)
 Observação: os comandos abaixo usam o wrapper Maven presente em backend/folha-facil, portanto não é obrigatório ter o Maven instalado globalmente.
@@ -80,14 +79,17 @@ Recomendações de cobertura (já implementadas/para verificação):
 - Não subir dados reais dos funcionários (use o funcionarios.json de exemplo ou anonimizado).
 - Se solicitado, gerar JavaDoc e anexar link/artefato.
 
-9. Arquitetura e Modularização  
-A aplicação segue o padrão de arquitetura em camadas, visando separação de responsabilidades e fácil manutenção.  
-- **Camada Model:** contém as classes que representam o domínio da aplicação (Funcionário, Contrato, Provento, Desconto).  
-- **Camada Service:** contém as regras de negócio e serviços de cálculo (interfaces e implementações concretas).  
-- **Camada Core/Abstract:** contém classes abstratas e utilitárias que concentram comportamentos comuns entre diferentes tipos de funcionários.  
-- **Camada Test:** responsável por garantir a qualidade do código através de testes unitários automatizados.  
+9. Estrutura do repositório (itens relevantes)
+- backend/folha-facil/  
+  - mvnw, mvnw.cmd, .mvn/      -> wrapper Maven incluído (não é necessário Maven instalado globalmente)  
+  - pom.xml                    -> configuração do projeto Java/Maven  
+  - src/main/java/...          -> código-fonte Java (pacote raiz: com.engsoft)  
+  - src/test/java/...          -> testes unitários (JUnit)  
+- funcionarios.json            -> dados de exemplo (entrada para demo/testes)  
+- frontend/                    -> espaço para frontend (se houver)  
+- docs/                        -> documentação complementar (diagramas, etc.)
 
-Essa estrutura modular facilita futuras expansões, como integração com banco de dados ou criação de uma API REST.
+
 
 ---
 
