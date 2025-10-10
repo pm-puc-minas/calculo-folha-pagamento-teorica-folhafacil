@@ -124,16 +124,30 @@ No Windows (PowerShell ou cmd):
 - backend\folha-facil\mvnw.cmd -f backend\folha-facil test
 
 
-5. plicação dos Conceitos de POO
+5. Aplicação dos conceitos de POO (Herança, Polimorfismo, Interfaces, Classes Abstratas)
 
-A aplicação demonstra claramente os pilares da **Programação Orientada a Objetos**:
+O projeto demonstra os principais conceitos de **Programação Orientada a Objetos (POO)** de forma prática:
 
-| Conceito | Implementação |
-| :--- | :--- |
-| Herança | Classes que estendem comportamentos comuns, como **Funcionario** e suas especializações. |
-| Polimorfismo | Serviços que operam sobre tipos genéricos de funcionários ou benefícios. |
-| Interfaces | Interfaces para definir contratos de serviços e cálculos. |
-| Classes Abstratas | Modelos base para padronizar cálculos e evitar duplicações. |
+* **Herança**: A classe `Funcionario` é a base comum para diferentes tipos de vínculos (CLT, PJ, Estagiário).
+    Exemplo:
+    ```java
+    public class FuncionarioCLT extends Funcionario {
+        // Implementa regras específicas de CLT, como INSS e IRRF
+    }
+    ```
+
+* **Polimorfismo**: O método `calcularFolha()` no serviço aceita diferentes tipos de funcionários, aplicando a lógica correta de acordo com o tipo em tempo de execução.
+
+* **Interfaces**: A interface `CalculadoraFolha` define o contrato para o cálculo de salários, sendo implementada por classes concretas como `CalculadoraFolhaCLT` e `CalculadoraFolhaPJ`.
+
+* **Classes Abstratas**: A classe abstrata `Beneficio` contém atributos e métodos comuns a todos os tipos de benefícios (como vale-transporte, alimentação e periculosidade).
+
+Essas implementações estão localizadas principalmente nos pacotes:
+
+* `backend/folha-facil/src/main/java/com/engsoft/folhafacil/model`
+* `backend/folha-facil/src/main/java/com/engsoft/folhafacil/service`
+
+---
 
 6. Testes unitários
 - Framework: JUnit (versão configurada no pom.xml). Possível uso de Mockito para simular dependências.
