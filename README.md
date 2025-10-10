@@ -19,15 +19,42 @@ O projeto foi estruturado para permitir a leitura de dados de funcionários, o c
 
 2. Arquitetura e Modularização
 
-A aplicação segue o padrão de arquitetura em camadas, visando separação de responsabilidades e fácil manutenção.  
-- **Camada Model:** contém as classes que representam o domínio da aplicação (Funcionário, Contrato, Provento, Desconto).  
-- **Camada Service:** contém as regras de negócio e serviços de cálculo (interfaces e implementações concretas).  
-- **Camada Core/Abstract:** contém classes abstratas e utilitárias que concentram comportamentos comuns entre diferentes tipos de funcionários.  
-- **Camada Test:** responsável por garantir a qualidade do código através de testes unitários automatizados.  
+A aplicação foi desenvolvida seguindo o padrão de arquitetura em camadas, visando
+organização, separação de responsabilidades e facilidade de manutenção. Essa estrutura modular facilita futuras expansões, como a integração com bancos de dados ou a criação de uma API REST, e garante que cada camada tenha responsabilidades bem definidas, tornando o código mais legível e escalável.
 
-Essa estrutura modular facilita futuras expansões, como integração com banco de dados ou criação de uma API REST.
+As principais camadas do sistema são:
 
-3. Como compilar, testar e executar (comandos prontos)
+- Camada Model:  
+  Representa o domínio da aplicação, encapsulando os dados e comportamentos essenciais dos objetos do sistema.  
+  Esta camada é responsável por manter a estrutura dos dados, suas propriedades e métodos relacionados, sem se preocupar com regras de negócio ou persistência.  
+  Ela fornece uma base sólida para que outras camadas possam operar de forma consistente e confiável.
+
+- Camada Service:  
+  Contém as regras de negócio e a lógica de processamento do sistema.  
+  Nessa camada, são implementados os cálculos da folha de pagamento, a aplicação de descontos e proventos, e validações de consistência dos dados.  
+  A Service Layer atua como intermediária entre os dados do Model e a apresentação ou controle do fluxo, garantindo que toda a lógica de negócio seja centralizada e reutilizável.
+
+- Camada Repository: 
+  Gerencia o acesso e persistência de dados, isolando as operações de leitura e escrita dos arquivos ou banco de dados da lógica de negócio.  
+  Isso permite que alterações na forma de armazenamento não impactem outras partes do sistema.  
+  Essa camada garante a integridade e consistência dos dados, fornecendo métodos padronizados para consulta, atualização e armazenamento das informações.
+
+- Camada Controller:  
+  Serve como intermediária entre o usuário e o sistema, coordenando o fluxo de dados entre as camadas Service e Model.  
+  Recebe solicitações, direciona para os serviços apropriados e retorna respostas adequadas, organizando a interação e garantindo que cada operação siga a lógica de negócio definida.  
+  Em futuras expansões, essa camada poderá ser responsável por expor endpoints REST para integração com um frontend ou outros sistemas.
+
+- Camada Test:  
+  Focada na garantia de qualidade do código, utilizando testes unitários automatizados com JUnit.  
+  Verifica a correção dos cálculos, regras de negócio e demais funcionalidades, prevenindo erros e regressões.  
+  Essa camada permite validar alterações e novas funcionalidades de forma segura, promovendo maior confiabilidade na manutenção e evolução do sistema.
+
+A arquitetura em camadas adotada proporciona um código modular, organizado e de fácil manutenção, facilitando o entendimento, a reutilização de componentes e a expansão futura do sistema sem comprometer a consistência e qualidade do software.
+
+3. Dados de exemplo
+- O arquivo funcionarios.json na raiz contém um conjunto de funcionários de exemplo para usar em demos e testes. Use esse arquivo como entrada para demonstrações que executem cálculos e gerem saídas (console/arquivo).
+
+4. Como compilar, testar e executar (comandos prontos)
 Observação: os comandos abaixo usam o wrapper Maven presente em backend/folha-facil, portanto não é obrigatório ter o Maven instalado globalmente.
 
 No Linux/macOS:
@@ -47,9 +74,6 @@ Executar a aplicação (caso o projeto gere um JAR com Main):
 No Windows (PowerShell ou cmd):
 - backend\folha-facil\mvnw.cmd -f backend\folha-facil clean package
 - backend\folha-facil\mvnw.cmd -f backend\folha-facil test
-
-4. Dados de exemplo
-- O arquivo funcionarios.json na raiz contém um conjunto de funcionários de exemplo para usar em demos e testes. Use esse arquivo como entrada para demonstrações que executem cálculos e gerem saídas (console/arquivo).
 
 5. Aplicação dos conceitos de POO (HERANÇA, POLIMORFISMO, INTERFACES, CLASSES ABSTRATAS)
 As implementações que demonstram os conceitos pedidos para a 2ª sprint estão localizadas nos pacotes sob o pacote raiz do projeto Java (com.engsoft). Em particular:
