@@ -83,12 +83,14 @@ public class Funcionario {
     
     
     // Setters
+    public void setId(long id) { this.id = id; }
     public void setCargo(String cargo) { this.cargo = verificaStringVazia("cargo", cargo); }
     public void setTelefone(String telefone) { this.telefone = verificaStringVazia("telefone", telefone); }
     public void setRua(String rua) { this.rua = verificaStringVazia("rua", rua); }
     public void setBairro(String bairro) { this.bairro = verificaStringVazia("bairro", bairro); }
     public void setNumero(int numero) { this.numero = verificaNegativo("numero", numero); }
     public void setEmail(String email) { this.email = verificaStringVazia("email", email); }
+    public void setNome(String nome) { this.nome = verificaStringVazia("nome", nome); }
 
     public void setValeTransporte(Beneficio valeTransporte) {
     this.valeTransporte = valeTransporte;}

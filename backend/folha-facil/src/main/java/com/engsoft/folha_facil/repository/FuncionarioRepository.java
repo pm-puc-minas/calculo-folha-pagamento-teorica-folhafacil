@@ -45,8 +45,8 @@ public class FuncionarioRepository {
     }
 
 
-    //Buscar por ID
-    public static Funcionario findById(Long id){
+    //Buscar por ID(Tirei static para testes)
+    public Funcionario findById(Long id){
         return findAll().stream()
             .filter(f -> f.getId().equals(id))
             .findFirst()
