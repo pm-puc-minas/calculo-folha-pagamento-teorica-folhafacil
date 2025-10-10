@@ -124,18 +124,16 @@ No Windows (PowerShell ou cmd):
 - backend\folha-facil\mvnw.cmd -f backend\folha-facil test
 
 
-5. Aplicação dos conceitos de POO (HERANÇA, POLIMORFISMO, INTERFACES, CLASSES ABSTRATAS)
-As implementações que demonstram os conceitos pedidos para a 2ª sprint estão localizadas nos pacotes sob o pacote raiz do projeto Java (com.engsoft). Em particular:
-- Modelos de domínio (classes que representam funcionário, contrato, provento/desconto) estão sob: backend/folha-facil/src/main/java/com/engsoft/model
-- Serviços de cálculo e regras de negócio (interfaces e implementações concretas) estão sob: backend/folha-facil/src/main/java/com/engsoft/service
-- Classes utilitárias e abstratas (comportamentos compartilhados entre tipos de funcionário) estão sob: backend/folha-facil/src/main/java/com/engsoft/core ou com/engsoft/abstracts
+5. plicação dos Conceitos de POO
 
-Observações (para avaliação):
-- Herança e polimorfismo: existem classes base/abstratas que definem comportamento genérico e subclasses que especializam o cálculo para diferentes tipos de vínculo (ex.: CLT, PJ, temporário). Isso permite que o mesmo serviço invoque métodos polimórficos sem conhecer o tipo concreto.
-- Interfaces: existe uma interface descrita para o contrato de cálculo da folha (por exemplo: CalculadoraFolha) e implementações concretas injetáveis.
-- Classes abstratas: utilizadas para extrair lógica comum entre subclasses e evitar duplicação.
+A aplicação demonstra claramente os pilares da **Programação Orientada a Objetos**:
 
-(Se a banca exigir os nomes exatos de classes, estes nomes estão nos arquivos em backend/folha-facil/src/main/java/com/engsoft — para facilitar a visualização, abra esses arquivos e, na apresentação, aponte as classes citadas.)
+| Conceito | Implementação |
+| :--- | :--- |
+| Herança | Classes que estendem comportamentos comuns, como **Funcionario** e suas especializações. |
+| Polimorfismo | Serviços que operam sobre tipos genéricos de funcionários ou benefícios. |
+| Interfaces | Interfaces para definir contratos de serviços e cálculos. |
+| Classes Abstratas | Modelos base para padronizar cálculos e evitar duplicações. |
 
 6. Testes unitários
 - Framework: JUnit (versão configurada no pom.xml). Possível uso de Mockito para simular dependências.
