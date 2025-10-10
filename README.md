@@ -100,7 +100,7 @@ json
   }
 ]
 
-4. 4. Como compilar, testar e executar (comandos prontos)
+4. Como compilar, testar e executar (comandos prontos)
 
 **Observação:** os comandos abaixo usam o wrapper Maven presente em `backend/folha-facil`, portanto **não é obrigatório ter o Maven instalado globalmente**.
 
