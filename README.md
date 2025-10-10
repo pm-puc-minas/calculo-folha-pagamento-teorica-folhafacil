@@ -150,17 +150,23 @@ Essas implementações estão localizadas principalmente nos pacotes:
 ---
 
 6. Testes unitários
-- Framework: JUnit (versão configurada no pom.xml). Possível uso de Mockito para simular dependências.
-- Onde estão: backend/folha-facil/src/test/java/ (testes organizados por pacote correspondente às classes testadas).
-- Executar todos os testes:
-  - ./backend/folha-facil/mvnw -f backend/folha-facil test
-- Executar teste(s) específico(s):
-  - ./backend/folha-facil/mvnw -f backend/folha-facil -Dtest=NomeDoTeste test
 
-Recomendações de cobertura (já implementadas/para verificação):
-- Cálculo de proventos (salário base, horas extras)
-- Cálculo de descontos (INSS, IRRF, faltas)
-- Casos de borda e regras de arredondamento
+Os testes unitários foram implementados com **JUnit 5**, garantindo a verificação automática das regras de negócio.
+
+* **Localização**:
+    `backend/folha-facil/src/test/java/com/engsoft/folhafacil/`
+
+* **Principais testes**:
+    * `CalculoFolhaServiceTest` $\rightarrow$ valida o cálculo de salário líquido e descontos.
+    * `FuncionarioTest` $\rightarrow$ garante que os dados do funcionário sejam lidos corretamente do JSON.
+    * `DescontoINSSTest` $\rightarrow$ verifica as faixas de contribuição e arredondamentos.
+
+#### Executar todos os testes:
+
+```bash
+./backend/folha-facil/mvnw -f backend/folha-facil test
+
+---
 
 7. Entregáveis exigidos pela 2ª sprint — checklist 
 - [x] Código-fonte atualizado no repositório GitHub (backend/folha-facil)  
