@@ -52,7 +52,53 @@ As principais camadas do sistema são:
 A arquitetura em camadas adotada proporciona um código modular, organizado e de fácil manutenção, facilitando o entendimento, a reutilização de componentes e a expansão futura do sistema sem comprometer a consistência e qualidade do software.
 
 3. Dados de exemplo
-- O arquivo funcionarios.json na raiz contém um conjunto de funcionários de exemplo para usar em demos e testes. Use esse arquivo como entrada para demonstrações que executem cálculos e gerem saídas (console/arquivo).
+
+O arquivo `funcionarios.json`, localizado na raiz do projeto, contém um conjunto de funcionários de exemplo que podem ser utilizados para demonstrações e testes do sistema.  
+
+Cada objeto no arquivo representa um funcionário e inclui informações como:  
+
+- id: Identificador único do funcionário.  
+- nome, cpf, cargo, telefone, email: Dados pessoais e de contato.  
+- endereço: rua, bairro e número.  
+- dataNascimento e dataAdmissao: Datas importantes para cálculos e registros.  
+- salarioBase: Valor base do salário do funcionário.  
+- horasSemanais e diasTrabalhadosMes: Dados para cálculo proporcional de salário.  
+- valeTransporte e planoBeneficios: Informações sobre benefícios e descontos aplicáveis.  
+- numDependentes e pensaoAlimenticia: Dados que impactam no cálculo de descontos e impostos.
+
+ Exemplo de entrada no funcionarios.json:
+
+json
+[
+  {
+    "id": 0,
+    "nome": "Pedro Vieira",
+    "cpf": "12345678900",
+    "cargo": "Desenvolvedor",
+    "telefone": "31999999999",
+    "rua": "Rua A",
+    "bairro": "Bairro B",
+    "numero": 100,
+    "email": "pedro@email.com",
+    "dataNascimento": "Oct 8, 2025, 12:24:43 AM",
+    "dataAdmissao": "Oct 8, 2025, 12:24:43 AM",
+    "salarioBase": 3000.0,
+    "horasSemanais": 40,
+    "diasTrabalhadosMes": 0,
+    "valeTransporte": {
+      "tipo": "VALE_TRANSPORTE",
+      "valor": 150.0,
+      "desconto": 180.0
+    },
+    "planoBeneficios": [
+      {"tipo": "VALE_ALIMENTACAO", "valor": 20.0, "desconto": 0.0},
+      {"tipo": "PERICULOSIDADE", "valor": 100.0, "desconto": 0.0},
+      {"tipo": "VALE_TRANSPORTE", "valor": 150.0, "desconto": 180.0}
+    ],
+    "numDependentes": 0,
+    "pensaoAlimenticia": 0.0
+  }
+]
 
 4. Como compilar, testar e executar (comandos prontos)
 Observação: os comandos abaixo usam o wrapper Maven presente em backend/folha-facil, portanto não é obrigatório ter o Maven instalado globalmente.
