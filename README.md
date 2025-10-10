@@ -104,7 +104,7 @@ json
 
 **Observação:** os comandos abaixo usam o wrapper Maven presente em `backend/folha-facil`, portanto **não é obrigatório ter o Maven instalado globalmente**.
 
-### 🐧 No Linux/macOS:
+###  No Linux/macOS:
 
 - **Tornar o wrapper executável (uma vez):**
   ```bash
