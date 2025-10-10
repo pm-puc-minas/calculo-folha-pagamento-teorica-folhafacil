@@ -8,14 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.model.Imposto;
-import com.engsoft.folha_facil.repository.FuncionarioRepository;
 import com.engsoft.folha_facil.service.ImpostoService;
 
 public class CalculoFGTSTest {
     @Test
     void testeCalcularFGTS() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
+        ImpostoService impostoService = new ImpostoService(null);
         Funcionario f = new Funcionario("João Silva",
                 "111.222.333-44",
                 "Auxiliar",

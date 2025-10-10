@@ -11,7 +11,6 @@ import com.engsoft.folha_facil.repository.FuncionarioRepository;
 import com.engsoft.folha_facil.service.ImpostoService;
 
 public class CalculoSalarioLiquidoTest {
-
     @Test
     void testeCalculoSalarioLiquido() {
         FuncionarioRepository funcionarioRepository = new FuncionarioRepository();

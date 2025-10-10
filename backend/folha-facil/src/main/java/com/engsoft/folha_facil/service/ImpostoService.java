@@ -41,7 +41,7 @@ public class ImpostoService {
 
         //calcular IRRF
         double irrf;
-        double baseIRRF = salario - inss;
+        double baseIRRF = salario - inss - (f.getNumDependentes() * 189.59);
 
         if(baseIRRF <= 2112.00){
             irrf = 0.0;

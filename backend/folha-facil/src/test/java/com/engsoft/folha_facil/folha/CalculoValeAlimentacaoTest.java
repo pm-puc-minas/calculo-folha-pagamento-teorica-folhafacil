@@ -18,35 +18,35 @@ import com.engsoft.folha_facil.service.BeneficioService;
 import com.engsoft.folha_facil.service.FuncionarioService;
 
 public class CalculoValeAlimentacaoTest {
-@Test
-public void testCalculoValeAlimentacao() {
-    List<Beneficio> beneficios = new ArrayList<>();
-    double valorDiario = 24.00;
-    Funcionario f = new Funcionario("Matheus Dias",
-        "123.456.789-00",                
-        "Analista de Sistemas",          
-        "3199999-8888",                  
-        "Rua das Palmeiras",             
-        "Centro",                        
-        120,                             
-        "matheus.dias@empresa.com",      
-        Date.valueOf("1999-05-12"),
-        Date.valueOf("2025-01-10"),
-        2000.00,
-        40,
-        150.00,
-        valorDiario, beneficios,
-        2,
-        0.00 );
+    @Test
+    public void testCalculoValeAlimentacao() {
+        List<Beneficio> beneficios = new ArrayList<>();
+        double valorDiario = 24.00;
+        Funcionario f = new Funcionario("Matheus Dias",
+            "123.456.789-00",                
+            "Analista de Sistemas",          
+            "3199999-8888",                  
+            "Rua das Palmeiras",             
+            "Centro",                        
+            120,                             
+            "matheus.dias@empresa.com",      
+            Date.valueOf("1999-05-12"),
+            Date.valueOf("2025-01-10"),
+            2000.00,
+            40,
+            150.00,
+            valorDiario, beneficios,
+            2,
+            0.00 );
 
-    FuncionarioService funcionarioService = mock(FuncionarioService.class);
-    when(funcionarioService.contarDiasUteis(5, 2025, false)).thenReturn(26);
-    BeneficioService beneficioService = new BeneficioService(funcionarioService);
-    var beneficio = beneficioService.calcularValeAlimentacao(f, 5, 2025, false, valorDiario);
+        FuncionarioService funcionarioService = mock(FuncionarioService.class);
+        when(funcionarioService.contarDiasUteis(5, 2025, false)).thenReturn(26);
+        BeneficioService beneficioService = new BeneficioService(funcionarioService);
+        var beneficio = beneficioService.calcularValeAlimentacao(f, 5, 2025, false, valorDiario);
 
-    assertEquals(624.0, beneficio.getValor(), 0.001);
-    assertEquals(BeneficioTipo.VALE_ALIMENTACAO, beneficio.getTipo());
-    assertTrue(f.getPlanoBeneficios().contains(beneficio));
-}
+        assertEquals(624.0, beneficio.getValor(), 0.001);
+        assertEquals(BeneficioTipo.VALE_ALIMENTACAO, beneficio.getTipo());
+        assertTrue(f.getPlanoBeneficios().contains(beneficio));
+    }
 
 }
