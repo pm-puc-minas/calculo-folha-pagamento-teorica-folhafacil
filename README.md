@@ -100,12 +100,15 @@ json
   }
 ]
 
-4. Como compilar, testar e executar (comandos prontos)
-Observação: os comandos abaixo usam o wrapper Maven presente em backend/folha-facil, portanto não é obrigatório ter o Maven instalado globalmente.
+4. 4. Como compilar, testar e executar (comandos prontos)
 
-No Linux/macOS:
-- Tornar o wrapper executável (uma vez):
-  - chmod +x backend/folha-facil/mvnw
+**Observação:** os comandos abaixo usam o wrapper Maven presente em `backend/folha-facil`, portanto **não é obrigatório ter o Maven instalado globalmente**.
+
+### 🐧 No Linux/macOS:
+
+- **Tornar o wrapper executável (uma vez):**
+  ```bash
+  chmod +x backend/folha-facil/mvnw
 
 Compilar e empacotar:
 - ./backend/folha-facil/mvnw -f backend/folha-facil clean package
@@ -115,11 +118,11 @@ Executar testes automatizados:
 
 Executar a aplicação (caso o projeto gere um JAR com Main):
 - java -jar backend/folha-facil/target/<nome-do-artifact>.jar
-(Substitua <nome-do-artifact> pelo nome do JAR gerado em backend/folha-facil/target/)
 
 No Windows (PowerShell ou cmd):
 - backend\folha-facil\mvnw.cmd -f backend\folha-facil clean package
 - backend\folha-facil\mvnw.cmd -f backend\folha-facil test
+
 
 5. Aplicação dos conceitos de POO (HERANÇA, POLIMORFISMO, INTERFACES, CLASSES ABSTRATAS)
 As implementações que demonstram os conceitos pedidos para a 2ª sprint estão localizadas nos pacotes sob o pacote raiz do projeto Java (com.engsoft). Em particular:
