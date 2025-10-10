@@ -8,9 +8,17 @@ Sistema de apoio para cálculo de folha de pagamento — implementação em Java
 Status: pronto para entrega da 2ª sprint (código no diretório backend/folha-facil; wrapper Maven incluído).
 
 1. Sobre o Projeto
-Este repositório contém a implementação do módulo de cálculo de folha pensado para uso didático. A implementação está em Java e organizada para facilitar teste, revisão e demonstração das técnicas de modularização e POO exigidas pela disciplina.
 
-2. Arquitetura e Modularização  
+Este repositório contém a implementação de um sistema de gestão de folha de pagamento, desenvolvido como parte de um projeto didático da disciplina de Engenharia de Software.
+
+O objetivo do trabalho é implementar um módulo de cálculo de folha de pagamento integrado a um software de gestão de recursos humanos (RH), simulando o funcionamento de um sistema corporativo utilizado por empresas para automatizar o processamento de salários e encargos trabalhistas.
+
+A solução foi desenvolvida em Java, seguindo princípios de Programação Orientada a Objetos (POO) e modularização, de modo a facilitar o entendimento, a manutenção e a realização de testes automatizados.
+
+O projeto foi estruturado para permitir a leitura de dados de funcionários, o cálculo automático de salários brutos e líquidos, e a aplicação de regras de desconto e contribuição (como INSS e IRRF), utilizando arquivos de entrada em formato JSON e testes de validação com JUnit.
+
+2. Arquitetura e Modularização
+
 A aplicação segue o padrão de arquitetura em camadas, visando separação de responsabilidades e fácil manutenção.  
 - **Camada Model:** contém as classes que representam o domínio da aplicação (Funcionário, Contrato, Provento, Desconto).  
 - **Camada Service:** contém as regras de negócio e serviços de cálculo (interfaces e implementações concretas).  
