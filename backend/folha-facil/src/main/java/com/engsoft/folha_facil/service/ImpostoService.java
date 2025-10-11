@@ -5,60 +5,70 @@ import com.engsoft.folha_facil.model.Imposto;
 import com.engsoft.folha_facil.repository.FuncionarioRepository;
 
 public class ImpostoService {
+
     private final FuncionarioRepository funcionarioRepository;
 
     public ImpostoService(FuncionarioRepository funcionarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public Imposto calcularImpostos(String funcionario){
-        Funcionario f = FuncionarioRepository.findByCpf(funcionario);
-        if(f == null){
-            throw new IllegalArgumentException("Funcionario do CPF " + funcionario + "não foi encontrado.");
+    public Imposto calcularImpostos(String cpfFuncionario) {
+        // ✅ Usar método de instância do repositório
+        Funcionario f = funcionarioRepository.findByCpf(cpfFuncionario);
+        if (f == null) {
+            throw new IllegalArgumentException("Funcionario do CPF " + cpfFuncionario + " não foi encontrado.");
         }
 
         Imposto imposto = new Imposto();
         double salario = f.getSalarioBase();
 
-        //calcular INSS
+        // ✅ Cálculo do INSS (2024)
         double inss;
-        if(salario <= 1412.00){
+        if (salario <= 1412.00) {
             inss = salario * 0.075;
-        }else if(salario <= 2666.68){
+        } else if (salario <= 2666.68) {
             inss = (1412.00 * 0.075) + ((salario - 1412.00) * 0.09);
-        }else if(salario <= 4000.03){
-            inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((salario - 2666.68) * 0.12);
-        }else if(salario <= 7786.02){
-            inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((salario - 4000.03) * 0.14);
-        }else {
-            inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((7786.02 - 4000.03) * 0.14);
+        } else if (salario <= 4000.03) {
+            inss = (1412.00 * 0.075)
+                 + ((2666.68 - 1412.00) * 0.09)
+                 + ((salario - 2666.68) * 0.12);
+        } else if (salario <= 7786.02) {
+            inss = (1412.00 * 0.075)
+                 + ((2666.68 - 1412.00) * 0.09)
+                 + ((4000.03 - 2666.68) * 0.12)
+                 + ((salario - 4000.03) * 0.14);
+        } else {
+            inss = (1412.00 * 0.075)
+                 + ((2666.68 - 1412.00) * 0.09)
+                 + ((4000.03 - 2666.68) * 0.12)
+                 + ((7786.02 - 4000.03) * 0.14);
         }
         imposto.setINSS(inss);
 
-        //calcular FGTS
+        // ✅ FGTS
         imposto.setFGTS(salario * 0.08);
 
-        //calcular IRRF
+        // ✅ IRRF (considerando dependentes)
+        double deducaoDependente = 189.59; // valor por dependente (2024)
+        double baseIRRF = salario - inss - (f.getNumDependentes() * deducaoDependente);
         double irrf;
-        double baseIRRF = salario - inss;
 
-        if(baseIRRF <= 2112.00){
+        if (baseIRRF <= 2112.00) {
             irrf = 0.0;
-        }else if(baseIRRF <= 2826.65){
+        } else if (baseIRRF <= 2826.65) {
             irrf = (baseIRRF * 0.075) - 158.40;
-        }else if(baseIRRF <= 3751.05){
+        } else if (baseIRRF <= 3751.05) {
             irrf = (baseIRRF * 0.15) - 370.40;
-        }else if(baseIRRF <= 4664.68){
+        } else if (baseIRRF <= 4664.68) {
             irrf = (baseIRRF * 0.225) - 651.73;
-        }else{
+        } else {
             irrf = (baseIRRF * 0.275) - 884.96;
         }
 
-        if(irrf < 0) irrf = 0.0;
-
+        if (irrf < 0) irrf = 0.0;
         imposto.setIRRF(irrf);
 
-        //calcular Desconto Total
+        // ✅ Desconto total
         imposto.setDescontoTotal(inss + imposto.getFGTS() + irrf);
 
         return imposto;
