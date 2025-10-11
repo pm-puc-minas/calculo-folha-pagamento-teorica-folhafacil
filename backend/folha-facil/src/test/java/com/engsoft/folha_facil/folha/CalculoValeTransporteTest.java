@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class CalculoValeTransporteTest {
             "Centro",                        
             120,                             
             "matheus.dias@empresa.com",      
-            new Date(99, 4, 12),
-            new Date(125, 0, 10),
+            LocalDate.of(2001, 3, 2),
+            LocalDate.of(2021, 3, 2),
             3000.00,
             40,
             150.00,

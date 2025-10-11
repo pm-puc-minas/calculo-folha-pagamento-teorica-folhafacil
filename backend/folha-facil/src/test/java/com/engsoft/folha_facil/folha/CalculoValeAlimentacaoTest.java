@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class CalculoValeAlimentacaoTest {
             "Centro",                        
             120,                             
             "matheus.dias@empresa.com",      
-            Date.valueOf("1999-05-12"),
-            Date.valueOf("2025-01-10"),
+            LocalDate.of(2001, 3, 2),
+            LocalDate.of(2021, 3, 2),
             2000.00,
             40,
             150.00,

@@ -1,16 +1,27 @@
 package com.engsoft.folha_facil.repository;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.engsoft.folha_facil.model.Funcionario;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class FuncionarioRepository {
     
     private static final String FILE_PATH = "funcionarios.json";
-    private static final Gson gson = new Gson();
+    static Gson gson = new GsonBuilder()
+    .registerTypeAdapter(LocalDate.class, 
+        (com.google.gson.JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
+            new com.google.gson.JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+    .registerTypeAdapter(LocalDate.class, 
+        (com.google.gson.JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
+            LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE))
+    .setPrettyPrinting()
+    .create();
 
     // Buscar todos os Funcionários
     public static List <Funcionario> findAll(){

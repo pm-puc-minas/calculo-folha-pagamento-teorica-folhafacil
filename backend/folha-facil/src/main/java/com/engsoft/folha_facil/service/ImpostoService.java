@@ -13,7 +13,6 @@ public class ImpostoService {
     }
 
     public Imposto calcularImpostos(String cpfFuncionario) {
-        // ✅ Usar método de instância do repositório
         Funcionario f = funcionarioRepository.findByCpf(cpfFuncionario);
         if (f == null) {
             throw new IllegalArgumentException("Funcionario do CPF " + cpfFuncionario + " não foi encontrado.");
@@ -22,7 +21,7 @@ public class ImpostoService {
         Imposto imposto = new Imposto();
         double salario = f.getSalarioBase();
 
-        // ✅ Cálculo do INSS (2024)
+        // Cálculo do INSS 2024
         double inss;
         if (salario <= 1412.00) {
             inss = salario * 0.075;
@@ -45,11 +44,11 @@ public class ImpostoService {
         }
         imposto.setINSS(inss);
 
-        // ✅ FGTS
+        // FGTS
         imposto.setFGTS(salario * 0.08);
 
-        // ✅ IRRF (considerando dependentes)
-        double deducaoDependente = 189.59; // valor por dependente (2024)
+        // IRRF considerando dependentes
+        double deducaoDependente = 189.59;
         double baseIRRF = salario - inss - (f.getNumDependentes() * deducaoDependente);
         double irrf;
 
@@ -68,7 +67,7 @@ public class ImpostoService {
         if (irrf < 0) irrf = 0.0;
         imposto.setIRRF(irrf);
 
-        // ✅ Desconto total
+        // Desconto total
         imposto.setDescontoTotal(inss + imposto.getFGTS() + irrf);
 
         return imposto;

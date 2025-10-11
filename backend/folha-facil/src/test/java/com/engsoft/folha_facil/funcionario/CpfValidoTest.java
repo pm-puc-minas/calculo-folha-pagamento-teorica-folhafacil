@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +26,8 @@ void testCpfInvalido() {
             "Bairro B",
             100,
             "joao.silva@empresa.com",
-            new Date(100, 1, 1),
-            new Date(120, 1, 1),
+            LocalDate.of(2001, 3, 2),
+            LocalDate.of(2021, 3, 2),
             3000.00,
             40,
             100.00,

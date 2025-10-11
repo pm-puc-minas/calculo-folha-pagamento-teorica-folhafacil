@@ -2,11 +2,8 @@ package com.engsoft.folha_facil.folha;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Date;
-
 import org.junit.jupiter.api.Test;
 
-import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.model.Imposto;
 import com.engsoft.folha_facil.service.ImpostoService;
 

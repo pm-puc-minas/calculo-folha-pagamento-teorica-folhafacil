@@ -21,7 +21,7 @@ public class FuncionarioService {
     private Funcionario criarFuncionario(String nome, String cpf, String cargo,
                                     String telefone, String rua, String bairro,
                                     int numero, String email,
-                                    Date dataNascimento, Date dataAdmissao,
+                                    LocalDate dataNascimento, LocalDate dataAdmissao,
                                     double salarioBase, int horasSemanais,
                                     double valorValeTransporte,
                                     List<Beneficio> planoBeneficios,

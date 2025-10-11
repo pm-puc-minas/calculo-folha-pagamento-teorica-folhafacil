@@ -1,5 +1,6 @@
 package com.engsoft.folha_facil.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +18,8 @@ public class Funcionario {
     private String bairro;
     private int numero;
     private String email;
-    private Date dataNascimento;
-    private Date dataAdmissao;
+    private LocalDate dataNascimento;
+    private LocalDate dataAdmissao;
     private double salarioBase;
     private int horasSemanais;
     private int diasTrabalhadosMes;
@@ -29,7 +30,7 @@ public class Funcionario {
     
     public Funcionario(String nome, String cpf, String cargo, String telefone,
                        String rua, String bairro, int numero, String email,
-                       Date dataNascimento, Date dataAdmissao, double salarioBase,
+                       LocalDate dataNascimento2, LocalDate dataAdmissao2, double salarioBase,
                        int horasSemanais, double valorValeTransporte, double desconto,
                        List<Beneficio> planoBeneficios, int numDependentes,
                        double pensaoAlimenticia) {
@@ -43,8 +44,8 @@ public class Funcionario {
         this.bairro = verificaStringVazia("bairro", bairro);
         this.numero = verificaNegativo("numero", numero);
         this.email = verificaStringVazia("email", email);
-        this.dataNascimento = verificarDataNula("dataNascimento", dataNascimento);
-        this.dataAdmissao = verificarDataNula("dataAdmissão", dataAdmissao);
+        this.dataNascimento = verificarDataNula("dataNascimento", dataNascimento2);
+        this.dataAdmissao = verificarDataNula("dataAdmissão", dataAdmissao2);
                     
         // Campos numéricos validados
         this.salarioBase = verificaNegativo("salarioBase", salarioBase);
@@ -62,6 +63,13 @@ public class Funcionario {
 
     // Getters
 
+    public Funcionario(String nome2, String cpf2, String cargo2, String telefone2, String rua2, String bairro2,
+            int numero2, String email2, Date dataNascimento2, Date dataAdmissao2, double salarioBase2,
+            int horasSemanais2, double valorValeTransporte, double desconto, List<Beneficio> planoBeneficios2,
+            int numDependentes2, double pensaoAlimenticia2) {
+        //TODO Auto-generated constructor stub
+    }
+
     public Long getId() { return id; }
 
     public String getNome() { return nome; }
@@ -73,8 +81,8 @@ public class Funcionario {
     public String getBairro() { return bairro; }
     public int getNumero() { return numero; }
     public String getEmail() { return email; }
-    public Date getDataNascimento() { return dataNascimento; }
-    public Date getDataAdmissao() { return dataAdmissao; }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public LocalDate getDataAdmissao() { return dataAdmissao; }
     public double getSalarioBase() { return salarioBase; }
     public Beneficio getValeTransporte() { return valeTransporte; }
     public List<Beneficio> getPlanoBeneficios() { return planoBeneficios; }
@@ -123,7 +131,7 @@ public class Funcionario {
         return valor;
     }
 
-    private static Date verificarDataNula(String campo, Date valor){
+    private static LocalDate verificarDataNula(String campo, LocalDate valor){
         if (valor == null) throw new IllegalArgumentException(campo + "não pode ser nula");
         return valor;
     }

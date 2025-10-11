@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,22 +21,27 @@ public class CalculoInsalubridadeTest {
     public void testCalculoInsalubridade() {
         List<Beneficio> beneficios = new ArrayList<>();
         double salarioBase = 1380.00;
-        Funcionario f = new Funcionario("Matheus Dias",
-            "123.456.789-00",                
-            "Analista de Sistemas",          
-            "3199999-8888",                  
-            "Rua das Palmeiras",             
-            "Centro",                        
-            120,                             
-            "matheus.dias@empresa.com",      
-            new Date(99, 4, 12),
-            new Date(125, 0, 10),
+
+        Funcionario f = new Funcionario(
+            "Matheus Dias",
+            "12345678900",
+            "Analista de Sistemas",
+            "3199999-8888",
+            "Rua das Palmeiras",
+            "Centro",
+            120,
+            "matheus.dias@empresa.com",
+            LocalDate.of(2001, 3, 2),
+            LocalDate.of(2021, 3, 2),
             1380.00,
             40,
             150.00,
-            salarioBase, beneficios,
+            1380.00,
+            null,
             2,
-            0.00 );
+            0.00
+        );
+
             
         var beneficio = beneficioService.calcularInsalubridade(20, f);
         

@@ -2,6 +2,7 @@ package com.engsoft.folha_facil.folha;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,19 +22,20 @@ public class RelatorioFolhaTest {
 
         Funcionario f1 = new Funcionario(
             "Maria Souza", "55566677788", "Assistente", "3199999-6666", "Rua B", "Bairro C",
-            110, "maria.souza@empresa.com", new Date(101, 2, 2), new Date(121, 2, 2),
+            110, "maria.souza@empresa.com",LocalDate.of(2001, 3, 2), LocalDate.of(2021, 3, 2),
             3000.00, 40, 120.00, 3000.00, null, 1, 0.00
         );
         Funcionario f2 = new Funcionario(
             "João Silva", "11122233344", "Auxiliar", "3199999-7777", "Rua A", "Bairro B",
-            100, "joao.silva@empresa.com", new Date(100, 1, 1), new Date(120, 1, 1),
+            100, "joao.silva@empresa.com",             LocalDate.of(2001, 3, 2),
+            LocalDate.of(2021, 3, 2),
             2000.00, 40, 100.00, 2000.00, null, 1, 0.00
         );
 
         List<Funcionario> funcionarios = Arrays.asList(f1, f2);
 
         for (Funcionario f : funcionarios) {
-            Imposto imposto = impostoService.calcularImpostos("55566677788"); // 👈 passa o CPF
+            Imposto imposto = impostoService.calcularImpostos("55566677788");
 
             double salarioLiquido = f.getSalarioBase() - imposto.getINSS() - imposto.getIRRF();
             
