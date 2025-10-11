@@ -1,7 +1,6 @@
 package com.engsoft.folha_facil.folha;
 
 import com.engsoft.folha_facil.model.Imposto;
-import com.engsoft.folha_facil.repository.FuncionarioRepository;
 import com.engsoft.folha_facil.service.ImpostoService;
 
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,7 @@ public class CalculoINSSTest {
 
     @Test
     void testeCalculoINSSSalario3000() {
-        FuncionarioRepository funcionarioRepository = new FuncionarioRepository();
-        ImpostoService impostoService = new ImpostoService(funcionarioRepository);
+        ImpostoService impostoService = new ImpostoService(null);
 
         Imposto imposto = impostoService.calcularImpostos("55566677788");
         double inssEsperado = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((3000.00 - 2666.68) * 0.12);

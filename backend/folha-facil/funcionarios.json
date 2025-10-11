@@ -1,20 +1,26 @@
-[{
-  "id": 0,
-  "nome": "Maria Souza",
-  "cpf": "55566677788",
-  "cargo": "Assistente",
-  "telefone": "3199999-6666",
-  "rua": "Rua B",
-  "bairro": "Bairro C",
-  "numero": 110,
-  "email": "maria.souza@empresa.com",
-  "dataNascimento": "2001-03-02",
-  "dataAdmissao": "2021-03-02",
-  "salarioBase": 3000.0,
-  "horasSemanais": 40,
-  "diasTrabalhadosMes": 0,
-  "valeTransporte": { "tipo": "VALE_TRANSPORTE", "valor": 120.0, "desconto": 3000.0 },
-  "planoBeneficios": [],
-  "numDependentes": 1,
-  "pensaoAlimenticia": 0.0
-}]
+[
+  {
+    "id": 0,
+    "nome": "Maria Souza",
+    "cpf": "55566677788",
+    "cargo": "Assistente",
+    "telefone": "3199999-6666",
+    "rua": "Rua B",
+    "bairro": "Bairro C",
+    "numero": 110,
+    "email": "maria.souza@empresa.com",
+    "dataNascimento": "2001-03-02",
+    "dataAdmissao": "2021-03-02",
+    "salarioBase": 3000.0,
+    "horasSemanais": 40,
+    "diasTrabalhadosMes": 0,
+    "valeTransporte": {
+      "tipo": "VALE_TRANSPORTE",
+      "valor": 120.0,
+      "desconto": 3000.0
+    },
+    "planoBeneficios": [],
+    "numDependentes": 2,
+    "pensaoAlimenticia": 0.0
+  }
+]
