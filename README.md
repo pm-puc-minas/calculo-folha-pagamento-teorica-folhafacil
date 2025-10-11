@@ -165,9 +165,7 @@ Os testes unitários foram implementados com JUnit 5, garantindo a verificação
 ./backend/folha-facil/mvnw -f backend/folha-facil test
 
 7. Observações sobre submissão e avaliação
-- Vídeo: máximo 3 minutos; mostre comandos e resultados (build & testes) — caso a apresentação seja presencial, prepare os mesmos passos para execução ao vivo.
-- Não subir dados reais dos funcionários (use o funcionarios.json de exemplo ou anonimizado).
-- Se solicitado, gerar JavaDoc e anexar link/artefato.
+- https://youtu.be/Ce3ROcGsKqA
 
 8. Estrutura do Repositório (itens relevantes)
 
