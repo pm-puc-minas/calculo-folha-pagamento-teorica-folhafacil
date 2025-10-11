@@ -164,17 +164,12 @@ Os testes unitários foram implementados com JUnit 5, garantindo a verificação
 ```bash
 ./backend/folha-facil/mvnw -f backend/folha-facil test
 
-7. Entregáveis exigidos pela 2ª sprint — checklist 
-- [x] Código-fonte atualizado no repositório GitHub (backend/folha-facil)  
-- [x] README.md (este arquivo) explicando como compilar, rodar e testar, e indicando onde estão os conceitos de POO aplicados  
-- [x] Testes unitários automatizados (localizados em src/test/java)  
-
-8. Observações sobre submissão e avaliação
+7. Observações sobre submissão e avaliação
 - Vídeo: máximo 3 minutos; mostre comandos e resultados (build & testes) — caso a apresentação seja presencial, prepare os mesmos passos para execução ao vivo.
 - Não subir dados reais dos funcionários (use o funcionarios.json de exemplo ou anonimizado).
 - Se solicitado, gerar JavaDoc e anexar link/artefato.
 
-9. Estrutura do Repositório (itens relevantes)
+8. Estrutura do Repositório (itens relevantes)
 
 A estrutura do projeto foi organizada para garantir clareza, modularidade e fácil manutenção.  
 A seguir, estão descritos os principais diretórios e arquivos que compõem o sistema de folha de pagamento.
@@ -305,23 +300,67 @@ Arquivo principal de documentação do projeto (este arquivo), descrevendo:
 
 ---
 
-10. Design Patterns Utilizados  
-Para garantir extensibilidade e reutilização de código, o projeto faz uso de alguns padrões de projeto (Design Patterns):  
-- **Strategy:** utilizado no cálculo da folha para permitir múltiplas estratégias de cálculo conforme o tipo de funcionário.  
-- **Template Method:** aplicado nas classes abstratas que definem etapas padrão para o cálculo de proventos e descontos.  
-- **Factory Method:** usado para criar instâncias de funcionários com base em seu tipo de vínculo (CLT, PJ, Temporário).  
+9. Design Patterns Utilizados  
+Para garantir extensibilidade e reutilização de código, o projeto faz uso de alguns padrões de projeto (Design Patterns):
 
-Esses padrões reforçam os princípios de POO e tornam o sistema mais flexível e sustentável a longo prazo.
+- **Strategy:** utilizado no cálculo da folha para permitir múltiplas estratégias de cálculo conforme o tipo de funcionário. Implementação prática: a interface `CalculadoraFolha` e suas implementações (`CalculadoraFolhaCLT`, `CalculadoraFolhaPJ`, etc.). O serviço de cálculo seleciona a estratégia adequada com base no tipo de vínculo do funcionário.
+
+- **Template Method:** aplicado nas classes abstratas que definem etapas padrão para o cálculo de proventos e descontos. Ex.: uma classe abstrata que define o fluxo geral (calcularProventos -> aplicarDescontos -> gerarResumo) e deixa passos específicos para subclasses.
+
+- **Factory Method:** usado para criar instâncias de funcionários com base em seu tipo de vínculo (CLT, PJ, Temporário). Ex.: `FuncionarioFactory`/`FuncionarioRepository` verifica o campo `tipoContrato` do JSON e instancia a subclasse correta (`FuncionarioCLT`, `FuncionarioPJ`, ...).
+
+- **Builder (uso pontual):** para montar objetos compostos como `FolhaPagamento`/`Recibo` com muitos campos opcionais, facilitando a criação em testes e a geração de relatórios.
+
+- **Observer / Event (potencial evolução):** pode ser aplicado futuramente para notificar subsistemas (ex.: geração de arquivos, envio de e-mails) após o cálculo concluído.
+
+Onde procurar no código:
+- `backend/folha-facil/src/main/java/com/engsoft/folhafacil/service` — implementações de `CalculadoraFolha*`, classes que orquestram o cálculo e possíveis Template Methods.
+- `backend/folha-facil/src/main/java/com/engsoft/folhafacil/repository` — códigos que convertem JSON em objetos do domínio e servem como fábricas.
+- `backend/folha-facil/src/main/java/com/engsoft/folhafacil/model` — classes de domínio que podem usar Builder/Factory patterns.
+
+Comentário: os nomes exatos de classes/factories podem variar conforme implementações locais — verifique os arquivos listados para localizar a classe que implementa cada padrão.
 
 ---
 
-11. Tratamento de Exceções e Validações  
-O sistema implementa um tratamento de exceções robusto para garantir execução segura:  
-- **Exceções tratadas:** erros de leitura de arquivo JSON, campos ausentes ou inválidos, formatos incorretos e valores fora dos limites esperados.  
-- **Validações:** antes do cálculo da folha, o sistema valida dados obrigatórios como nome, cargo, tipo de contrato e salário base.  
-- **Logs:** os erros e avisos são registrados em console (ou arquivo, futuramente), facilitando a depuração e manutenção.
+10. Tratamento de Exceções e Validações
 
-12. Créditos   
+O sistema implementa um tratamento de exceções robusto para garantir execução segura e fácil diagnóstico de problemas:
+
+- Estratégia geral:
+  - Validações de entrada são realizadas assim que os dados são carregados (camada Repository / JsonReader). Campos obrigatórios são verificados e valores fora do esperado são rejeitados com mensagens claras.
+  - O serviço de cálculo (`CalculoFolhaService`) valida consistência dos dados antes de aplicar regras (salário >= 0, horas semanais no intervalo esperado, datas válidas, etc.).
+  - Exceções esperadas (ex.: erro de leitura do arquivo, parse inválido) são tratadas e transformadas em mensagens amigáveis nos logs/console.
+
+- Exceções e classes de erro (exemplos recomendados):
+  - `InvalidDataException` — lançada quando campos obrigatórios estiverem ausentes ou com formato inválido.
+  - `ResourceNotFoundException` / `ArquivoNaoEncontradoException` — quando `funcionarios.json` ou outro recurso não é localizado.
+  - `CalculoException` — falhas durante o processamento (por exemplo, divisão por zero em bases inválidas).
+  - `JsonParseException` — erros de desserialização (vêm da biblioteca JSON utilizada).
+
+- Logs e registro de erros:
+  - No momento, o projeto usa saída padrão (System.out / System.err) para mensagens e erros, facilitando a avaliação em ambiente acadêmico.
+  - Recomenda-se adotar SLF4J + Logback para permitir níveis de log configuráveis (ERROR, WARN, INFO, DEBUG) e persistência em arquivo para produção.
+  - As mensagens de log devem incluir contexto suficiente (id do funcionário, operação, valores relevantes) para facilitar a depuração.
+
+- Validações aplicadas (exemplos de verificações realizadas no fluxo):
+  - Presença de campos obrigatórios: `nome`, `cpf`, `salarioBase`, `tipoContrato`.
+  - Valores numéricos não negativos: `salarioBase`, `numDependentes`, `pensaoAlimenticia`.
+  - Intervalos e limites: `horasSemanais` dentro de um intervalo plausível (ex.: 0–168), `diasTrabalhadosMes` entre 0 e 31.
+  - Datas coerentes: `dataAdmissao` não posterior à data atual; `dataNascimento` compatível com idade mínima quando aplicável.
+  - Benefícios: tipos válidos e valores compatíveis; por exemplo, verificar se desconto de transporte foi calculado conforme regra aplicada no sistema.
+  - Faixas de INSS/IRRF: validação das faixas e arredondamentos conforme regras de cálculo implementadas.
+
+- Como agir perante erros:
+  - Erros de leitura/parse: verificar caminho do arquivo `funcionarios.json` e integridade do JSON.
+  - Validações que falham: revisar o registro de entrada (campo ausente/valor incorreto) e corrigi-lo; logs apontarão o id e o motivo.
+  - Falhas em cálculos: verificar dados de entrada e os testes de unidade que exercitam o caso de borda.
+
+- Recomendações para evolução:
+  - Centralizar exceções customizadas em um pacote `exception/` com mapeamento para mensagens de usuário e códigos (útil para futura API).
+  - Integrar um framework de logging (SLF4J + Logback) e configurar arquivos de log rotacionados.
+  - Adicionar validações automáticas com bibliotecas (ex.: Bean Validation / javax.validation) para reforçar checagens em POJOs.
+  - Criar handlers para transformar exceções em respostas padronizadas quando for exposta uma API REST.
+11. Créditos   
 - Contribuidores:
   - Marcos de Oliveira Antunes
   - Matheus Henrique Tavares Malta
