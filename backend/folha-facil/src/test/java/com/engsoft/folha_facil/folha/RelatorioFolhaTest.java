@@ -1,7 +1,6 @@
 package com.engsoft.folha_facil.folha;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

@@ -3,7 +3,6 @@ package com.engsoft.folha_facil.folha;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class CalculoValeTransporteTest {
         List<Beneficio> beneficios = new ArrayList<>();
         double salarioBase = 3000.00;
         Funcionario f = new Funcionario("Matheus Dias",
-            "123.456.789-00",                
+            "55566677788",                
             "Analista de Sistemas",          
             "3199999-8888",                  
             "Rua das Palmeiras",             

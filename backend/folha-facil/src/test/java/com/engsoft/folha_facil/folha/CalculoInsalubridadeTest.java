@@ -3,14 +3,10 @@ package com.engsoft.folha_facil.folha;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.engsoft.folha_facil.model.Beneficio;
 import com.engsoft.folha_facil.model.BeneficioTipo;
 import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.service.BeneficioService;
@@ -19,12 +15,9 @@ public class CalculoInsalubridadeTest {
     private final BeneficioService beneficioService = new BeneficioService(null);
     @Test
     public void testCalculoInsalubridade() {
-        List<Beneficio> beneficios = new ArrayList<>();
-        double salarioBase = 1380.00;
-
         Funcionario f = new Funcionario(
             "Matheus Dias",
-            "12345678900",
+            "55566677788",
             "Analista de Sistemas",
             "3199999-8888",
             "Rua das Palmeiras",

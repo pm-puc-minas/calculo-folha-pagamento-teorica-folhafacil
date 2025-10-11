@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class CalculoValeAlimentacaoTest {
         List<Beneficio> beneficios = new ArrayList<>();
         double valorDiario = 24.00;
         Funcionario f = new Funcionario("Matheus Dias",
-            "123.456.789-00",                
+            "55566677788",                
             "Analista de Sistemas",          
             "3199999-8888",                  
             "Rua das Palmeiras",             

@@ -2,7 +2,6 @@ package com.engsoft.folha_facil.funcionario;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;

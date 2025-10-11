@@ -4,7 +4,6 @@ package com.engsoft.folha_facil.folha;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +15,15 @@ import com.engsoft.folha_facil.model.Funcionario;
 import com.engsoft.folha_facil.model.BeneficioTipo;
 import com.engsoft.folha_facil.service.BeneficioService;
 
-public class CalculoPerculosidadeTest {
+public class CalculoPericulosidadeTest {
     private final BeneficioService beneficioService = new BeneficioService(null);
 
     @Test
-    public void testCalculoPerculosidade() {
+    public void testCalculoPericulosidade() {
         List<Beneficio> beneficios = new ArrayList<>();
         double salarioBase = 2000.00;
         Funcionario f = new Funcionario("Matheus Dias",
-            "123.456.789-00",                
+            "55566677788",                
             "Analista de Sistemas",          
             "3199999-8888",                  
             "Rua das Palmeiras",             
