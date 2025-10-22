@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
+
 export class KeyCloackService {
   private keycloakUrl = 'http://localhost:8081/realms/folha-facil-realm/protocol/openid-connect/token';
   private clientId = 'folha-facil-app'; 
@@ -45,7 +46,6 @@ export class KeyCloackService {
   }
 
   isAuthenticated(): boolean {
-    console.log(!!this.getToken())
     return !!this.getToken();
   }
 

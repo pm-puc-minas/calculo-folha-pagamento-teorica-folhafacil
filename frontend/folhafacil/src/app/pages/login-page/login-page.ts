@@ -39,7 +39,6 @@ export class LoginPage {
   }
 
   auth(){
-    console.log("askijdajs",this.getAuthForm())
     const login : Auth = this.getAuthForm()
     this.keycloackService.login(login.user, login.pass)
   }

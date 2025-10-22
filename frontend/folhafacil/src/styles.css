@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "primeicons/primeicons.css";
 
 @theme {
     --color-main-100: oklch(0.7412 0.0586 243.81);
@@ -13,4 +14,37 @@ body {
 	border: none;
 	height: 100%;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+	background-color: #FAFAFA;
 }
+
+.p-datatable-thead > tr > th {
+  background-color: #8CB0CE !important;
+  color: white !important;
+}
+
+
+.p-datatable-tbody > tr:hover > td {
+  background-color: #8CB0CE; 
+  color: #ffffff; 
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Todos os p-button */
+.p-button.p-component {
+    background-color: var(--color-main-700) !important; 
+    color: white !important;                    
+    border: 2px solid var(--color-main-100) !important;
+}
+
+
+.p-button.p-component:hover {
+    background-color: var(--color-main-500) !important; 
+    color: white !important;
+}
+
+.p-button.p-component .p-button-label,
+.p-button.p-component .p-button-icon {
+    color: white !important;
+}
+
