@@ -1,7 +1,7 @@
 
-<p-dialog [header]="isEdit ? 'Editar Funcionário' : 'Criar Funcionário'" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<p-dialog [header]="isEdit ? 'Editar Funcionário' : 'Criar Funcionário'" (onHide)="afterCloseModal()" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
         <div class="card flex justify-center">
-            <p-stepper [value]="1" class="basis-[100%]">
+            <p-stepper [(value)]="steperValue" class="basis-[100%]">
                 <p-step-list>
                     <p-step [value]="1">Pessoal</p-step>
                     <p-step [value]="2">Empresarial</p-step>
@@ -23,7 +23,7 @@
                                                 <label for="on_label">Email</label>
                                             </p-floatlabel>
                                             <p-floatlabel variant="on" styleClass="w-full">
-                                                <p-inputnumber inputId="withoutgrouping" class="w-full" formControlName="cpf"/>
+                                                <p-inputmask styleClass="w-full" id="on_label" mask="999.999.999-99" formControlName="cpf"/>
                                                 <label for="on_label">CPF</label>
                                             </p-floatlabel>
                                         </div>
@@ -33,7 +33,7 @@
                                         </p-floatlabel>
                                         <div class="grid grid-cols-2 gap-2 w-full">
                                             <p-floatlabel variant="on" styleClass="w-full">
-                                                <p-inputnumber inputId="withoutgrouping" class="w-full" formControlName="telefone"/>
+                                                <p-inputmask styleClass="w-full" id="on_label" mask="(99)99999-9999" formControlName="telefone"/>
                                                 <label for="on_label">Telefone</label>
                                             </p-floatlabel>
                                             <p-floatlabel variant="on">

@@ -13,6 +13,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { Select } from 'primeng/select';
 import { InputNumber } from 'primeng/inputnumber';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputMask } from 'primeng/inputmask';
 
 
 @Component({
@@ -30,7 +31,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
     Select,
     InputNumber,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    InputMask
   ],
   templateUrl: './funcionarios-page.html',
   styleUrl: './funcionarios-page.css'
@@ -40,6 +42,7 @@ export class FuncionariosPage {
 
   isModal: boolean = false
   isEdit: boolean = false;
+  steperValue: number = 1
 
   cargos: {name: string, value: string}[] = [
     {name : 'Estagiario', value: 'ESTAGIARIO'},
@@ -68,6 +71,15 @@ export class FuncionariosPage {
 
   showModal(){
     this.isModal = true
+  }
+
+  afterCloseModal(){
+    this.steperValue = 1
+  }
+
+  closeModal(){
+    this.isModal = false
+    this.afterCloseModal()
   }
 
   getFuncionarioForm(){

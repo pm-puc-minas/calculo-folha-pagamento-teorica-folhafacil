@@ -25,7 +25,7 @@ public class KeycloakService {
                 .build();
     }
 
-    public void criarUsuario(String username, String email, String primeiroNome, String ultimoNome, String senha, String nomeGrupo) {
+    public String criarUsuario(String username, String email, String primeiroNome, String ultimoNome, String senha, String nomeGrupo) {
         UsersResource usersResource = keycloak.realm(realm).users();
 
         UserRepresentation user = new UserRepresentation();
@@ -51,9 +51,12 @@ public class KeycloakService {
             if (nomeGrupo != null && !nomeGrupo.isBlank()) {
                 adicionarUsuarioAoGrupo(userId, nomeGrupo);
             }
+
+            return userId;
         } else {
             System.out.println("Erro ao criar usuário: " + response.getStatus());
         }
+        return null;
     }
 
     private void adicionarUsuarioAoGrupo(String userId, String nomeGrupo) {
