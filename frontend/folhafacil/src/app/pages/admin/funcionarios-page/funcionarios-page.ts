@@ -5,6 +5,15 @@ import { Table } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
+import { Dialog } from 'primeng/dialog';
+import { StepperModule } from 'primeng/stepper';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabel } from 'primeng/floatlabel';
+import { DatePicker } from 'primeng/datepicker';
+import { Select } from 'primeng/select';
+import { InputNumber } from 'primeng/inputnumber';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-funcionarios-page',
@@ -12,12 +21,63 @@ import { ButtonModule } from 'primeng/button';
     CommonModule, 
     TableModule, 
     TagModule,
-    ButtonModule
+    ButtonModule,
+    Dialog,
+    StepperModule,
+    InputTextModule,
+    FloatLabel,
+    DatePicker,
+    Select,
+    InputNumber,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './funcionarios-page.html',
   styleUrl: './funcionarios-page.css'
 })
 export class FuncionariosPage {
+	funcionarioForm: FormGroup;
+
+  isModal: boolean = false
+  isEdit: boolean = false;
+
+  cargos: {name: string, value: string}[] = [
+    {name : 'Estagiario', value: 'ESTAGIARIO'},
+    {name : 'Funcionário', value: 'FUNCIONARIO'},
+    {name : 'Admin', value: 'ADMIN'},
+  ]
+
+  constructor(private fb: FormBuilder) {
+    this.funcionarioForm = this.fb.group({
+      id: [],
+      nome: [],
+      email: [],
+      cpf: [],
+      endereco: [],
+      telefone: [],
+      dataNascimento: [],
+      cargo: [],
+      dataAdmissao: [],
+      salarioBase: [],
+      horasDiarias: [],
+      diasMensal: [],
+      numDependentes: [],
+      valorPensao: [],
+    });
+	}
+
+  showModal(){
+    this.isModal = true
+  }
+
+  getFuncionarioForm(){
+    return this.funcionarioForm.value;
+  }
+
+  salvar(){
+    console.log(this.getFuncionarioForm())
+  }
+
   dados = [
     { 
       nome: "Teste 1",

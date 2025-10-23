@@ -1,12 +1,127 @@
+
+<p-dialog [header]="isEdit ? 'Editar Funcionário' : 'Criar Funcionário'" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+        <div class="card flex justify-center">
+            <p-stepper [value]="1" class="basis-[100%]">
+                <p-step-list>
+                    <p-step [value]="1">Pessoal</p-step>
+                    <p-step [value]="2">Empresarial</p-step>
+                    <p-step [value]="3" styleClass="bg-main-500">Beneficios</p-step>
+                </p-step-list>
+                <p-step-panels>
+                   <form [formGroup]="funcionarioForm">
+                        <p-step-panel [value]="1">
+                            <ng-template #content let-activateCallback="activateCallback">
+                                <div class="flex flex-col h-48">
+                                    <div class="p-2 flex flex-col space-y-2">
+                                        <p-floatlabel variant="on" styleClass="w-full">
+                                            <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="nome"/>
+                                            <label for="on_label">Nome</label>
+                                        </p-floatlabel>
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="email"/>
+                                                <label for="on_label">Email</label>
+                                            </p-floatlabel>
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="withoutgrouping" class="w-full" formControlName="cpf"/>
+                                                <label for="on_label">CPF</label>
+                                            </p-floatlabel>
+                                        </div>
+                                        <p-floatlabel variant="on" styleClass="w-full">
+                                            <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="endereco"/>
+                                            <label for="on_label">Endereço</label>
+                                        </p-floatlabel>
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="withoutgrouping" class="w-full" formControlName="telefone"/>
+                                                <label for="on_label">Telefone</label>
+                                            </p-floatlabel>
+                                            <p-floatlabel variant="on">
+                                                <p-datepicker inputId="on_label" showIcon iconDisplay="input" dateFormat="dd/mm/yy" appendTo="body" formControlName="dataNascimento" fluid/>
+                                                <label for="on_label">Data de Nascimento</label>
+                                            </p-floatlabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex pt-6 justify-end">
+                                    <p-button label="Proximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(2)" />
+                                </div>
+                            </ng-template>
+                        </p-step-panel>
+
+                        <p-step-panel [value]="2">
+                            <ng-template #content let-activateCallback="activateCallback">
+                                <div class="flex flex-col h-48">
+                                    <div class="p-2 flex flex-col space-y-2">
+                                         <div class="grid grid-cols-2 gap-2 w-full">
+                                            <p-floatlabel variant="on">
+                                                <p-datepicker inputId="on_label" showIcon iconDisplay="input" dateFormat="dd/mm/yy" appendTo="body" formControlName="dataAdmissao" fluid/>
+                                                <label for="on_label">Data de Admissão</label>
+                                            </p-floatlabel>
+                                            <p-floatlabel styleClass="w-full" variant="on">
+                                                <p-select inputId="on_label" [options]="cargos" optionLabel="name" optionValue="value" class="w-full" formControlName="cargo" />
+                                                <label for="on_label">Cargo</label>
+                                            </p-floatlabel>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-2 w-full">
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="on_label" mode="currency" currency="BRL" locale="pt-BR" class="w-full" formControlName="salarioBase"/>
+                                                <label for="on_label">Salário</label>
+                                            </p-floatlabel>
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="integeronly" class="w-full" formControlName="horasDiarias"/>
+                                                <label for="on_label">Horas diarias</label>
+                                            </p-floatlabel>
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="integeronly" class="w-full" formControlName="diasMensal"/>
+                                                <label for="on_label">Dias mensais</label>
+                                            </p-floatlabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex pt-6 justify-between">
+                                    <p-button label="Voltar" severity="secondary" icon="pi pi-arrow-left" (onClick)="activateCallback(1)" />
+                                    <p-button label="Proximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(3)" />
+                                </div>
+                            </ng-template>
+                        </p-step-panel>
+
+                        <p-step-panel [value]="3">
+                            <ng-template #content let-activateCallback="activateCallback">
+                                <div class="flex flex-col h-48">
+                                    <div class="p-2 flex flex-col space-y-2">
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="integeronly" class="w-full" formControlName="numDependentes"/>
+                                                <label for="on_label">Numero de Dependentes</label>
+                                            </p-floatlabel>
+                                            <p-floatlabel variant="on" styleClass="w-full">
+                                                <p-inputnumber inputId="on_label" mode="currency" currency="BRL" locale="pt-BR" class="w-full" formControlName="valorPensao"/>
+                                                <label for="on_label">Valor pensão</label>
+                                            </p-floatlabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex pt-6 justify-between">
+                                    <p-button label="Voltar" icon="pi pi-arrow-left" (onClick)="activateCallback(2)" />
+                                    <p-button label="Salvar" icon="pi pi-check" iconPos="right" (onClick)="salvar()" />
+                                </div>
+                            </ng-template>
+                        </p-step-panel>
+                    </form>
+                </p-step-panels>
+            </p-stepper>
+        </div>
+</p-dialog>
 <section class="w-full">
     <div class="flex flex-row gap-x-4">
-       <p-button label="Novo" icon="pi pi-plus-circle" />
-       <p-button label="Profile" icon="pi pi-search"/> 
+       <p-button label="Novo" icon="pi pi-plus-circle" (click)="showModal()" />
+       <p-button label="Pesquisar" icon="pi pi-search"/> 
     </div>
 </section>
 <main class="w-full mt-5">
     <div class="w-full">
-        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Funcionarios</div>
+        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Funcionários</div>
     </div>
     <div class="card">
         <p-table [value]="dados" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">

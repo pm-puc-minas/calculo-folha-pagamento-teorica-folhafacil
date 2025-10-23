@@ -44,7 +44,7 @@ export class MainPage {
 
       if(this.keyclaockService.hasRole("FF_FUNCIONARIOS_LISTAR")){
           route.routes.push({
-            name: 'Funcionarios',
+            name: 'Funcionários',
             route: 'admin/funcionarios'
           })
       }
@@ -63,7 +63,7 @@ export class MainPage {
 
   hasFuncionario(){
     const route : MiniMenuNavItem = {
-      title: "Funcionario",
+      title: "Funcionário",
       routes: []
     }
 
