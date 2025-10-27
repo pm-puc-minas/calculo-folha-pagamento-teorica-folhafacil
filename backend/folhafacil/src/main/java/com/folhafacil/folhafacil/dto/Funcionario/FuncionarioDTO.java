@@ -23,4 +23,5 @@ public class FuncionarioDTO {
     private Integer diasMensal;
     private Integer numDependentes;
     private BigDecimal pensao;
+    private String usuario;
 }

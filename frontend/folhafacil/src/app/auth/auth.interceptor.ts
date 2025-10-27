@@ -1,6 +1,7 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse  } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { KeyCloackService } from '../services/keycloack.service';
+import { catchError, switchMap, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const keycloakService = inject(KeyCloackService);
@@ -12,14 +13,34 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(newReq);
   }
 
-  if (token) {
-    const cloned = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return next(cloned);
-  }
+  const authReq = token
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+    : req;
 
-  return next(req);
+  return next(authReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        return keycloakService.refreshToken().pipe(
+          switchMap((newToken) => {
+            if (!newToken) {
+              keycloakService.logout();
+              return throwError(() => new Error('Falha ao obter novo token'));
+            }
+
+            const retryReq = req.clone({
+              setHeaders: { Authorization: `Bearer ${newToken}` }
+            });
+            return next(retryReq);
+          }),
+          catchError((refreshErr) => {
+            console.error('Falha ao renovar o token', refreshErr);
+            keycloakService.logout();
+            return throwError(() => refreshErr);
+          })
+        );
+      }
+
+      return throwError(() => error);
+    })
+  );
 };

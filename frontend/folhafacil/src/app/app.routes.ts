@@ -6,6 +6,7 @@ import { LoginPage } from './pages/login-page/login-page';
 import { RoleCanMatch, AuthCanMatch } from './auth/auth.guard';
 import { HoraExtraPage } from './pages/funcionario/hora-extra-page/hora-extra-page';
 import { NoPermissionPage } from './pages/no-permission-page/no-permission-page';
+import { LogsPage } from './pages/admin/logs-page/logs-page';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -38,6 +39,12 @@ export const routes: Routes = [
 						canActivate: [RoleCanMatch],
 						data: { role : 'FF_FOLHA_SALARIAL_LISTAR'}
 					},
+					{
+						path: "logs",
+						component: LogsPage,
+						canActivate: [RoleCanMatch],
+						data : { role : 'FF_LOGS_LISTAR'}
+					}
 				],
 			},
 			{

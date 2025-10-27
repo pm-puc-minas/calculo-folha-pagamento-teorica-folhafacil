@@ -56,6 +56,13 @@ export class MainPage {
         })
       }
 
+      if(this.keyclaockService.hasRole("FF_LOGS_LISTAR")){
+        route.routes.push({
+          name: 'Logs',
+          route: 'admin/logs'
+        })
+      }
+
       if(route.routes.length > 0){
         this.routes.push(route)
       }

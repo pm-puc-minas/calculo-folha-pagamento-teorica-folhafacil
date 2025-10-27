@@ -1,26 +1,35 @@
 package com.folhafacil.folhafacil.controller;
 
-import com.folhafacil.folhafacil.service.KeycloakService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
+import com.folhafacil.folhafacil.service.Funcionario.FuncionarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("funcionario")
 public class FuncionarioController {
-    private final KeycloakService keycloakService;
+    @Autowired
+    private FuncionarioService funcionarioService;
 
-    public FuncionarioController(KeycloakService keycloakService) {
-        this.keycloakService = keycloakService;
+
+    @PreAuthorize("hasRole('FF_FUNCIONARIO_SALVAR')")
+    @PostMapping(value ={"",  "editar"})
+    public void salvar(@RequestBody FuncionarioDTO d, @AuthenticationPrincipal Jwt token) {
+       funcionarioService.salvar(d, token);
     }
-    @PostMapping(value ="")
-    public void salvar( @RequestParam String username,
-                        @RequestParam String email,
-                        @RequestParam String primeiroNome,
-                        @RequestParam String ultimoNome,
-                        @RequestParam String senha,
-                        @RequestParam String grupo) {
-        keycloakService.criarUsuario(username, email, primeiroNome, ultimoNome, senha, grupo);
+
+    @PreAuthorize("hasRole('FF_FUNCIONARIO_HABILITAR')")
+    @GetMapping(value = "/{uid}/habilitar")
+    public void habilitar(@PathVariable String uid, @AuthenticationPrincipal Jwt token) {
+        funcionarioService.habilitar(uid, token);
+    }
+
+    @PreAuthorize("hasRole('FF_FUNCIONARIO_DESABILITAR')")
+    @GetMapping(value = "/{uid}/desabilitar")
+    public void desabilitar(@PathVariable String uid, @AuthenticationPrincipal Jwt token) {
+        funcionarioService.desabilitar(uid, token);
     }
 }

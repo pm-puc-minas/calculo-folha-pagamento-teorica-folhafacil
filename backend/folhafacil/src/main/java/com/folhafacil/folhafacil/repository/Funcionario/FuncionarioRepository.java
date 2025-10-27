@@ -1,4 +1,4 @@
-package com.folhafacil.folhafacil.repository;
+package com.folhafacil.folhafacil.repository.Funcionario;
 
 import com.folhafacil.folhafacil.entity.Funcionario;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -25,6 +25,7 @@ public class FuncionarioMapper {
         e.setPensao(dto.getPensao());
         e.setSalarioBase(dto.getSalarioBase());
         e.setDiasMensal(dto.getDiasMensal());
+        e.setUsuario(dto.getUsuario());
 
         return e;
     }

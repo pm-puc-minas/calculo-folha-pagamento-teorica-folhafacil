@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { throwError, of, switchMap, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,34 @@ export class KeyCloackService {
       }
     });
   }
+
+  refreshToken() {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) {
+      this.logout();
+      return throwError(() => new Error('Sem refresh token'));
+    }
+
+    const body = new HttpParams()
+      .set('client_id', this.clientId)
+      .set('grant_type', 'refresh_token')
+      .set('refresh_token', refreshToken)
+      .set('client_secret', this.clientSecret);
+
+    return this.http.post<any>(this.keycloakUrl, body).pipe(
+      switchMap((res) => {
+        localStorage.setItem(this.storageKey, res.access_token);
+        localStorage.setItem('refresh_token', res.refresh_token);
+        return of(res.access_token); // <- retorna um Observable<string>
+      }),
+      catchError((err) => {
+        console.error('Erro ao renovar o token', err);
+        this.logout();
+        return throwError(() => err);
+      })
+    );
+  }
+
 
   logout() {
     localStorage.removeItem(this.storageKey);

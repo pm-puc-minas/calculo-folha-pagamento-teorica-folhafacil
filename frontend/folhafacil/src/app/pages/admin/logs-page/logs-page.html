@@ -1,0 +1,71 @@
+<div class="card mt-5">
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Funcionarios</p-tab>
+            <p-tab value="1">Folha Salarial</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Logs</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="logsFuncionarios" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="nomeResponsavel" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Responsavel
+                                            <p-sortIcon field="nomeResponsavel" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="nomeManipulado" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Manipulado
+                                            <p-sortIcon field="nomeManipulado" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="data" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Data
+                                            <p-sortIcon field="data" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="mensagem" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Mensagem
+                                            <p-sortIcon field="mensagem" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="tipo" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Tipo
+                                            <p-sortIcon field="tipo" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-logsFuncionario>
+                                <tr>
+                                    <td ><p-avatar [label]="getAvatar(logsFuncionario.nomeResponsavel)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/> {{ logsFuncionario.nomeResponsavel }} </td>
+                                    <td><p-avatar [label]="getAvatar(logsFuncionario.nomeManipulado)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/>{{ logsFuncionario.nomeManipulado }}</td>
+                                    <td>{{ logsFuncionario.data | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    <td class="w-[60%]">{{ logsFuncionario.mensagem }}</td>
+                                    <td><p-tag [value]="logsFuncionario.tipo" [severity]="getServerityTipo(logsFuncionario.tipo)"></p-tag></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500"></div>
+                    </div>
+                </main>
+            </p-tabpanel>
+            <p-tabpanel value="1">
+    
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>
+

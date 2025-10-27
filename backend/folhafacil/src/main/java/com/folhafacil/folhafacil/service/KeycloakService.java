@@ -3,8 +3,10 @@ package com.folhafacil.folhafacil.service;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.*;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +39,6 @@ public class KeycloakService {
 
         var response = usersResource.create(user);
         if (response.getStatus() == 201) {
-            System.out.println("Usuário criado com sucesso!");
-
             String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
 
             CredentialRepresentation credential = new CredentialRepresentation();
@@ -53,8 +53,6 @@ public class KeycloakService {
             }
 
             return userId;
-        } else {
-            System.out.println("Erro ao criar usuário: " + response.getStatus());
         }
         return null;
     }
@@ -70,5 +68,29 @@ public class KeycloakService {
                 .orElseThrow(() -> new RuntimeException("Grupo não encontrado: " + nomeGrupoLimpo));
 
         keycloak.realm(realm).users().get(userId).joinGroup(grupo.getId());
+    }
+
+    public String recuperarUID(Jwt token){
+        return token.getSubject();
+    }
+
+    public void desativarUsuario(String userId) {
+        UsersResource usersResource = keycloak.realm(realm).users();
+        UserResource userResource = usersResource.get(userId);
+
+        UserRepresentation user = userResource.toRepresentation();
+        user.setEnabled(false);
+        userResource.update(user);
+
+        userResource.logout();
+    }
+
+    public void ativarUsuario(String userId) {
+        UsersResource usersResource = keycloak.realm(realm).users();
+        UserResource userResource = usersResource.get(userId);
+
+        UserRepresentation user = userResource.toRepresentation();
+        user.setEnabled(true);
+        userResource.update(user);
     }
 }

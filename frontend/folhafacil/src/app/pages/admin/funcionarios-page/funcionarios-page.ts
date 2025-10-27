@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Table } from 'primeng/table';
@@ -14,6 +14,8 @@ import { Select } from 'primeng/select';
 import { InputNumber } from 'primeng/inputnumber';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputMask } from 'primeng/inputmask';
+import { FuncionarioService } from '../../../services/funcionario.service';
+import { FuncionarioDTO } from '../../../models/funcionario.model';
 
 
 @Component({
@@ -38,6 +40,7 @@ import { InputMask } from 'primeng/inputmask';
   styleUrl: './funcionarios-page.css'
 })
 export class FuncionariosPage {
+  service = inject(FuncionarioService)
 	funcionarioForm: FormGroup;
 
   isModal: boolean = false
@@ -65,7 +68,7 @@ export class FuncionariosPage {
       horasDiarias: [],
       diasMensal: [],
       numDependentes: [],
-      valorPensao: [],
+      pensao: [],
     });
 	}
 
@@ -81,13 +84,23 @@ export class FuncionariosPage {
     this.isModal = false
     this.afterCloseModal()
   }
+  
 
   getFuncionarioForm(){
-    return this.funcionarioForm.value;
+    const i : FuncionarioDTO = this.funcionarioForm.value;
+
+    return i;
   }
 
   salvar(){
-    console.log(this.getFuncionarioForm())
+    this.service.salvar(this.getFuncionarioForm()).subscribe({
+      next : (res: any) =>{
+        
+      },
+      error : () => {
+
+      }
+    })
   }
 
   dados = [

@@ -6,7 +6,7 @@ CREATE TABLE Funcionario (
     endereco VARCHAR(200),
     email VARCHAR(200),
     dataNascimento DATE,
-    cargo VARCHAR(10),
+    cargo VARCHAR(11),
     dataAdmissao DATE,
     salarioBase DECIMAL(9,2),
     horasDiarias INT,

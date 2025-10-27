@@ -83,3 +83,20 @@ body {
 .p-select:not(.p-disabled).p-focus{
     border-color: var(--color-main-500) !important;
 }
+
+.p-tabpanels{
+    background: none !important;
+}
+
+.p-tablist{
+    background: none !important;
+}
+
+.p-tab-active{
+    color: var(--color-main-500) !important;
+    border-color: var(--color-main-500)  !important;
+}
+
+.p-tablist-active-bar{
+    background: var(--color-main-500) !important;
+}

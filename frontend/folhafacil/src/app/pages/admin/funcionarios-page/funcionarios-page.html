@@ -23,7 +23,7 @@
                                                 <label for="on_label">Email</label>
                                             </p-floatlabel>
                                             <p-floatlabel variant="on" styleClass="w-full">
-                                                <p-inputmask styleClass="w-full" id="on_label" mask="999.999.999-99" formControlName="cpf"/>
+                                                <p-inputmask styleClass="w-full" id="on_label" mask="999.999.999-99" formControlName="cpf" [unmask]="true"/>
                                                 <label for="on_label">CPF</label>
                                             </p-floatlabel>
                                         </div>
@@ -33,7 +33,7 @@
                                         </p-floatlabel>
                                         <div class="grid grid-cols-2 gap-2 w-full">
                                             <p-floatlabel variant="on" styleClass="w-full">
-                                                <p-inputmask styleClass="w-full" id="on_label" mask="(99)99999-9999" formControlName="telefone"/>
+                                                <p-inputmask styleClass="w-full" id="on_label" mask="(99)99999-9999" formControlName="telefone" [unmask]="true"/>
                                                 <label for="on_label">Telefone</label>
                                             </p-floatlabel>
                                             <p-floatlabel variant="on">
@@ -96,7 +96,7 @@
                                                 <label for="on_label">Numero de Dependentes</label>
                                             </p-floatlabel>
                                             <p-floatlabel variant="on" styleClass="w-full">
-                                                <p-inputnumber inputId="on_label" mode="currency" currency="BRL" locale="pt-BR" class="w-full" formControlName="valorPensao"/>
+                                                <p-inputnumber inputId="on_label" mode="currency" currency="BRL" locale="pt-BR" class="w-full" formControlName="pensao"/>
                                                 <label for="on_label">Valor pensão</label>
                                             </p-floatlabel>
                                         </div>
@@ -164,7 +164,7 @@
                     <td>{{ dado.nome }}</td>
                     <td>{{ dado.telefone }}</td>
                     <td>{{ dado.endereco }}</td>
-                    <td class="text-center"><p-tag [value]="dado.cargo" [severity]="getServerityCargo(dado.cargo)"></p-tag></td>
+                    <td><p-tag [value]="dado.cargo" [severity]="getServerityCargo(dado.cargo)"></p-tag></td>
                     <td>R${{ dado.salario }}</td>
                 </tr>
             </ng-template>

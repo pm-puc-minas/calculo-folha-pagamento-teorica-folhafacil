@@ -1,0 +1,89 @@
+package com.folhafacil.folhafacil.service.Funcionario;
+
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
+import com.folhafacil.folhafacil.entity.Funcionario;
+import com.folhafacil.folhafacil.mapper.FuncionarioMapper;
+import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
+import com.folhafacil.folhafacil.service.KeycloakService;
+import com.folhafacil.folhafacil.service.Log.Funcionario.LogFuncionarioServiceImpl;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Service;
+
+@Service
+public class FuncionarioServiceImpl implements FuncionarioService {
+    private final FuncionarioRepository funcionarioRepository;
+    private final KeycloakService keycloakService;
+    private final LogFuncionarioServiceImpl logFuncionarioServiceImpl;
+
+    public FuncionarioServiceImpl(
+            FuncionarioRepository funcionarioRepository,
+            KeycloakService keycloakService,
+            LogFuncionarioServiceImpl logFuncionarioServiceImpl
+    ) {
+        this.funcionarioRepository = funcionarioRepository;
+        this.keycloakService = keycloakService;
+        this.logFuncionarioServiceImpl = logFuncionarioServiceImpl;
+    }
+
+    @Override
+    public void salvar(FuncionarioDTO d, Jwt t) throws RuntimeException {
+        try {
+            Funcionario f = FuncionarioMapper.toEntity(d);
+
+            if(d.getId() == null){
+                String[] nameArr = f.getNome().split(" ");
+                String username = nameArr[0]+"."+nameArr[nameArr.length-1];
+                String password = "FolhaFacil2025";
+                String uid = keycloakService.criarUsuario(username, f.getEmail(), nameArr[0], nameArr[nameArr.length-1], password, f.getCargo());
+                f.setUsuario(username);
+                f.setId(uid);
+            }
+
+            funcionarioRepository.save(f);
+
+            if(d.getId() == null){
+                logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), f.getId());
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void habilitar(String uid, Jwt t) throws RuntimeException {
+        try {
+            Funcionario f = funcionarioRepository.findById(uid).get();
+
+            if(f.getStatus()){
+                throw new RuntimeException("Conta já habilitada");
+            }
+
+            f.setStatus(true);
+            funcionarioRepository.save(f);
+
+            logFuncionarioServiceImpl.gerarLogHabilitado(keycloakService.recuperarUID(t), f.getId());
+        }
+        catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void desabilitar(String uid, Jwt t) throws RuntimeException {
+        try {
+            Funcionario f = funcionarioRepository.findById(uid).get();
+
+            if(!f.getStatus()) {
+                throw new RuntimeException("Conta ja desabilidatada");
+            }
+
+            f.setStatus(false);
+            funcionarioRepository.save(f);
+
+            logFuncionarioServiceImpl.gerarLogDesativado(keycloakService.recuperarUID(t), f.getId());
+        }
+        catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+}

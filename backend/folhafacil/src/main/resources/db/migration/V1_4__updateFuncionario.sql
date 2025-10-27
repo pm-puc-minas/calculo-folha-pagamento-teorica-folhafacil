@@ -1,0 +1,2 @@
+ALTER TABLE Funcionario
+    ADD status BIT NOT NULL DEFAULT 1;
