@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, String> {
+    Funcionario findByCpf(String cpf);
 }

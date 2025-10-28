@@ -1,0 +1,48 @@
+/*package com.engsoft.folha_facil.folha;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import com.engsoft.folha_facil.model.Beneficio;
+import com.engsoft.folha_facil.model.Funcionario;
+import com.engsoft.folha_facil.model.BeneficioTipo;
+import com.engsoft.folha_facil.service.BeneficioService;
+
+public class CalculoPericulosidadeTest {
+    private final BeneficioService beneficioService = new BeneficioService(null);
+
+    @Test
+    public void testCalculoPericulosidade() {
+        List<Beneficio> beneficios = new ArrayList<>();
+        double salarioBase = 2000.00;
+        Funcionario f = new Funcionario("Matheus Dias",
+            "55566677788",                
+            "Analista de Sistemas",          
+            "3199999-8888",                  
+            "Rua das Palmeiras",             
+            "Centro",                        
+            120,                             
+            "matheus.dias@empresa.com",      
+            LocalDate.of(2001, 3, 2),
+            LocalDate.of(2021, 3, 2),
+            2000.00,
+            40,
+            150.00,
+            salarioBase, beneficios,
+            2,
+            0.00 );
+        
+        var beneficio = beneficioService.calcularPericulosidade(f);
+        
+        assertEquals(600.0, beneficio.getValor(), 0.001);
+        assertEquals(BeneficioTipo.PERICULOSIDADE, beneficio.getTipo());
+        assertTrue(f.getPlanoBeneficios().contains(beneficio));
+    }
+}*/

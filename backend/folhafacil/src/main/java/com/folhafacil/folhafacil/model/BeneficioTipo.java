@@ -1,6 +1,6 @@
 package com.folhafacil.folhafacil.model;
 
-public enum BenificioTipo {
+public enum BeneficioTipo {
     VALE_TRANSPORTE(true),
     VALE_ALIMENTACAO(false),
     PERICULOSIDADE(true),
@@ -9,7 +9,7 @@ public enum BenificioTipo {
 
     private final boolean monetario;
 
-    BenificioTipo(boolean monetario) {
+    BeneficioTipo(boolean monetario) {
         this.monetario = monetario;
     }
 
