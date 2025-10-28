@@ -42,7 +42,13 @@
   </div>
 
   <!-- Conteúdo -->
-  <div class="flex-1 p-6 w-full">
-    <router-outlet></router-outlet>
-  </div>
+   <p-toast position="top-right" key="global"></p-toast>
+  <main class="relative w-full">
+    <div class="overlay" *ngIf="isLoading">
+      <div class="loader"></div>
+    </div>
+    <div class="flex-1 p-6 w-full">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
 </div>

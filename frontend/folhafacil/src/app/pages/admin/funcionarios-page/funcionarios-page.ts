@@ -20,6 +20,7 @@ import { FuncionarioDTO } from '../../../models/funcionario.model';
 
 @Component({
   selector: 'app-funcionarios-page',
+  standalone: true,
   imports: [
     CommonModule, 
     TableModule, 

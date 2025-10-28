@@ -7,9 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { TabsModule } from 'primeng/tabs';
 import { LogsService } from '../../../services/logs.service';
-import { LogsFuncionarioResponseDTO } from '../../../models/logs.model';
+import { LogFilterDTO, LogsFuncionarioResponseDTO } from '../../../models/logs.model';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
+import { DatePicker } from 'primeng/datepicker';
+import { FloatLabel } from 'primeng/floatlabel';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { isFormEmpty } from '../../../shared/utils/form'
+import { ActionsService } from '../../../services/actions.service';
 
 
 @Component({
@@ -21,14 +26,28 @@ import { AvatarModule } from 'primeng/avatar';
     Dialog,
     TabsModule,
     TagModule,
-    AvatarModule
+    AvatarModule,
+    DatePicker,
+    FloatLabel,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './logs-page.html',
   styleUrl: './logs-page.css'
 })
-export class LogsPage implements OnInit{
+export class LogsPage{
   service = inject(LogsService)
+  actions = inject(ActionsService)
   cdr = inject(ChangeDetectorRef)
+
+	searchForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.searchForm = this.fb.group({
+      dataInicio: [],
+      dataFim: [],
+    });
+	}
 
   logsFuncionarios!: LogsFuncionarioResponseDTO[]
 
@@ -36,16 +55,38 @@ export class LogsPage implements OnInit{
     this.buscarLogsFuncionarios()
   }
 
+  filter(){
+    this.buscarLogsFuncionarios()
+  }
+
   buscarLogsFuncionarios(){
-    this.service.buscarFuncionarios().subscribe({
+    this.actions.showLoad()
+    this.service.buscarFuncionarios(this.getrSearchForm()).subscribe({
       next : (res: LogsFuncionarioResponseDTO[]) => {
-        this.logsFuncionarios = res;
-        this.cdr.detectChanges();
+        if(res.length == 0){
+          this.actions.info("Nenhum registro encontrado")
+        }else{
+          this.logsFuncionarios = [...res];
+          this.cdr.markForCheck();
+        }
+        this.actions.hideLoad()
       },
       error : () =>{
 
       }
     })
+  }
+
+  limparSearch(){
+    this.searchForm = this.fb.group({
+      dataInicio: [],
+      dataFim: [],
+    });
+  }
+
+  getrSearchForm(){
+    const f : LogFilterDTO = this.searchForm.value
+    return f
   }
 
   getAvatar(n: string){
@@ -55,14 +96,18 @@ export class LogsPage implements OnInit{
 
   getServerityTipo(c: any){
     switch (c) {
-            case 'CRIADO':
-                return 'success';
-            case 'ALTERADO':
-                return 'info';
-            case 'DESABILITADO':
-                return 'danger';
-            default:
-              return 'warn'
-        }
+      case 'CRIADO':
+        return 'success';
+      case 'ALTERADO':
+        return 'info';
+      case 'DESABILITADO':
+        return 'danger';
+      default:
+        return 'warn'
+    }
+  }
+
+  get isFormEmpty(): boolean {
+    return isFormEmpty(this.searchForm);
   }
 }

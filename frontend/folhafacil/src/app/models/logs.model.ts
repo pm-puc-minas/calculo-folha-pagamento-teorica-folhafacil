@@ -1,3 +1,8 @@
+export type LogFilterDTO = {
+    dataInicio: Date;
+    dataFim: Date;
+}
+
 export type LogsFuncionarioResponseDTO = { 
     id: number;
     idResponsavel: string;

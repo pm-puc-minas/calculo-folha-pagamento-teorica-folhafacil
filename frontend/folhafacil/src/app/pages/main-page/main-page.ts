@@ -6,10 +6,13 @@ import { MiniMenuNavItem } from '../../models/router.model';
 import { MiniMenuNav } from '../../components/mini-menu-nav/mini-menu-nav';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { KeyCloackService } from '../../services/keycloack.service';
+import { ActionsService } from '../../services/actions.service';
+import { Toast } from 'primeng/toast';
 
 
 @Component({
   selector: 'app-main-page',
+  standalone: true,
   imports: [
     CommonModule,
     MatSidenavModule, 
@@ -17,7 +20,8 @@ import { KeyCloackService } from '../../services/keycloack.service';
     MiniMenuNav,
     RouterLink, 
     RouterLinkActive, 
-    RouterOutlet
+    RouterOutlet,
+    Toast
   ],
   templateUrl: './main-page.html',
   styleUrl: './main-page.css'
@@ -27,9 +31,15 @@ export class MainPage {
 
   isExpanded = true;
 
-  routes: MiniMenuNavItem[] = [
-    
-  ]
+  isLoading = false;
+
+  routes: MiniMenuNavItem[] = []
+
+  constructor(private actionsService: ActionsService) {
+    this.actionsService.loading$.subscribe(value => {
+      this.isLoading = value;
+    });
+  }
 
   ngOnInit(){
     this.hasAdmin()

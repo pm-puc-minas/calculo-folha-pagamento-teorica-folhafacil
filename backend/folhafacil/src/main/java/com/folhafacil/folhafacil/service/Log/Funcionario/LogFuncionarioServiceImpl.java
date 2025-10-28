@@ -2,6 +2,7 @@ package com.folhafacil.folhafacil.service.Log.Funcionario;
 
 import com.folhafacil.folhafacil.dto.Log.Funcionario.LogFuncionarioResponseDTO;
 import com.folhafacil.folhafacil.dto.Log.Funcionario.TipoFuncionario;
+import com.folhafacil.folhafacil.dto.Log.LogFilterDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.LogFuncionario;
 import com.folhafacil.folhafacil.repository.Log.Funcionario.LogFuncionarioCustomRepository;
@@ -78,7 +79,7 @@ public class LogFuncionarioServiceImpl implements  LogFuncionarioService {
     }
 
     @Override
-    public List<LogFuncionarioResponseDTO> buscar(){
-        return logFuncionarioCustomRepository.buscar();
+    public List<LogFuncionarioResponseDTO> buscar(LogFilterDTO filter){
+        return logFuncionarioCustomRepository.buscar(filter);
     }
 }
