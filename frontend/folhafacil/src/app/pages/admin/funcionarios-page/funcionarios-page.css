@@ -1,1 +1,4 @@
-
+:host ::ng-deep .p-carousel-item {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}

@@ -2,6 +2,7 @@ package com.folhafacil.folhafacil.service.Funcionario;
 
 import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
+import com.folhafacil.folhafacil.mapper.FuncionarioBeneficioMapper;
 import com.folhafacil.folhafacil.mapper.FuncionarioMapper;
 import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
 import com.folhafacil.folhafacil.service.KeycloakService;
@@ -32,21 +33,19 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     @Override
     public void salvar(FuncionarioDTO d, Jwt t) throws RuntimeException {
         try {
-            Funcionario f = FuncionarioMapper.toEntity(d);
-
             if(d.getId() == null){
-                String[] nameArr = f.getNome().split(" ");
+                String[] nameArr = d.getNome().split(" ");
                 String username = nameArr[0]+"."+nameArr[nameArr.length-1];
                 String password = "FolhaFacil2025";
-                String uid = keycloakService.criarUsuario(username, f.getEmail(), nameArr[0], nameArr[nameArr.length-1], password, f.getCargo());
-                f.setUsuario(username);
-                f.setId(uid);
-            }
-
-            funcionarioRepository.save(f);
-
-            if(d.getId() == null){
-                logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), f.getId());
+                String uid = keycloakService.criarUsuario(username, d.getEmail(), nameArr[0], nameArr[nameArr.length-1], password, d.getCargo());
+                d.setUsuario(username);
+                d.setId(uid);
+                d.setStatus(Funcionario.HABILITADO);
+                funcionarioRepository.save(FuncionarioMapper.toEntity(d, FuncionarioBeneficioMapper.toEntityList(d.getBeneficios(), d.getId())));
+                logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), d.getId());
+            }else{
+                funcionarioRepository.save(FuncionarioMapper.toEntity(d, FuncionarioBeneficioMapper.toEntityList(d.getBeneficios(), d.getId())));
+                logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), d.getId());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
@@ -78,7 +77,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             Funcionario f = funcionarioRepository.findById(uid).get();
 
             if(!f.getStatus()) {
-                throw new RuntimeException("Conta ja desabilidatada");
+                throw new RuntimeException("Conta ja desabilitada");
             }
 
             f.setStatus(false);

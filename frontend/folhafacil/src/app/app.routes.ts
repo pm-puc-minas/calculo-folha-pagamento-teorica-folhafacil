@@ -7,6 +7,7 @@ import { RoleCanMatch, AuthCanMatch } from './auth/auth.guard';
 import { HoraExtraPage } from './pages/funcionario/hora-extra-page/hora-extra-page';
 import { NoPermissionPage } from './pages/no-permission-page/no-permission-page';
 import { LogsPage } from './pages/admin/logs-page/logs-page';
+import { BeneficiosPage } from './pages/admin/beneficios-page/beneficios-page';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -44,6 +45,12 @@ export const routes: Routes = [
 						component: LogsPage,
 						canActivate: [RoleCanMatch],
 						data : { role : 'FF_LOGS_LISTAR'}
+					},
+					{
+						path: "beneficios",
+						component: BeneficiosPage,
+						canActivate: [RoleCanMatch],
+						data : { role : 'FF_BENEFICIO_LISTAR'}
 					}
 				],
 			},

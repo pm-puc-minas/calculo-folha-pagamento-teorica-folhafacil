@@ -1,19 +1,53 @@
 package com.folhafacil.folhafacil.service.Beneficio;
 
-import com.folhafacil.folhafacil.model.Beneficio;
-import com.folhafacil.folhafacil.model.BeneficioTipo;
-import com.folhafacil.folhafacil.model.Funcionario;
-import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
+import com.folhafacil.folhafacil.dto.Beneficio.BeneficioDTO;
+import com.folhafacil.folhafacil.dto.Beneficio.BeneficioResponseDTO;
+import com.folhafacil.folhafacil.entity.Beneficio;
+import com.folhafacil.folhafacil.mapper.BeneficioMapper;
+import com.folhafacil.folhafacil.repository.Beneficio.BeneficioCustomRepository;
+import com.folhafacil.folhafacil.repository.Beneficio.BeneficioRepository;
+import org.springframework.stereotype.Service;
 
-public class BeneficoServiceImpl {
+import java.util.List;
 
-    private final FuncionarioServiceImpl funcionarioService;
+@Service
+public class BeneficoServiceImpl implements BeneficioService {
+    private final BeneficioRepository beneficioRepository;
+    private final BeneficioCustomRepository beneficioCustomRepository;
 
-    public BeneficoServiceImpl(FuncionarioServiceImpl funcionarioService) {
-        this.funcionarioService = funcionarioService;
+    public BeneficoServiceImpl(
+            BeneficioRepository beneficioRepository,
+            BeneficioCustomRepository beneficioCustomRepository
+    ) {
+        this.beneficioRepository = beneficioRepository;
+        this.beneficioCustomRepository = beneficioCustomRepository;
     }
 
-    public Beneficio adicionarBeneficio(Funcionario funcionario, BeneficioTipo tipo, double valor, double desconto){
+    @Override
+    public void salvar(BeneficioDTO d) throws RuntimeException{
+        try{
+            Beneficio b = BeneficioMapper.toEntity(d);
+            beneficioRepository.save(b);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<BeneficioResponseDTO> buscar(){
+        return beneficioCustomRepository.buscar();
+    }
+
+    @Override
+    public void deletar(Long id) throws RuntimeException{
+        try {
+         beneficioRepository.deleteById(id);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /*public Beneficio adicionarBeneficio(Funcionario funcionario, BeneficioTipo tipo, double valor, double desconto){
         if (funcionario == null) throw new IllegalArgumentException("Funcionario nulo");
 
         Beneficio beneficio = new Beneficio(tipo, valor, desconto);
@@ -82,5 +116,5 @@ public class BeneficoServiceImpl {
         double valorTotal = diasUteis * valorDiario;
 
         return adicionarBeneficio(funcionario, BeneficioTipo.VALE_ALIMENTACAO, valorTotal, 0.0);
-    }
+    }*/
 }

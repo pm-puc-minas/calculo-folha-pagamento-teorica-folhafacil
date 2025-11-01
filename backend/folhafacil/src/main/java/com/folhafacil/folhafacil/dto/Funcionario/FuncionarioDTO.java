@@ -1,10 +1,12 @@
 package com.folhafacil.folhafacil.dto.Funcionario;
 
+import com.folhafacil.folhafacil.dto.FuncionarioBeneficio.FuncionarioBeneficioDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +26,6 @@ public class FuncionarioDTO {
     private Integer numDependentes;
     private BigDecimal pensao;
     private String usuario;
+    private Boolean status;
+    private List<FuncionarioBeneficioDTO> beneficios;
 }

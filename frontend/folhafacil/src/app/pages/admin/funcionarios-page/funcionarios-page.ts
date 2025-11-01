@@ -12,10 +12,14 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { DatePicker } from 'primeng/datepicker';
 import { Select } from 'primeng/select';
 import { InputNumber } from 'primeng/inputnumber';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputMask } from 'primeng/inputmask';
 import { FuncionarioService } from '../../../services/funcionario.service';
 import { FuncionarioDTO } from '../../../models/funcionario.model';
+import { ActionsService } from '../../../services/actions.service';
+import { BeneficioResponseDTO } from '../../../models/beneficio.model';
+import { BeneficioService } from '../../../services/beneficio.service';
+import { CarouselModule } from 'primeng/carousel';
 
 
 @Component({
@@ -35,18 +39,25 @@ import { FuncionarioDTO } from '../../../models/funcionario.model';
     InputNumber,
     ReactiveFormsModule,
     FormsModule,
-    InputMask
+    InputMask,
+    CarouselModule
   ],
   templateUrl: './funcionarios-page.html',
   styleUrl: './funcionarios-page.css'
 })
 export class FuncionariosPage {
   service = inject(FuncionarioService)
+  actions = inject(ActionsService)
+  beneficioService = inject(BeneficioService)
+
 	funcionarioForm: FormGroup;
+  beneficioForm: FormGroup;
 
   isModal: boolean = false
   isEdit: boolean = false;
   steperValue: number = 1
+
+  beneficioObj: BeneficioResponseDTO[] = []
 
   cargos: {name: string, value: string}[] = [
     {name : 'Estagiario', value: 'ESTAGIARIO'},
@@ -70,20 +81,29 @@ export class FuncionariosPage {
       diasMensal: [],
       numDependentes: [],
       pensao: [],
+      beneficios: this.fb.array([])
     });
+
+    this.beneficioForm = this.fb.group({
+      idBeneficio: [null],
+      nomeBeneficio: [null],
+      valor: [null]
+    });
+
 	}
 
-  showModal(){
-    this.isModal = true
+  ngOnInit(){
+    this.buscarBeneficios()
   }
 
-  afterCloseModal(){
-    this.steperValue = 1
+  novo(){
+    this.isModal = true
   }
 
   closeModal(){
     this.isModal = false
-    this.afterCloseModal()
+    this.isEdit = false
+    this.steperValue = 1
   }
   
 
@@ -93,13 +113,58 @@ export class FuncionariosPage {
     return i;
   }
 
+  removerBeneficio(id: any) {
+    const index = this.beneficios.value.findIndex((b: any) => b.idBeneficio === id);
+    if (index !== -1) {
+      this.beneficios.removeAt(index);
+    }
+  }
+
+  adicionarBeneficio() {
+    const idBeneficio = this.beneficioForm.get('idBeneficio')?.value;
+    const valor = this.beneficioForm.get('valor')?.value;
+
+    if (!idBeneficio) return;
+
+    const beneficioSelecionado = this.beneficioObj.find((b: any) => b.id === idBeneficio);
+    const nomeBeneficio = beneficioSelecionado ? beneficioSelecionado.nome : 'Desconhecido';
+
+    const index = this.beneficios.value.findIndex((b: any) => b.idBeneficio === idBeneficio);
+
+    if (index !== -1) {
+      this.beneficios.at(index).patchValue({ valor, nomeBeneficio });
+    } else {
+      this.beneficios.push(
+        this.fb.group({
+          idBeneficio,
+          nomeBeneficio,
+          valor
+        })
+      );
+    }
+
+    this.beneficioForm.reset();
+    console.log(this.funcionarioForm.value.beneficios);
+  }
+
+
   salvar(){
+    console.log(this.getFuncionarioForm())
     this.service.salvar(this.getFuncionarioForm()).subscribe({
       next : (res: any) =>{
-        
+        this.actions.success('Funcionário salvo com sucesso')
+        this.closeModal()
       },
       error : () => {
 
+      }
+    })
+  }
+
+  buscarBeneficios(){
+    this.beneficioService.buscar().subscribe({
+      next : (res: BeneficioResponseDTO[]) =>{
+        this.beneficioObj = [...res]
       }
     })
   }
@@ -232,6 +297,10 @@ export class FuncionariosPage {
       salario: 6000
     },
   ]
+
+  get beneficios(): FormArray {
+    return this.funcionarioForm.get('beneficios') as FormArray;
+  }
 
   getServerityCargo(c: any){
     switch (c) {

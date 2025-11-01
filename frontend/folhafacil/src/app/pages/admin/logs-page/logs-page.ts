@@ -16,7 +16,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { isFormEmpty } from '../../../shared/utils/form'
 import { ActionsService } from '../../../services/actions.service';
 
-
 @Component({
   selector: 'app-logs-page',
   imports: [
@@ -72,7 +71,7 @@ export class LogsPage{
         this.actions.hideLoad()
       },
       error : () =>{
-
+          this.actions.hideLoad()
       }
     })
   }

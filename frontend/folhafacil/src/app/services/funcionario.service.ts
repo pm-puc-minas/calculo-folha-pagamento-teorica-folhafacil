@@ -6,6 +6,7 @@ import { FuncionarioDTO } from "../models/funcionario.model";
 @Injectable({
 	providedIn: "root",
 })
+
 export class FuncionarioService{
 	http = inject(HttpClient);
 

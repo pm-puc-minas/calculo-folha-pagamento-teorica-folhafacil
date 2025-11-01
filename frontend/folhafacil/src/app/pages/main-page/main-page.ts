@@ -73,6 +73,13 @@ export class MainPage {
         })
       }
 
+      if(this.keyclaockService.hasRole("FF_BENEFICIO_LISTAR")){
+        route.routes.push({
+          name: 'Benefícios',
+          route: 'admin/beneficios'
+        })
+      }
+
       if(route.routes.length > 0){
         this.routes.push(route)
       }

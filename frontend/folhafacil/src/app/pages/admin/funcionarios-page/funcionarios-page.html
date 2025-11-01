@@ -1,5 +1,5 @@
 
-<p-dialog [header]="isEdit ? 'Editar Funcionário' : 'Criar Funcionário'" (onHide)="afterCloseModal()" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<p-dialog [header]="isEdit ? 'Editar Funcionário' : 'Criar Funcionário'" (onHide)="closeModal()" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
         <div class="card flex justify-center">
             <p-stepper [(value)]="steperValue" class="basis-[100%]">
                 <p-step-list>
@@ -100,6 +100,59 @@
                                                 <label for="on_label">Valor pensão</label>
                                             </p-floatlabel>
                                         </div>
+                                        <div class="grid grid-cols-7 gap-2 w-full" [formGroup]="beneficioForm">
+                                            <div class="col-span-4">
+                                                <p-floatlabel variant="on">
+                                                    <p-select 
+                                                        inputId="on_label" 
+                                                        [options]="beneficioObj" 
+                                                        optionLabel="nome" 
+                                                        optionValue="id" 
+                                                        class="w-full"
+                                                        formControlName="idBeneficio"
+                                                    />
+                                                    <label for="on_label">Benefício</label>
+                                                </p-floatlabel>
+                                            </div>
+                                            <div class="col-span-2">
+                                                <p-floatlabel variant="on" styleClass="w-full">
+                                                    <p-inputnumber 
+                                                        inputId="on_label" 
+                                                        mode="currency" 
+                                                        currency="BRL" 
+                                                        locale="pt-BR" 
+                                                        class="w-full"
+                                                        formControlName="valor"
+                                                    />
+                                                    <label for="on_label">Valor</label>
+                                                </p-floatlabel>
+                                            </div>
+                                            <div class="flex flex-row justify-center col-span-1">
+                                                <p-button icon="pi pi-plus" [rounded]="true" (onClick)="adicionarBeneficio()" />
+                                            </div>
+                                        </div>
+                                        <div class="w-150 max-w-150 mt-4 flex flex-row justify-center m-auto">
+                                            <p-carousel 
+                                            [value]="beneficios.value" 
+                                            [numVisible]="1" 
+                                            [numScroll]="1" 
+                                            [circular]="true" 
+                                            styleClass="w-[70%]"
+                                            >
+                                                <ng-template let-b pTemplate="item">
+                                                    <div class="flex flex-row justify-between items-center">
+                                                    <p class="text-lg font-semibold">{{ b.nomeBeneficio }}</p>
+                                                    <p class="text-sm text-gray-600">{{ b.valor | currency:'BRL' }}</p>
+                                                    <p-button 
+                                                        icon="pi pi-trash" 
+                                                        (onClick)="removerBeneficio(b.idBeneficio)" 
+                                                        [rounded]="true" 
+                                                        severity="danger" 
+                                                    />
+                                                    </div>
+                                                </ng-template>
+                                            </p-carousel>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex pt-6 justify-between">
@@ -114,10 +167,7 @@
         </div>
 </p-dialog>
 <section class="w-full">
-    <div class="flex flex-row gap-x-4">
-       <p-button label="Novo" icon="pi pi-plus-circle" (click)="showModal()" />
-       <p-button label="Pesquisar" icon="pi pi-search"/> 
-    </div>
+    <!-- filtro -->
 </section>
 <main class="w-full mt-5">
     <div class="w-full">
@@ -171,6 +221,11 @@
         </p-table>
     </div>
     <div class="w-full">
-        <div class="w-full p-4 bg-main-500"></div>
+        <div class="w-full p-4 bg-main-500">
+            <div class="flex flex-row gap-x-4">
+                <p-button label="Novo" icon="pi pi-plus-circle" (click)="novo()" />
+                <p-button label="Pesquisar" icon="pi pi-search"/> 
+            </div>
+        </div>
     </div>
 </main>

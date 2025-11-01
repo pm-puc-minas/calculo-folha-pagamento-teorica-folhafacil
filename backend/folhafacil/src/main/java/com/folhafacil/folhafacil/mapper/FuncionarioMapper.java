@@ -2,9 +2,12 @@ package com.folhafacil.folhafacil.mapper;
 
 import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
+import com.folhafacil.folhafacil.entity.FuncionarioBeneficio;
+
+import java.util.List;
 
 public class FuncionarioMapper {
-    public static Funcionario toEntity(FuncionarioDTO dto) {
+    public static Funcionario toEntity(FuncionarioDTO dto, List<FuncionarioBeneficio> beneficios) {
         if (dto == null) {
             return null;
         }
@@ -25,7 +28,10 @@ public class FuncionarioMapper {
         e.setPensao(dto.getPensao());
         e.setSalarioBase(dto.getSalarioBase());
         e.setDiasMensal(dto.getDiasMensal());
+        e.setStatus(dto.getStatus());
         e.setUsuario(dto.getUsuario());
+
+        e.setBeneficios(beneficios);
 
         return e;
     }

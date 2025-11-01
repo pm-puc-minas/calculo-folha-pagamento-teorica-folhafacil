@@ -1,14 +1,13 @@
 package com.folhafacil.folhafacil.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -63,4 +62,9 @@ public class Funcionario {
 
     @Column(name = "status", nullable = false)
     private Boolean status;
+    public static final Boolean HABILITADO = true;
+    public static final Boolean DESABILITADO = false;
+
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FuncionarioBeneficio> beneficios = new ArrayList<>();
 }

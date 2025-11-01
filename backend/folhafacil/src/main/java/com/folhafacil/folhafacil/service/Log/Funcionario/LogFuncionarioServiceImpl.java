@@ -35,9 +35,28 @@ public class LogFuncionarioServiceImpl implements  LogFuncionarioService {
         Funcionario manipulado = new Funcionario();
         manipulado.setId(idManipulado);
         e.setIdManipulado(manipulado);
+
         e.setTipo(TipoFuncionario.CRIADO);
         e.setData(LocalDateTime.now());
         e.setMensagem(idResponsavel + " criou o usuário " + idManipulado);
+
+        logFuncionarioRepository.save(e);
+    }
+
+    public void gerarLogEditado(String idResponsavel, String idManipulado){
+        LogFuncionario e = new LogFuncionario();
+
+        Funcionario responsavel = new Funcionario();
+        responsavel.setId(idResponsavel);
+        e.setIdResponsavel(responsavel);
+
+        Funcionario manipulado = new Funcionario();
+        manipulado.setId(idManipulado);
+        e.setIdManipulado(manipulado);
+
+        e.setTipo(TipoFuncionario.ALTERADO);
+        e.setData(LocalDateTime.now());
+        e.setMensagem(idResponsavel + " editou o usuário " +  idManipulado);
 
         logFuncionarioRepository.save(e);
     }

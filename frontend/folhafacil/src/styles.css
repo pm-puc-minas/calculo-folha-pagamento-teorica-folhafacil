@@ -36,6 +36,14 @@ body {
     border: 2px solid var(--color-main-100) !important;
 }
 
+.p-button.p-component.p-danger {
+    background-color: #F94518 !important;
+    border: 2px solid #FF8466 !important;
+}
+
+.p-button.p-component.p-danger:hover {
+    background-color: #FF8466 !important;
+}
 
 .p-button.p-component:hover {
     background-color: var(--color-main-500) !important; 
@@ -99,4 +107,14 @@ body {
 
 .p-tablist-active-bar{
     background: var(--color-main-500) !important;
+}
+
+.p-dialog-title{
+    padding-right: 50px !important;
+    border-bottom: 3px solid var(--color-main-700) !important;
+    color: var(--color-main-700) !important;
+}
+
+.p-carousel-indicator-active .p-carousel-indicator-button{
+    background: var(--color-main-700) !important;
 }

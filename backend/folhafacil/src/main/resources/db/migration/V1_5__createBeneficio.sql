@@ -1,0 +1,4 @@
+CREATE TABLE Beneficio (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL
+);

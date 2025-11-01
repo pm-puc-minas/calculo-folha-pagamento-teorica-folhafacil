@@ -1,0 +1,80 @@
+<p-dialog [header]="isEdit ? 'Editar Benefício' : 'Criar Benefício'" (onHide)="closeModal()" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+        <div class="card flex justify-center">
+            <form [formGroup]="beneficioForm" class="mt-2 w-full">
+                <p-floatlabel variant="on" styleClass="w-full">
+                    <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="nome" maxlength="120" required/>
+                    <label for="on_label">Nome</label>
+                </p-floatlabel>
+            </form>
+        </div>
+        <p-button label="Salvar" icon="pi pi-check" iconPos="right" (onClick)="salvar()" [disabled]="!isValidForm()" styleClass="mt-2"/>
+
+</p-dialog>
+
+<main class="w-full">
+    <div class="w-full">
+        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Benefícios</div>
+    </div>
+    <div class="card">
+        <p-table [value]="beneficios || []" sortField="price" [sortOrder]="-1" [scrollable]="true"
+            scrollHeight="60vh" [tableStyle]="{ 'min-width': '60rem' }">
+            <ng-template #header class="bg-main-100">
+                <tr>
+                    <th pSortableColumn="nome" style="width:60%">
+                        <div class="flex items-center gap-2">
+                            Nome
+                            <p-sortIcon field="nome" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="qntUso" style="width:20%">
+                        <div class="flex items-center gap-2">
+                            Uso
+                            <p-sortIcon field="qntUso" />
+                        </div>
+                    </th>
+                    <th style="width:20%">
+                        <div class="flex items-center gap-2">
+                            
+                            
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-beneficio>
+                <tr>
+                    <td>{{ beneficio.nome }}</td>
+                    <td 
+                    class="hover:underline hover:text-lg cursor-pointer transition-transform duration-300 ease-in-out"
+                    (click)="verFuncionarios(beneficio.id)"
+                    >
+                        {{ beneficio.uso }} Funcionários
+                    </td>
+                    <td>
+                        <div class="w-full flex flex-row center space-x-3">
+                            <p-button icon="pi pi-pencil" [rounded]="true" (click)="edit(beneficio)" />
+                            <div class="card flex justify-center gap-2">
+                                <p-confirmpopup #cp>
+                                    <ng-template #headless let-message>
+                                        <div class="rounded p-4">
+                                            <span>{{ message.message }}</span>
+                                            <div class="flex items-center gap-2 mt-4">
+                                                <p-button (onClick)="cp.onAccept()" label="Deletar" size="small" styleClass="p-danger" />
+                                                <p-button (onClick)="cp.onReject()" label="Cancelar" [text]="true" size="small"/>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </p-confirmpopup>
+                                <p-button icon="pi pi-trash" [rounded]="true" styleClass="p-danger" (onClick)="delete($event, beneficio.id)" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="w-full">
+        <div class="w-full p-4 bg-main-500">
+            <p-button label="Novo" icon="pi pi-plus-circle" (click)="novo()" />
+        </div>
+    </div>
+</main>
