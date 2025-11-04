@@ -19,5 +19,5 @@ public class LogFuncionarioResponseDTO {
     private String nomeManipulado;
     private LocalDateTime data;
     private String mensagem;
-    private TipoFuncionario tipo;
+    private TipoLogFuncionario tipo;
 }

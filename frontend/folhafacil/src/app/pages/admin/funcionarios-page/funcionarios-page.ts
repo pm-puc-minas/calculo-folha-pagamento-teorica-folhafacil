@@ -104,6 +104,7 @@ export class FuncionariosPage {
     this.isModal = false
     this.isEdit = false
     this.steperValue = 1
+    this.limparFuncionarioForm()
   }
   
 
@@ -144,12 +145,10 @@ export class FuncionariosPage {
     }
 
     this.beneficioForm.reset();
-    console.log(this.funcionarioForm.value.beneficios);
   }
 
 
   salvar(){
-    console.log(this.getFuncionarioForm())
     this.service.salvar(this.getFuncionarioForm()).subscribe({
       next : (res: any) =>{
         this.actions.success('Funcionário salvo com sucesso')
@@ -159,6 +158,32 @@ export class FuncionariosPage {
 
       }
     })
+  }
+
+  limparFuncionarioForm(){
+    this.funcionarioForm = this.fb.group({
+      id: [],
+      nome: [],
+      email: [],
+      cpf: [],
+      endereco: [],
+      telefone: [],
+      dataNascimento: [],
+      cargo: [],
+      dataAdmissao: [],
+      salarioBase: [],
+      horasDiarias: [],
+      diasMensal: [],
+      numDependentes: [],
+      pensao: [],
+      beneficios: this.fb.array([])
+    });
+
+    this.beneficioForm = this.fb.group({
+      idBeneficio: [null],
+      nomeBeneficio: [null],
+      valor: [null]
+    });
   }
 
   buscarBeneficios(){

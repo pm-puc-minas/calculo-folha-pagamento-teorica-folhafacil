@@ -8,7 +8,6 @@
             </form>
         </div>
         <p-button label="Salvar" icon="pi pi-check" iconPos="right" (onClick)="salvar()" [disabled]="!isValidForm()" styleClass="mt-2"/>
-
 </p-dialog>
 
 <main class="w-full">
@@ -50,7 +49,7 @@
                         {{ beneficio.uso }} Funcionários
                     </td>
                     <td>
-                        <div class="w-full flex flex-row center space-x-3">
+                        <div class="w-full flex flex-row justify-center space-x-3">
                             <p-button icon="pi pi-pencil" [rounded]="true" (click)="edit(beneficio)" />
                             <div class="card flex justify-center gap-2">
                                 <p-confirmpopup #cp>

@@ -1,6 +1,6 @@
 package com.folhafacil.folhafacil.dto.Log.Funcionario;
 
-public enum TipoFuncionario {
+public enum TipoLogFuncionario {
     CRIADO,
     ALTERADO,
     DESABILITADO,

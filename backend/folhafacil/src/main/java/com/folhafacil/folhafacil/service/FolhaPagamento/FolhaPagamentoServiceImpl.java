@@ -1,71 +1,69 @@
 package com.folhafacil.folhafacil.service.FolhaPagamento;
 
-public class FolhaPagamentoServiceImpl {
-    /*public FolhaPagamento gerarFolha(Funcionario funcionario, int mes, int ano) {
-        // Implemente a lógica de geração da folha conforme necessário
-        // Exemplo básico:
-        FolhaPagamento folha = new FolhaPagamento();
-        folha.setFuncionario(funcionario);
-        // Defina outros campos conforme sua lógica de negócio
-        return folha;
+import com.folhafacil.folhafacil.dto.FolhaPagamento.StatusFolhaPagamento;
+import com.folhafacil.folhafacil.entity.FolhaPagamento;
+import com.folhafacil.folhafacil.entity.Funcionario;
+import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
+import com.folhafacil.folhafacil.service.HoraExtra.HoraExtraServiceImpl;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public class FolhaPagamentoServiceImpl implements FolhaPagamentoService {
+
+    private final FuncionarioServiceImpl funcionarioServiceImpl;
+    private final HoraExtraServiceImpl horaExtraServiceImpl;
+
+    public FolhaPagamentoServiceImpl(
+            FuncionarioServiceImpl funcionarioServiceImpl,
+            HoraExtraServiceImpl horaExtraServiceImpl
+    ) {
+        this.funcionarioServiceImpl = funcionarioServiceImpl;
+        this.horaExtraServiceImpl = horaExtraServiceImpl;
     }
 
+    public void gerarPorFuncionario(Funcionario f, LocalDate data, Long idLog) throws RuntimeException {
+        try{
+            FolhaPagamento e = new FolhaPagamento();
 
-    public FolhaPagamento consuFolhaPagamento(FolhaPagamento fp){
-        return FolhaPagamentoRepository.findAll().stream().filter(f -> f.equals(fp)).findFirst().orElse(null);
-    }
+            e.setIdFuncionario(f);
+            e.setStatus(StatusFolhaPagamento.PENDENTE);
+            e.setData(data);
 
-    public double consultarDescontos(FolhaPagamento fp){
-        if(fp == null || fp.getFuncionario() == null){
-            return 0.0;
+            BigDecimal inss = funcionarioServiceImpl.getINSS(f);
+            e.setINSS(inss);
+
+            BigDecimal fgst = funcionarioServiceImpl.getFGST(f);
+            e.setFGTS(fgst);
+
+            BigDecimal irrf = funcionarioServiceImpl.getIRRF(f);
+            e.setIRRF(irrf);
+
+            BigDecimal totalValorImposto = inss.add(fgst).add(irrf);
+            e.setTotalValorImposto(totalValorImposto);
+
+            BigDecimal totalValorBeneficios = funcionarioServiceImpl.getTotalValorBeneficios(f);
+            e.setTotalValorBeneficios(totalValorBeneficios);
+
+            BigDecimal totalHorasExtras = BigDecimal.ZERO;
+            BigDecimal totalValorHorasExtras = BigDecimal.ZERO;
+
+            if(!f.getCargo().equals("ESTAGIARIO")){
+                totalHorasExtras = horaExtraServiceImpl.totalHorasNoMes(f.getId(), data);
+
+                if(!(totalHorasExtras.compareTo(BigDecimal.ZERO) <= 0)){
+                    totalValorHorasExtras = totalHorasExtras.multiply(funcionarioServiceImpl.valorHoraExtra(f));
+                }
+            }
+
+            e.setTotalHorasExtras(totalHorasExtras);
+            e.setTotalValorHorasExtras(totalValorHorasExtras);
+
+            e.setSalarioBruto(f.getSalarioBase());
+
+            e.setTotal(f.getSalarioBase().add(totalValorHorasExtras).add(totalValorBeneficios).subtract(totalValorImposto));
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage());
         }
-        Imposto imposto = impostoService.calcularImpostos(fp.getFuncionario().getCpf());
-        return imposto.getDescontoTotal();
     }
-
-    //Calcula e retorna o salario liquido
-    public double consultarSalarioLiquido(FolhaPagamento fp){
-        if(fp == null || fp.getFuncionario() == null){
-            return 0.0;
-        }
-
-        Imposto imposto = impostoService.calcularImpostos(fp.getFuncionario().getCpf());
-
-        double salarioBruto = fp.getSalarioBruto();
-
-        double descontoFaltas = (salarioBruto / 30)*fp.getDiasFaltados();
-
-        double valorHora = salarioBruto/220.0;
-        double adicionarHoraExtra = valorHora * 1.5 * fp.getHoraExtra();
-
-        double totalBeneficios = fp.getBeneficios() == null ? 0.0 :
-                fp.getBeneficios().stream()
-                        .filter(b -> b.getTipo() != BeneficioTipo.VALE_TRANSPORTE && b.getTipo() != BeneficioTipo.VALE_ALIMENTACAO)
-                        .mapToDouble(Beneficio::getValor)
-                        .sum();
-
-        //calcula salario final
-        double salarioLiquido = salarioBruto - imposto.getDescontoTotal() - descontoFaltas + adicionarHoraExtra + totalBeneficios;
-
-        fp.setSalarioLiquido(salarioLiquido);
-        fp.setImposto(imposto);
-
-        return salarioLiquido;
-    }
-
-    public List<FolhaPagamento> consultarHistoricoFuncionario(Funcionario funcionario){
-        return FolhaPagamentoRepository.findByFuncionario(funcionario);
-    }
-
-    public List<FolhaPagamento> consultarPorCPF(String cpf){
-        return FolhaPagamentoRepository.findByCpf(cpf);
-    }
-
-    public List<FolhaPagamento> consutarPorPeriodo(Date inicio, Date fim){
-        return FolhaPagamentoRepository.findByPeriodo(inicio, fim);
-    }
-
-    public void removerFolha(long id){
-        FolhaPagamentoRepository.delete(id);
-    }*/
 }

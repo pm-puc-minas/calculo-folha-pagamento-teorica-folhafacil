@@ -118,3 +118,9 @@ body {
 .p-carousel-indicator-active .p-carousel-indicator-button{
     background: var(--color-main-700) !important;
 }
+
+.warp-col {
+  white-space: normal !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}

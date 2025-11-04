@@ -91,7 +91,7 @@ export class MainPage {
       routes: []
     }
 
-    if(this.keyclaockService.hasRole("FF_HORA_EXTRAS_LISTAR")){
+    if(this.keyclaockService.hasRole("FF_MINHA_HORA_EXTRA_LISTAR")){
       route.routes.push({
         name: 'Hora Extra',
         route: 'funcionario/hora-extra'

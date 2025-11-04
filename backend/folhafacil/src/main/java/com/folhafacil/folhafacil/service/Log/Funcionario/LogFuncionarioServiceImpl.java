@@ -1,7 +1,7 @@
 package com.folhafacil.folhafacil.service.Log.Funcionario;
 
 import com.folhafacil.folhafacil.dto.Log.Funcionario.LogFuncionarioResponseDTO;
-import com.folhafacil.folhafacil.dto.Log.Funcionario.TipoFuncionario;
+import com.folhafacil.folhafacil.dto.Log.Funcionario.TipoLogFuncionario;
 import com.folhafacil.folhafacil.dto.Log.LogFilterDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.LogFuncionario;
@@ -36,7 +36,7 @@ public class LogFuncionarioServiceImpl implements  LogFuncionarioService {
         manipulado.setId(idManipulado);
         e.setIdManipulado(manipulado);
 
-        e.setTipo(TipoFuncionario.CRIADO);
+        e.setTipo(TipoLogFuncionario.CRIADO);
         e.setData(LocalDateTime.now());
         e.setMensagem(idResponsavel + " criou o usuário " + idManipulado);
 
@@ -54,7 +54,7 @@ public class LogFuncionarioServiceImpl implements  LogFuncionarioService {
         manipulado.setId(idManipulado);
         e.setIdManipulado(manipulado);
 
-        e.setTipo(TipoFuncionario.ALTERADO);
+        e.setTipo(TipoLogFuncionario.ALTERADO);
         e.setData(LocalDateTime.now());
         e.setMensagem(idResponsavel + " editou o usuário " +  idManipulado);
 
@@ -72,7 +72,7 @@ public class LogFuncionarioServiceImpl implements  LogFuncionarioService {
         manipulado.setId(idManipulado);
         e.setIdManipulado(manipulado);
 
-        e.setTipo(TipoFuncionario.HABILITADO);
+        e.setTipo(TipoLogFuncionario.HABILITADO);
         e.setData(LocalDateTime.now());
         e.setMensagem(idResponsavel + " habilitou o usuário " + idManipulado);
 
@@ -90,7 +90,7 @@ public class LogFuncionarioServiceImpl implements  LogFuncionarioService {
         manipulado.setId(idManipulado);
         e.setIdManipulado(manipulado);
 
-        e.setTipo(TipoFuncionario.DESABILITADO);
+        e.setTipo(TipoLogFuncionario.DESABILITADO);
         e.setData(LocalDateTime.now());
         e.setMensagem(idResponsavel + " desabilitou o usuário " + idManipulado);
 

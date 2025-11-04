@@ -1,7 +1,7 @@
 package com.folhafacil.folhafacil.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.folhafacil.folhafacil.dto.Log.Funcionario.TipoFuncionario;
+import com.folhafacil.folhafacil.dto.Log.Funcionario.TipoLogFuncionario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +35,5 @@ public class LogFuncionario {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
-    private TipoFuncionario tipo;
+    private TipoLogFuncionario tipo;
 }

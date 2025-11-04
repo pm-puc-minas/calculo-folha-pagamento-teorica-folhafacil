@@ -14,7 +14,6 @@ import { ActionsService } from '../../../services/actions.service';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 
-
 @Component({
   selector: 'app-beneficios-page',
   imports: [

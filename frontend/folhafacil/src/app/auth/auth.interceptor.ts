@@ -24,7 +24,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           switchMap((newToken) => {
             if (!newToken) {
               keycloakService.logout();
-              return throwError(() => new Error('Falha ao obter novo token'));
             }
 
             const retryReq = req.clone({

@@ -1,0 +1,17 @@
+CREATE TABLE FolhaSalarial (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    idFuncionario NVARCHAR(50) NOT NULL,
+    status VARCHAR(15) NOT NULL CHECK (status IN ('PENDENTE', 'PAGO')),
+    data DATE NOT NULL,
+    INSS DECIMAL(9,2),
+    FGTS DECIMAL(9,2),
+    IRRF DECIMAL(9,2),
+    totalValorImposto DECIMAL(9,2),
+    totalValorBeneficios DECIMAL(9,2),
+    totalHorasExtras DECIMAL(9,2),
+    totalValorHorasExtras DECIMAL(9,2),
+    salarioBruto DECIMAL(9,2),
+    salarioLiquido DECIMAL(9,2),
+    total DECIMAL(9,2),
+    CONSTRAINT FK_FolhaSalarial_Funcionario FOREIGN KEY (idFuncionario) REFERENCES Funcionario(id),
+);

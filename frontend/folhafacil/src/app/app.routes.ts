@@ -4,10 +4,10 @@ import { FuncionariosPage } from './pages/admin/funcionarios-page/funcionarios-p
 import { FolhaSalarialPage } from './pages/admin/folha-salarial-page/folha-salarial-page';
 import { LoginPage } from './pages/login-page/login-page';
 import { RoleCanMatch, AuthCanMatch } from './auth/auth.guard';
-import { HoraExtraPage } from './pages/funcionario/hora-extra-page/hora-extra-page';
 import { NoPermissionPage } from './pages/no-permission-page/no-permission-page';
 import { LogsPage } from './pages/admin/logs-page/logs-page';
 import { BeneficiosPage } from './pages/admin/beneficios-page/beneficios-page';
+import { MinhasHorasExtrasPage } from './pages/funcionario/minhas-horas-extras-page/minhas-horas-extras-page';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -59,9 +59,9 @@ export const routes: Routes = [
 				children: [
 					{
 						path: "hora-extra",
-						component: HoraExtraPage,
+						component: MinhasHorasExtrasPage,
 						canActivate: [RoleCanMatch],
-						data: { role : 'FF_HORA_EXTRAS_LISTAR'}
+						data: { role : 'FF_MINHA_HORA_EXTRA_LISTAR'}
 					},
 				]
 			}
