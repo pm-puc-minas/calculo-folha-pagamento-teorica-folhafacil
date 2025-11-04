@@ -12,7 +12,7 @@ Um projeto sobre sistema de gestão de folha de pagamento para um software de ge
 
 ## ⚙️ Configuração do Ambiente
 
-> Faça tudo a partir da branch `develop` do projeto.
+> Faça tudo a partir da branch `main` do projeto.
 
 ---
 
