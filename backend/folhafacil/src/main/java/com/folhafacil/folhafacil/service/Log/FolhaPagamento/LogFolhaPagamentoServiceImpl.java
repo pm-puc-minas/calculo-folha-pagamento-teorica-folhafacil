@@ -1,0 +1,34 @@
+package com.folhafacil.folhafacil.service.Log.FolhaPagamento;
+
+import com.folhafacil.folhafacil.dto.Log.FolhaPagamento.TipoLogFolhaPagamento;
+import com.folhafacil.folhafacil.entity.Funcionario;
+import com.folhafacil.folhafacil.entity.LogFolhaPagamento;
+import com.folhafacil.folhafacil.infra.utils.DataUtils;
+import com.folhafacil.folhafacil.repository.Log.FolhaPagamento.LogFolhaPagamentoRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Service
+public class LogFolhaPagamentoServiceImpl implements LogFolhaPagamentoService {
+    private final LogFolhaPagamentoRepository logFolhaPagamentoRepository;
+
+    public LogFolhaPagamentoServiceImpl(LogFolhaPagamentoRepository logFolhaPagamentoRepository) {
+        this.logFolhaPagamentoRepository = logFolhaPagamentoRepository;
+    }
+
+    public LogFolhaPagamento gerarLogGeradaAtualizada(String uid, LocalDate data){
+        LogFolhaPagamento e = new LogFolhaPagamento();
+
+        Funcionario f = new Funcionario();
+        f.setId(uid);
+        e.setIdResponsavel(f);
+
+        e.setMensagem("O usuário " + uid + " gerou/ataualizou a folha referente a " + DataUtils.formatarMesAno(data));
+        e.setData(LocalDateTime.now());
+        e.setTipo(TipoLogFolhaPagamento.GERADA_ATUALIZADA);
+
+        return logFolhaPagamentoRepository.save(e);
+    }
+}

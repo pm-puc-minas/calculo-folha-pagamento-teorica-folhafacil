@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 import { MainPage } from './pages/main-page/main-page';
 import { FuncionariosPage } from './pages/admin/funcionarios-page/funcionarios-page';
-import { FolhaSalarialPage } from './pages/admin/folha-salarial-page/folha-salarial-page';
 import { LoginPage } from './pages/login-page/login-page';
 import { RoleCanMatch, AuthCanMatch } from './auth/auth.guard';
 import { NoPermissionPage } from './pages/no-permission-page/no-permission-page';
 import { LogsPage } from './pages/admin/logs-page/logs-page';
 import { BeneficiosPage } from './pages/admin/beneficios-page/beneficios-page';
 import { MinhasHorasExtrasPage } from './pages/funcionario/minhas-horas-extras-page/minhas-horas-extras-page';
+import { FolhaPagamentoPage } from './pages/admin/folha-pagamento-page/folha-pagamento-page';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -36,7 +36,7 @@ export const routes: Routes = [
 					},
 					{
 						path: "folha-salarial",
-						component: FolhaSalarialPage,
+						component: FolhaPagamentoPage,
 						canActivate: [RoleCanMatch],
 						data: { role : 'FF_FOLHA_SALARIAL_LISTAR'}
 					},

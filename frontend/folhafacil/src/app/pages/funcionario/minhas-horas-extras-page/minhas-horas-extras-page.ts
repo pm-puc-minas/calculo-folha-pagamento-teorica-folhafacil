@@ -69,7 +69,6 @@ export class MinhasHorasExtrasPage {
     this.service.minhasHoras().subscribe({
       next: (res: HoraExtraResponseDTO[]) => {
         if (res.length > 0) {
-          console.log(res)
           this.horasExtras = [...res]
           this.cdr.markForCheck();
         } else {

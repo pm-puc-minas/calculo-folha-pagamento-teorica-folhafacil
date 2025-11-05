@@ -90,7 +90,7 @@ public class HoraExtraServiceImpl implements HoraExtraService {
     }
 
     public BigDecimal totalHorasNoMes(String uid, LocalDate data){
-        List<HoraExtra> hes = horaExtraRepository.findByFuncionarioAndMesAno(uid, data.getMonthValue(), data.getYear());
+        List<HoraExtra> hes = findByFuncionarioAndMesAno(uid,data);
 
         double total = hes.stream()
                 .filter(h -> h.getDataFim() != null)
@@ -98,5 +98,9 @@ public class HoraExtraServiceImpl implements HoraExtraService {
                 .sum();
 
         return new BigDecimal(total);
+    }
+
+    public List<HoraExtra> findByFuncionarioAndMesAno(String uid, LocalDate data) {
+        return horaExtraRepository.findByFuncionarioAndMesAno(uid, data.getMonthValue(), data.getYear());
     }
 }

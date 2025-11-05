@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { throwError, of, switchMap, catchError } from 'rxjs';
+import { ActionsService } from './actions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class KeyCloackService {
   private clientSecret = 'xjLWnPHFsMmc61h6ZiBRKZDmuA4yzZTe'; 
   private storageKey = 'access_token';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private actions: ActionsService) {}
 
   login(username: string, password: string) {
     const body = new HttpParams()
@@ -30,6 +31,7 @@ export class KeyCloackService {
         this.router.navigate(['/main']);
       },
       error: (err) => {
+        this.actions.danger(err)
         console.error('Erro no login', err);
       }
     });
@@ -52,7 +54,7 @@ export class KeyCloackService {
       switchMap((res) => {
         localStorage.setItem(this.storageKey, res.access_token);
         localStorage.setItem('refresh_token', res.refresh_token);
-        return of(res.access_token); // <- retorna um Observable<string>
+        return of(res.access_token);
       }),
       catchError((err) => {
         console.error('Erro ao renovar o token', err);

@@ -59,7 +59,6 @@ export class LogsPage{
   }
 
   buscarLogsFuncionarios(){
-    this.actions.showLoad()
     this.service.buscarFuncionarios(this.getrSearchForm()).subscribe({
       next : (res: LogsFuncionarioResponseDTO[]) => {
         if(res.length == 0){
@@ -68,10 +67,8 @@ export class LogsPage{
           this.logsFuncionarios = [...res];
           this.cdr.markForCheck();
         }
-        this.actions.hideLoad()
       },
       error : () =>{
-          this.actions.hideLoad()
       }
     })
   }

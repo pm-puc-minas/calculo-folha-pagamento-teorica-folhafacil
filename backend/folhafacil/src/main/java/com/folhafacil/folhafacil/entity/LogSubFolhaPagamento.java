@@ -1,40 +1,38 @@
 package com.folhafacil.folhafacil.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.folhafacil.folhafacil.dto.Log.FolhaPagamento.Sub.TipoLogSubFolhaPagamento;
 import com.folhafacil.folhafacil.dto.Log.FolhaPagamento.TipoLogFolhaPagamento;
-import com.folhafacil.folhafacil.dto.Log.Funcionario.TipoLogFuncionario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "LogFolhaPagamento")
-public class LogFolhaPagamento {
+@Table(name = "LogSubFolhaPagamento")
+public class LogSubFolhaPagamento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "idResponsavel", referencedColumnName = "id")
+    @JoinColumn(name = "idLogFolhaPagamento", referencedColumnName = "id")
     @JsonIgnore
-    private Funcionario idResponsavel;
+    private LogFolhaPagamento idLogFolhaPagamento;
+
+    @ManyToOne
+    @JoinColumn(name = "idFolhaPagamento", referencedColumnName = "id")
+    @JsonIgnore
+    private FolhaPagamento idFolhaPagamento;
 
     @Column(name = "mensagem", nullable = false, length = 150)
     private String mensagem;
 
-    @Column(name = "data", nullable = false)
-    private LocalDateTime data;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false, length = 20)
-    private TipoLogFolhaPagamento tipo;
-
-    @OneToMany(mappedBy = "idLogFolhaPagamento")
-    private List<LogSubFolhaPagamento> subLogs = new ArrayList<>();
+    private TipoLogSubFolhaPagamento tipo;
 }

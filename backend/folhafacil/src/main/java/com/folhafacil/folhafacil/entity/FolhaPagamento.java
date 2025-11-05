@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,39 +26,45 @@ public class FolhaPagamento {
     private Funcionario idFuncionario;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
+    @Column(name = "status", nullable = false, length = 15)
     private StatusFolhaPagamento status;
 
-    @Column(nullable = false)
+    @Column(name = "data", nullable = false)
     private LocalDate data;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "INSS", precision = 9, scale = 2)
     private BigDecimal INSS;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "FGTS", precision = 9, scale = 2)
     private BigDecimal FGTS;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "IRRF", precision = 9, scale = 2)
     private BigDecimal IRRF;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "totalValorImposto", precision = 9, scale = 2)
     private BigDecimal totalValorImposto;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "totalValorBeneficios", precision = 9, scale = 2)
     private BigDecimal totalValorBeneficios;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "totalHorasExtras", precision = 9, scale = 2)
     private BigDecimal totalHorasExtras;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "totalValorHorasExtras", precision = 9, scale = 2)
     private BigDecimal totalValorHorasExtras;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "salarioBruto", precision = 9, scale = 2)
     private BigDecimal salarioBruto;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "salarioLiquido",precision = 9, scale = 2)
     private BigDecimal salarioLiquido;
 
-    @Column(precision = 9, scale = 2)
+    @Column(name = "total", precision = 9, scale = 2)
     private BigDecimal total;
+
+    @OneToMany(mappedBy = "folhaPagamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FolhaPagamentoBeneficio> beneficios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "folhaPagamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FolhaPagamentoHoraExtra> horasExtras = new ArrayList<>();
 }

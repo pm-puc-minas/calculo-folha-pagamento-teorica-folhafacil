@@ -16,6 +16,7 @@ import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 
 @Service
 public class FuncionarioServiceImpl implements FuncionarioService {
@@ -64,7 +65,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
                 throw new RuntimeException("Conta já habilitada");
             }
 
-            f.setStatus(true);
+            f.setStatus(Funcionario.HABILITADO);
             funcionarioRepository.save(f);
 
             logFuncionarioServiceImpl.gerarLogHabilitado(keycloakService.recuperarUID(t), f.getId());
@@ -83,7 +84,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
                 throw new RuntimeException("Conta ja desabilitada");
             }
 
-            f.setStatus(false);
+            f.setStatus(Funcionario.DESABILITADO);
             funcionarioRepository.save(f);
 
             logFuncionarioServiceImpl.gerarLogDesativado(keycloakService.recuperarUID(t), f.getId());
@@ -91,6 +92,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public List<Funcionario> findByStatus(Boolean status) {
+        return funcionarioRepository.findByStatus(status);
     }
 
     public BigDecimal getTotalValorBeneficios(Funcionario f){
@@ -177,14 +182,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         }
 
         return irrf.setScale(2, RoundingMode.HALF_UP);
-    }
-
-    public Funcionario findById(String id) {
-        return funcionarioRepository.findById(id).get();
-    }
-
-    public Funcionario findByCpf(String id){
-        return funcionarioRepository.findByCpf(id);
     }
 
     public int contarDiasUteis(int mes, int ano, boolean incluirSabado){

@@ -56,7 +56,6 @@ export class BeneficiosPage {
   }
 
   buscar(){
-    this.actions.showLoad()
     this.service.buscar().subscribe({
       next : (res : BeneficioResponseDTO[]) =>{
         if(res.length == 0){
@@ -65,10 +64,8 @@ export class BeneficiosPage {
           this.beneficios = [...res]
           this.cdr.markForCheck();
         }
-          this.actions.hideLoad()
       },
       error : () =>{
-          this.actions.hideLoad()
       }
     })
   }
