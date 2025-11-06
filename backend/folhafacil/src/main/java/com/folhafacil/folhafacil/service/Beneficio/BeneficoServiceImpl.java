@@ -6,12 +6,14 @@ import com.folhafacil.folhafacil.entity.Beneficio;
 import com.folhafacil.folhafacil.mapper.BeneficioMapper;
 import com.folhafacil.folhafacil.repository.Beneficio.BeneficioCustomRepository;
 import com.folhafacil.folhafacil.repository.Beneficio.BeneficioRepository;
+import com.folhafacil.folhafacil.service.ServiceGenerico;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BeneficoServiceImpl implements BeneficioService {
+public class BeneficoServiceImpl extends ServiceGenerico<Beneficio, Long> implements BeneficioService {
     private final BeneficioRepository beneficioRepository;
     private final BeneficioCustomRepository beneficioCustomRepository;
 
@@ -19,6 +21,7 @@ public class BeneficoServiceImpl implements BeneficioService {
             BeneficioRepository beneficioRepository,
             BeneficioCustomRepository beneficioCustomRepository
     ) {
+        super(beneficioRepository);
         this.beneficioRepository = beneficioRepository;
         this.beneficioCustomRepository = beneficioCustomRepository;
     }

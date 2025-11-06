@@ -9,6 +9,8 @@ import com.folhafacil.folhafacil.entity.HoraExtra;
 import com.folhafacil.folhafacil.repository.HoraExtra.HoraExtraCustomRepository;
 import com.folhafacil.folhafacil.repository.HoraExtra.HoraExtraRepository;
 import com.folhafacil.folhafacil.service.KeycloakService;
+import com.folhafacil.folhafacil.service.ServiceGenerico;
+
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class HoraExtraServiceImpl implements HoraExtraService {
+public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> implements HoraExtraService {
     private final HoraExtraRepository horaExtraRepository;
     private final KeycloakService keycloakService;
     private final HoraExtraCustomRepository  horaExtraCustomRepository;
@@ -29,6 +31,7 @@ public class HoraExtraServiceImpl implements HoraExtraService {
             KeycloakService keycloakService,
             HoraExtraCustomRepository horaExtraCustomRepository
     ) {
+        super(horaExtraRepository);
         this.horaExtraRepository = horaExtraRepository;
         this.keycloakService = keycloakService;
         this.horaExtraCustomRepository = horaExtraCustomRepository;

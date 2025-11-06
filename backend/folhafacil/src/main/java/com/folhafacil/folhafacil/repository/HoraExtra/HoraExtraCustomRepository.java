@@ -6,21 +6,26 @@ import com.folhafacil.folhafacil.dto.Log.Funcionario.LogFuncionarioResponseDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.HoraExtra;
 import com.folhafacil.folhafacil.entity.LogFuncionario;
+import com.folhafacil.folhafacil.repository.RepositorioGenerico;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class HoraExtraCustomRepository {
+public class HoraExtraCustomRepository extends RepositorioGenerico<HoraExtra> {
     private final EntityManager em;
 
-    public List<HoraExtraReponseDTO> buscar(HoraExtraFilterDTO f){
+    public HoraExtraCustomRepository(EntityManager em) {
+        super(HoraExtra.class);
+        this.em = em;
+    }
+
+    public List<HoraExtraReponseDTO> buscar(HoraExtraFilterDTO f) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<HoraExtraReponseDTO> query = cb.createQuery(HoraExtraReponseDTO.class);
 
@@ -29,8 +34,7 @@ public class HoraExtraCustomRepository {
         Root<HoraExtra> root = query.from(HoraExtra.class);
 
         Join<HoraExtra, Funcionario> funcionarioJoin = cb.treat(
-                root.join("idFuncionario", JoinType.INNER), Funcionario.class
-        );
+                root.join("idFuncionario", JoinType.INNER), Funcionario.class);
         query.select(cb.construct(
                 HoraExtraReponseDTO.class,
                 root.get("id"),
@@ -39,10 +43,9 @@ public class HoraExtraCustomRepository {
                 root.get("dataInicio"),
                 root.get("dataFim"),
                 root.get("descricao"),
-                root.get("status")
-        ));
+                root.get("status")));
 
-        if(f.getIdFuncionario() != null){
+        if (f.getIdFuncionario() != null) {
             predicates.add(cb.equal(root.get("idFuncionario").get("id"), f.getIdFuncionario()));
         }
 

@@ -9,6 +9,7 @@ import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoReposit
 import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
 import com.folhafacil.folhafacil.service.HoraExtra.HoraExtraServiceImpl;
 import com.folhafacil.folhafacil.service.KeycloakService;
+import com.folhafacil.folhafacil.service.ServiceGenerico;
 import com.folhafacil.folhafacil.service.Log.FolhaPagamento.LogFolhaPagamentoServiceImpl;
 import com.folhafacil.folhafacil.service.Log.FolhaPagamento.Sub.LogSubFolhaPagamentoServiceImpl;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class FolhaPagamentoServiceImpl implements FolhaPagamentoService {
+public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, Long> implements FolhaPagamentoService {
 
     private final FuncionarioServiceImpl funcionarioServiceImpl;
     private final HoraExtraServiceImpl horaExtraServiceImpl;
@@ -36,6 +37,7 @@ public class FolhaPagamentoServiceImpl implements FolhaPagamentoService {
             FolhaPagamentoRepository folhaPagamentoRepository,
             LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl
     ) {
+        super(folhaPagamentoRepository);
         this.funcionarioServiceImpl = funcionarioServiceImpl;
         this.horaExtraServiceImpl = horaExtraServiceImpl;
         this.logFolhaPagamentoServiceImpl = logFolhaPagamentoServiceImpl;

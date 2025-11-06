@@ -7,6 +7,7 @@ import com.folhafacil.folhafacil.mapper.FuncionarioBeneficioMapper;
 import com.folhafacil.folhafacil.mapper.FuncionarioMapper;
 import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
 import com.folhafacil.folhafacil.service.KeycloakService;
+import com.folhafacil.folhafacil.service.ServiceGenerico;
 import com.folhafacil.folhafacil.service.Log.Funcionario.LogFuncionarioServiceImpl;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.time.YearMonth;
 import java.util.List;
 
 @Service
-public class FuncionarioServiceImpl implements FuncionarioService {
+public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String> implements FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
     private final KeycloakService keycloakService;
     private final LogFuncionarioServiceImpl logFuncionarioServiceImpl;
@@ -29,6 +30,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             KeycloakService keycloakService,
             LogFuncionarioServiceImpl logFuncionarioServiceImpl
     ) {
+        super(funcionarioRepository);
         this.funcionarioRepository = funcionarioRepository;
         this.keycloakService = keycloakService;
         this.logFuncionarioServiceImpl = logFuncionarioServiceImpl;
