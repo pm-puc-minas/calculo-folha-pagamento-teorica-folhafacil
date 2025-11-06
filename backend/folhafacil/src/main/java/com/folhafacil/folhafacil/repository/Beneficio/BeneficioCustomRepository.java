@@ -3,20 +3,25 @@ package com.folhafacil.folhafacil.repository.Beneficio;
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioResponseDTO;
 import com.folhafacil.folhafacil.entity.Beneficio;
 import com.folhafacil.folhafacil.entity.FuncionarioBeneficio;
+import com.folhafacil.folhafacil.repository.RepositorioGenerico;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class BeneficioCustomRepository {
+public class BeneficioCustomRepository extends RepositorioGenerico<Beneficio> {
+    
     private final EntityManager em;
+    public BeneficioCustomRepository(EntityManager em) {
+        super(Beneficio.class);
+        this.em = em;
+    }
 
     public List<BeneficioResponseDTO> buscar() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
