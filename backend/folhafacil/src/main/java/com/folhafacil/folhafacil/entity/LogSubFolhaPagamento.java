@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -31,6 +32,21 @@ public class LogSubFolhaPagamento {
 
     @Column(name = "mensagem", nullable = false, length = 150)
     private String mensagem;
+
+    @Column(name = "totalValorImposto", precision = 9, scale = 2)
+    private BigDecimal totalValorImposto;
+
+    @Column(name = "totalValorBeneficios", precision = 9, scale = 2)
+    private BigDecimal totalValorBeneficios;
+
+    @Column(name = "totalHorasExtras", precision = 9, scale = 2)
+    private BigDecimal totalHorasExtras;
+
+    @Column(name = "totalValorHorasExtras", precision = 9, scale = 2)
+    private BigDecimal totalValorHorasExtras;
+
+    @Column(name = "salarioBruto", precision = 9, scale = 2)
+    private BigDecimal salarioBruto;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false, length = 20)

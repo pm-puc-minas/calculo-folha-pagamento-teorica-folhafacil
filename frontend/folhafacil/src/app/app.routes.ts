@@ -35,10 +35,10 @@ export const routes: Routes = [
 						data: { role : 'FF_FUNCIONARIOS_LISTAR'}
 					},
 					{
-						path: "folha-salarial",
+						path: "folha-pagamento",
 						component: FolhaPagamentoPage,
 						canActivate: [RoleCanMatch],
-						data: { role : 'FF_FOLHA_SALARIAL_LISTAR'}
+						data: { role : 'FF_FOLHA_PAGAMENTO_LISTAR'}
 					},
 					{
 						path: "logs",
