@@ -105,7 +105,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
         BigDecimal totalValorBeneficios = BigDecimal.ZERO;
         for(FuncionarioBeneficio b : f.getBeneficios()){
-            totalValorBeneficios.add(b.getValor());
+            totalValorBeneficios = totalValorBeneficios.add(b.getValor());
         }
 
         return totalValorBeneficios;

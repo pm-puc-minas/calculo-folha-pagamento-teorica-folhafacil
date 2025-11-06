@@ -40,7 +40,7 @@ export class FolhaPagamentoPage {
   gerar(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Deseja gerar/atualizar? Essa ações pode demorar',
+      message: 'Deseja gerar/atualizar? Essa ações pode demorar (Referente ao mês atual)',
       accept: () => {
         this.service.gerar().subscribe({
           next: () =>{

@@ -23,6 +23,11 @@ public class LogSubFolhaPagamentoServiceImpl {
         e.setIdLogFolhaPagamento(lfp);
 
         e.setIdFolhaPagamento(fp);
+        e.setTotalValorImposto(fp.getTotalValorImposto());
+        e.setTotalValorBeneficios(fp.getTotalValorBeneficios());
+        e.setTotalHorasExtras(fp.getTotalHorasExtras());
+        e.setTotalValorHorasExtras(fp.getTotalValorHorasExtras());
+        e.setSalarioBruto(fp.getSalarioBruto());
         e.setMensagem("Folha gerada com sucesso");
         e.setTipo(TipoLogSubFolhaPagamento.GERADO);
 
@@ -37,6 +42,11 @@ public class LogSubFolhaPagamentoServiceImpl {
         e.setIdLogFolhaPagamento(lfp);
 
         e.setIdFolhaPagamento(fp);
+        e.setTotalValorImposto(fp.getTotalValorImposto());
+        e.setTotalValorBeneficios(fp.getTotalValorBeneficios());
+        e.setTotalHorasExtras(fp.getTotalHorasExtras());
+        e.setTotalValorHorasExtras(fp.getTotalValorHorasExtras());
+        e.setSalarioBruto(fp.getSalarioBruto());
         e.setMensagem("Folha atualizada com sucesso");
         e.setTipo(TipoLogSubFolhaPagamento.ATUALIZADO);
 
@@ -51,6 +61,11 @@ public class LogSubFolhaPagamentoServiceImpl {
         e.setIdLogFolhaPagamento(lfp);
 
         e.setIdFolhaPagamento(fp);
+        e.setTotalValorImposto(fp.getTotalValorImposto());
+        e.setTotalValorBeneficios(fp.getTotalValorBeneficios());
+        e.setTotalHorasExtras(fp.getTotalHorasExtras());
+        e.setTotalValorHorasExtras(fp.getTotalValorHorasExtras());
+        e.setSalarioBruto(fp.getSalarioBruto());
         e.setMensagem("Folha paga com sucesso");
         e.setTipo(TipoLogSubFolhaPagamento.PAGO);
 
@@ -65,6 +80,11 @@ public class LogSubFolhaPagamentoServiceImpl {
         e.setIdLogFolhaPagamento(lfp);
 
         e.setIdFolhaPagamento(fp);
+        e.setTotalValorImposto(fp.getTotalValorImposto());
+        e.setTotalValorBeneficios(fp.getTotalValorBeneficios());
+        e.setTotalHorasExtras(fp.getTotalHorasExtras());
+        e.setTotalValorHorasExtras(fp.getTotalValorHorasExtras());
+        e.setSalarioBruto(fp.getSalarioBruto());
         e.setMensagem("Folha já paga");
         e.setTipo(TipoLogSubFolhaPagamento.ERRO);
 

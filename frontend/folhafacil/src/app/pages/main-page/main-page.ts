@@ -59,10 +59,10 @@ export class MainPage {
           })
       }
 
-      if(this.keyclaockService.hasRole("FF_FOLHA_SALARIAL_LISTAR")){
+      if(this.keyclaockService.hasRole("FF_FOLHA_PAGAMENTO_LISTAR")){
         route.routes.push({
-          name: 'Folha Salarial',
-          route: 'admin/folha-salarial'
+          name: 'Folha Pagamento',
+          route: 'admin/folha-pagamento'
         })
       }
 
