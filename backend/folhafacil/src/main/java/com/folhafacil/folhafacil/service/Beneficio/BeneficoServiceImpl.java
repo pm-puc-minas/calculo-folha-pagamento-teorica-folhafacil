@@ -10,7 +10,12 @@ import com.folhafacil.folhafacil.service.ServiceGenerico;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class BeneficoServiceImpl extends ServiceGenerico<Beneficio, Long> implements BeneficioService {
@@ -49,6 +54,36 @@ public class BeneficoServiceImpl extends ServiceGenerico<Beneficio, Long> implem
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    // Lista os tipos de benefícios únicos
+public Set<String> listarTiposUnicos() {
+    List<BeneficioResponseDTO> beneficios = beneficioCustomRepository.buscar();
+    Set<String> tipos = new HashSet<>();
+    for (BeneficioResponseDTO b : beneficios) {
+        tipos.add(b.getTipo());
+    }
+    return tipos;
+}
+
+// Agrupa benefícios por tipo
+public Map<String, List<BeneficioResponseDTO>> agruparPorTipo() {
+    List<BeneficioResponseDTO> beneficios = beneficioCustomRepository.buscar();
+    Map<String, List<BeneficioResponseDTO>> mapa = new HashMap<>();
+    for (BeneficioResponseDTO b : beneficios) {
+        mapa.computeIfAbsent(b.getTipo(), k -> new ArrayList<>()).add(b);
+    }
+    return mapa;
+}
+
+// Filtra benefícios por valor mínimo
+public List<BeneficioResponseDTO> filtrarPorValorMinimo(double minimo) {
+    List<BeneficioResponseDTO> beneficios = beneficioCustomRepository.buscar();
+    return beneficios.stream()
+            .filter(b -> b.getValor() >= minimo)
+            .toList();
+}
+
+
 
     /*public Beneficio adicionarBeneficio(Funcionario funcionario, BeneficioTipo tipo, double valor, double desconto){
         if (funcionario == null) throw new IllegalArgumentException("Funcionario nulo");
