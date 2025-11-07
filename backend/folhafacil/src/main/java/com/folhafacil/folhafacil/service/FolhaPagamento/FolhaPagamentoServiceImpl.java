@@ -1,103 +1,133 @@
 package com.folhafacil.folhafacil.service.FolhaPagamento;
 
 import com.folhafacil.folhafacil.dto.FolhaPagamento.StatusFolhaPagamento;
-import com.folhafacil.folhafacil.entity.FolhaPagamento;
-import com.folhafacil.folhafacil.entity.Funcionario;
+import com.folhafacil.folhafacil.entity.*;
+import com.folhafacil.folhafacil.infra.utils.CollectionUtils;
+import com.folhafacil.folhafacil.mapper.FolhaPagamentoBenficioMapper;
+import com.folhafacil.folhafacil.mapper.FolhaPagamentoHoraExtraMapper;
 import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoRepository;
-import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
-import com.folhafacil.folhafacil.service.generico.ServiceGenerico;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
+import com.folhafacil.folhafacil.service.HoraExtra.HoraExtraServiceImpl;
+import com.folhafacil.folhafacil.service.KeycloakService;
+import com.folhafacil.folhafacil.service.ServiceGenerico;
+import com.folhafacil.folhafacil.service.Log.FolhaPagamento.LogFolhaPagamentoServiceImpl;
+import com.folhafacil.folhafacil.service.Log.FolhaPagamento.Sub.LogSubFolhaPagamentoServiceImpl;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional
-public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, Long>
-        implements FolhaPagamentoService {
+public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, Long> implements FolhaPagamentoService {
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private final FuncionarioServiceImpl funcionarioServiceImpl;
+    private final HoraExtraServiceImpl horaExtraServiceImpl;
+    private final LogFolhaPagamentoServiceImpl logFolhaPagamentoServiceImpl;
+    private final KeycloakService keycloakService;
+    private final FolhaPagamentoRepository folhaPagamentoRepository;
+    private final LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl;
 
-    @Autowired
-    private FolhaPagamentoRepository folhaPagamentoRepository;
+    public FolhaPagamentoServiceImpl(
+            FuncionarioServiceImpl funcionarioServiceImpl,
+            HoraExtraServiceImpl horaExtraServiceImpl,
+            LogFolhaPagamentoServiceImpl logFolhaPagamentoServiceImpl,
+            KeycloakService keycloakService,
+            FolhaPagamentoRepository folhaPagamentoRepository,
+            LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl
+    ) {
+        super(folhaPagamentoRepository);
+        this.funcionarioServiceImpl = funcionarioServiceImpl;
+        this.horaExtraServiceImpl = horaExtraServiceImpl;
+        this.logFolhaPagamentoServiceImpl = logFolhaPagamentoServiceImpl;
+        this.keycloakService = keycloakService;
+        this.folhaPagamentoRepository = folhaPagamentoRepository;
+        this.logSubFolhaPagamentoServiceImpl = logSubFolhaPagamentoServiceImpl;
+    }
 
     @Override
     public void gerarFolhaPagamento(Jwt token) throws RuntimeException {
-        LocalDate dataAtual = LocalDate.now();
+        try {
+            List<Funcionario> fs = funcionarioServiceImpl.findByStatus(Funcionario.HABILITADO);
 
-        //  Busca funcionários ativos com Stream e filtragem funcional
-        List<Funcionario> funcionariosAtivos = funcionarioRepository.findAll().stream()
-                .filter(f -> Funcionario.HABILITADO.equals(f.getStatus()))
-                .collect(Collectors.toList());
+            LocalDate dataInicio = LocalDate.now().withDayOfMonth(1);
 
-        if (funcionariosAtivos.isEmpty()) {
-            throw new RuntimeException("Nenhum funcionário ativo encontrado para gerar folha.");
-        }
+            LogFolhaPagamento lfp = logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada(keycloakService.recuperarUID(token), dataInicio);
 
-        //  Processamento funcional com Stream + forEach
-        funcionariosAtivos.stream().forEach(func -> {
-            FolhaPagamento folhaExistente =
-                    folhaPagamentoRepository.findByIdFuncionarioIdAndData(
-                            func.getId(), dataAtual.withDayOfMonth(1));
+            for(Funcionario f : fs) {
+                FolhaPagamento fp = folhaPagamentoRepository.findByIdFuncionarioIdAndData(f.getId(), dataInicio);
 
-            if (folhaExistente != null) return; // já existe folha neste mês
-
-            FolhaPagamento folha = new FolhaPagamento();
-            folha.setIdFuncionario(func);
-            folha.setData(dataAtual.withDayOfMonth(1));
-            folha.setStatus(StatusFolhaPagamento.ABERTA);
-
-            BigDecimal salarioBruto = func.getSalarioBase();
-            BigDecimal inss = salarioBruto.multiply(BigDecimal.valueOf(0.11));
-            BigDecimal fgts = salarioBruto.multiply(BigDecimal.valueOf(0.08));
-            BigDecimal irrf = salarioBruto.multiply(BigDecimal.valueOf(0.075));
-
-            //  Soma de benefícios usando Stream (exemplo: 100 por benefício)
-            BigDecimal totalBeneficios = BigDecimal.ZERO;
-            if (func.getBeneficios() != null && !func.getBeneficios().isEmpty()) {
-                totalBeneficios = BigDecimal.valueOf(func.getBeneficios().stream()
-                        .count() * 100);
+                if(fp == null) {
+                    FolhaPagamento newFP = gerarPorFuncionario(f, dataInicio, new FolhaPagamento());
+                    LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogGerado(lfp.getId(), newFP);
+                }else if(fp.getStatus().equals(StatusFolhaPagamento.PENDENTE)){
+                    FolhaPagamento newFP = gerarPorFuncionario(f, dataInicio, fp);
+                    LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(lfp.getId(), newFP);
+                }else if(fp.getStatus().equals(StatusFolhaPagamento.PAGO)){
+                    LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogErro(lfp.getId(), fp);
+                }
             }
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public FolhaPagamento gerarPorFuncionario(Funcionario f, LocalDate data, FolhaPagamento e) throws RuntimeException {
+        try{
+            e.setIdFuncionario(f);
+            e.setStatus(StatusFolhaPagamento.PENDENTE);
+            e.setData(data);
+
+            BigDecimal inss = funcionarioServiceImpl.getINSS(f);
+            e.setINSS(inss);
+
+            BigDecimal fgst = funcionarioServiceImpl.getFGST(f);
+            e.setFGTS(fgst);
+
+            BigDecimal irrf = funcionarioServiceImpl.getIRRF(f);
+            e.setIRRF(irrf);
+
+            BigDecimal totalValorImposto = inss.add(fgst).add(irrf);
+            e.setTotalValorImposto(totalValorImposto);
+
+            BigDecimal totalValorBeneficios = funcionarioServiceImpl.getTotalValorBeneficios(f);
+            e.setTotalValorBeneficios(totalValorBeneficios);
+
+            List<FolhaPagamentoBeneficio> novosBeneficios =
+                    FolhaPagamentoBenficioMapper.toList(f.getBeneficios(), e);
+            CollectionUtils.replaceCollection(e.getBeneficios(), novosBeneficios);
 
             BigDecimal totalHorasExtras = BigDecimal.ZERO;
             BigDecimal totalValorHorasExtras = BigDecimal.ZERO;
 
-            BigDecimal totalImpostos = inss.add(irrf).add(fgts);
+            if(!f.getCargo().equals("ESTAGIARIO")){
+                totalHorasExtras = horaExtraServiceImpl.totalHorasNoMes(f.getId(), data);
 
-            BigDecimal salarioLiquido = salarioBruto
-                    .add(totalValorHorasExtras)
-                    .add(totalBeneficios)
-                    .subtract(totalImpostos);
-
-            if (func.getPensao() != null) {
-                salarioLiquido = salarioLiquido.subtract(func.getPensao());
+                if(!(totalHorasExtras.compareTo(BigDecimal.ZERO) <= 0)){
+                    totalValorHorasExtras = totalHorasExtras.multiply(funcionarioServiceImpl.valorHoraExtra(f));
+                }
             }
+            List<FolhaPagamentoHoraExtra> novasHorasExtras =
+                    FolhaPagamentoHoraExtraMapper.toList(horaExtraServiceImpl.findByFuncionarioAndMesAno(f.getId(), data), e);
+            CollectionUtils.replaceCollection(e.getHorasExtras(), novasHorasExtras);
+            e.setTotalHorasExtras(totalHorasExtras);
+            e.setTotalValorHorasExtras(totalValorHorasExtras);
 
-            folha.setINSS(inss);
-            folha.setFGTS(fgts);
-            folha.setIRRF(irrf);
-            folha.setTotalValorImposto(totalImpostos);
-            folha.setTotalValorBeneficios(totalBeneficios);
-            folha.setTotalHorasExtras(totalHorasExtras);
-            folha.setTotalValorHorasExtras(totalValorHorasExtras);
-            folha.setSalarioBruto(salarioBruto);
-            folha.setSalarioLiquido(salarioLiquido);
-            folha.setTotal(salarioLiquido);
+            e.setSalarioBruto(f.getSalarioBase());
+            e.setSalarioLiquido(
+                    f.getSalarioBase()
+                            .subtract(totalValorImposto)
+                            .add(totalValorBeneficios)
+                            .add(totalValorHorasExtras)
+                            .setScale(2, BigDecimal.ROUND_HALF_UP)
+            );
 
-            folhaPagamentoRepository.save(folha);
-        });
-    }
+            e.setTotal(f.getSalarioBase().add(totalValorHorasExtras).add(totalValorBeneficios).subtract(totalValorImposto));
 
-    // Método adicional opcional: exemplo de uso de Stream para filtragem avançada
-    public List<FolhaPagamento> listarFolhasComSalarioLiquidoMaiorQue(BigDecimal valorMinimo) {
-        return folhaPagamentoRepository.findAll().stream()
-                .filter(f -> f.getSalarioLiquido().compareTo(valorMinimo) > 0)
-                .collect(Collectors.toList());
+            return folhaPagamentoRepository.save(e);
+        }catch(RuntimeException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 }
