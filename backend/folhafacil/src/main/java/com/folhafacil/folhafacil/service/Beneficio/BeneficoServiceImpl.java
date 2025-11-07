@@ -54,37 +54,35 @@ public class BeneficoServiceImpl extends ServiceGenerico<Beneficio, Long> implem
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    // Lista os tipos de benefícios únicos
-public Set<String> listarTiposUnicos() {
-    List<BeneficioResponseDTO> beneficios = beneficioCustomRepository.buscar();
-    Set<String> tipos = new HashSet<>();
-    for (BeneficioResponseDTO b : beneficios) {
-        tipos.add(b.getTipo());
+    
+    // Lista os nomes únicos de benefícios
+    public Set<String> listarNomesUnicos() {
+        List<Beneficio> beneficios = beneficioRepository.findAll();
+        Set<String> nomes = new HashSet<>();
+        for (Beneficio b : beneficios) {
+            nomes.add(b.getNome());
+        }
+        return nomes;
     }
-    return tipos;
-}
-
-// Agrupa benefícios por tipo
-public Map<String, List<BeneficioResponseDTO>> agruparPorTipo() {
-    List<BeneficioResponseDTO> beneficios = beneficioCustomRepository.buscar();
-    Map<String, List<BeneficioResponseDTO>> mapa = new HashMap<>();
-    for (BeneficioResponseDTO b : beneficios) {
-        mapa.computeIfAbsent(b.getTipo(), k -> new ArrayList<>()).add(b);
+    
+    // Agrupa benefícios por nome
+    public Map<String, List<Beneficio>> agruparPorNome() {
+        List<Beneficio> beneficios = beneficioRepository.findAll();
+        Map<String, List<Beneficio>> mapa = new HashMap<>();
+        for (Beneficio b : beneficios) {
+            mapa.computeIfAbsent(b.getNome(), k -> new ArrayList<>()).add(b);
+        }
+        return mapa;
     }
-    return mapa;
-}
-
-// Filtra benefícios por valor mínimo
-public List<BeneficioResponseDTO> filtrarPorValorMinimo(double minimo) {
-    List<BeneficioResponseDTO> beneficios = beneficioCustomRepository.buscar();
-    return beneficios.stream()
-            .filter(b -> b.getValor() >= minimo)
-            .toList();
-}
-
-
-
+    
+    // Filtra benefícios por nome mínimo (exemplo apenas)
+    public List<Beneficio> filtrarPorNomeMinimo(String prefixo) {
+        List<Beneficio> beneficios = beneficioRepository.findAll();
+        return beneficios.stream()
+                .filter(b -> b.getNome().startsWith(prefixo))
+                .toList();
+    }
+    
     /*public Beneficio adicionarBeneficio(Funcionario funcionario, BeneficioTipo tipo, double valor, double desconto){
         if (funcionario == null) throw new IllegalArgumentException("Funcionario nulo");
 
