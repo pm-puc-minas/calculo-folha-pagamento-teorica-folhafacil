@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, Long> implements FolhaPagamentoService {
@@ -69,18 +72,22 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
 
             for(Funcionario f : fs) {
                 FolhaPagamento fp = folhaPagamentoRepository.findByIdFuncionarioIdAndData(f.getId(), dataInicio);
+                FolhaPagamento newFP = null;
 
                 if(fp == null) {
-                    FolhaPagamento newFP = gerarPorFuncionario(f, dataInicio, new FolhaPagamento());
+                    newFP = gerarPorFuncionario(f, dataInicio, new FolhaPagamento());
                     LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogGerado(lfp.getId(), newFP);
                 }else if(fp.getStatus().equals(StatusFolhaPagamento.PENDENTE)){
-                    FolhaPagamento newFP = gerarPorFuncionario(f, dataInicio, fp);
+                    newFP = gerarPorFuncionario(f, dataInicio, fp);
                     LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(lfp.getId(), newFP);
                 }else if(fp.getStatus().equals(StatusFolhaPagamento.PAGO)){
                     LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogErro(lfp.getId(), fp);
+                    newFP = fp;
                 }
 
-                mapSalarioLiquido.put(f, newFP.getSalarioLiquido());
+                if(newFP != null){
+                    mapSalarioLiquido.put(f, newFP.getSalarioLiquido());
+                }
             }
 
             mapSalarioLiquido.forEach((func, salario) -> System.out.println(func.getNome() + "- Salário Liquido R$" + salario));
