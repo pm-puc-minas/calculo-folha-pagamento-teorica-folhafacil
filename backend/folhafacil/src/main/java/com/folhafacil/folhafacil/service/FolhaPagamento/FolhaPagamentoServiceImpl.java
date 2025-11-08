@@ -57,6 +57,8 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
 
             LogFolhaPagamento lfp = logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada(keycloakService.recuperarUID(token), dataInicio);
 
+            fs.sort(Comparator.comparing(Funcionario::getNome));
+
             Map<Funcionario, BigDecimal> mapSalarioLiquido = new HashMap<>();
 
             for(Funcionario f : fs) {
