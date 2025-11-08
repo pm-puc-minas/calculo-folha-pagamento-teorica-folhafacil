@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, Long> implements FolhaPagamentoService {
@@ -55,6 +56,8 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
 
             LogFolhaPagamento lfp = logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada(keycloakService.recuperarUID(token), dataInicio);
 
+            Map<Funcionario, BigDecimal> mapSalarioLiquido = new HashMap<>();
+
             for(Funcionario f : fs) {
                 FolhaPagamento fp = folhaPagamentoRepository.findByIdFuncionarioIdAndData(f.getId(), dataInicio);
 
@@ -67,7 +70,14 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
                 }else if(fp.getStatus().equals(StatusFolhaPagamento.PAGO)){
                     LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogErro(lfp.getId(), fp);
                 }
+
+                mapSalarioLiquido.put(f, newFP.getSalarioLiquido());
             }
+
+            for(Map.Entry<Funcionario, BigDecimal> entry : mapaSalarioLiquido.entrySet()){
+                System.our.println(entry.getKey().getNome() + "- Salário Liquido: " + entry.getValue());
+            }
+
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
