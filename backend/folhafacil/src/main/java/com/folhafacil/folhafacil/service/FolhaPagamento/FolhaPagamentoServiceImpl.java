@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -74,9 +75,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
                 mapSalarioLiquido.put(f, newFP.getSalarioLiquido());
             }
 
-            for(Map.Entry<Funcionario, BigDecimal> entry : mapaSalarioLiquido.entrySet()){
-                System.our.println(entry.getKey().getNome() + "- Salário Liquido: " + entry.getValue());
-            }
+            mapSalarioLiquido.forEach((func, salario) -> System.out.println(func.getNome() + "- Salário Liquido R$" + salario));
 
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
