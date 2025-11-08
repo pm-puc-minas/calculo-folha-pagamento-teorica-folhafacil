@@ -18,13 +18,15 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> implements HoraExtraService {
+
     private final HoraExtraRepository horaExtraRepository;
     private final KeycloakService keycloakService;
-    private final HoraExtraCustomRepository  horaExtraCustomRepository;
+    private final HoraExtraCustomRepository horaExtraCustomRepository;
 
     public HoraExtraServiceImpl(
             HoraExtraRepository horaExtraRepository,
@@ -41,7 +43,6 @@ public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> imple
     public void iniciar(HoraExtraDTO d, Jwt token) throws RuntimeException {
         try {
             String uid = keycloakService.recuperarUID(token);
-
             HoraExtra e = new HoraExtra();
 
             Funcionario f = new Funcionario();
@@ -61,12 +62,11 @@ public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> imple
     @Override
     public void finalizar(Long id) throws RuntimeException {
         try {
-            HoraExtra e = horaExtraRepository.findById(id).get();
+            HoraExtra e = horaExtraRepository.findById(id).orElseThrow();
             e.setDataFim(LocalDateTime.now());
             e.setStatus(StatusHoraExtra.CONCLUIDA);
-
             horaExtraRepository.save(e);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -74,36 +74,66 @@ public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> imple
     @Override
     public void cancelar(Long id) throws RuntimeException {
         try {
-            HoraExtra e = horaExtraRepository.findById(id).get();
+            HoraExtra e = horaExtraRepository.findById(id).orElseThrow();
             e.setStatus(StatusHoraExtra.CANCELADA);
-
             horaExtraRepository.save(e);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public List<HoraExtraReponseDTO> minhasHoras(Jwt jwt){
+    public List<HoraExtraReponseDTO> minhasHoras(Jwt jwt) {
         String uid = keycloakService.recuperarUID(jwt);
         HoraExtraFilterDTO f = new HoraExtraFilterDTO();
         f.setIdFuncionario(uid);
-
         return horaExtraCustomRepository.buscar(f);
     }
 
-    public BigDecimal totalHorasNoMes(String uid, LocalDate data){
-        List<HoraExtra> hes = findByFuncionarioAndMesAno(uid,data);
+    public BigDecimal totalHorasNoMes(String uid, LocalDate data) {
+        List<HoraExtra> hes = findByFuncionarioAndMesAno(uid, data);
 
         double total = hes.stream()
                 .filter(h -> h.getDataFim() != null)
                 .mapToDouble(h -> Duration.between(h.getDataInicio(), h.getDataFim()).toMinutes() / 60.0)
                 .sum();
 
-        return new BigDecimal(total);
+        return BigDecimal.valueOf(total);
     }
 
     public List<HoraExtra> findByFuncionarioAndMesAno(String uid, LocalDate data) {
         return horaExtraRepository.findByFuncionarioAndMesAno(uid, data.getMonthValue(), data.getYear());
+    }
+
+    /** Retorna um Set com todos os IDs únicos de funcionários que têm horas extras registradas */
+    public Set<String> listarFuncionariosComHorasExtras() {
+        return horaExtraRepository.findAll()
+                .stream()
+                .map(h -> h.getIdFuncionario().getId())
+                .collect(Collectors.toSet());
+    }
+
+    /** Retorna uma lista com horas extras em andamento */
+    public List<HoraExtra> listarEmAndamento() {
+        return horaExtraRepository.findAll()
+                .stream()
+                .filter(h -> h.getStatus() == StatusHoraExtra.EM_ANDAMENTO)
+                .collect(Collectors.toList());
+    }
+
+    /** Retorna um Map com o total de horas concluídas por funcionário */
+    public Map<String, BigDecimal> totalPorFuncionario() {
+        Map<String, BigDecimal> mapa = new HashMap<>();
+
+        horaExtraRepository.findAll()
+                .stream()
+                .filter(h -> h.getStatus() == StatusHoraExtra.CONCLUIDA && h.getDataFim() != null)
+                .forEach(h -> {
+                    String idFunc = h.getIdFuncionario().getId();
+                    double horas = Duration.between(h.getDataInicio(), h.getDataFim()).toMinutes() / 60.0;
+                    mapa.merge(idFunc, BigDecimal.valueOf(horas), BigDecimal::add);
+                });
+
+        return mapa;
     }
 }
