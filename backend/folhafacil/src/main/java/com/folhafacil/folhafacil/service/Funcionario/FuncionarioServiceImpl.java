@@ -17,7 +17,8 @@ import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String> implements FuncionarioService {
@@ -39,18 +40,24 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
     @Override
     public void salvar(FuncionarioDTO d, Jwt t) throws RuntimeException {
         try {
-            if(d.getId() == null){
+            Funcionario entity = FuncionarioMapper.toEntity(
+                    d,
+                    FuncionarioBeneficioMapper.toEntityList(d.getBeneficios(), d.getId())
+            );
+
+            if (d.getId() == null) {
                 String[] nameArr = d.getNome().split(" ");
-                String username = nameArr[0]+"."+nameArr[nameArr.length-1];
+                String username = nameArr[0] + "." + nameArr[nameArr.length - 1];
                 String password = "FolhaFacil2025";
-                String uid = keycloakService.criarUsuario(username, d.getEmail(), nameArr[0], nameArr[nameArr.length-1], password, d.getCargo());
+                String uid = keycloakService.criarUsuario(username, d.getEmail(), nameArr[0], nameArr[nameArr.length - 1], password, d.getCargo());
                 d.setUsuario(username);
                 d.setId(uid);
                 d.setStatus(Funcionario.HABILITADO);
-                funcionarioRepository.save(FuncionarioMapper.toEntity(d, FuncionarioBeneficioMapper.toEntityList(d.getBeneficios(), d.getId())));
+
+                funcionarioRepository.save(entity);
                 logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), d.getId());
-            }else{
-                funcionarioRepository.save(FuncionarioMapper.toEntity(d, FuncionarioBeneficioMapper.toEntityList(d.getBeneficios(), d.getId())));
+            } else {
+                funcionarioRepository.save(entity);
                 logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), d.getId());
             }
         } catch (RuntimeException e) {
@@ -60,66 +67,63 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
 
     @Override
     public void habilitar(String uid, Jwt t) throws RuntimeException {
-        try {
-            Funcionario f = funcionarioRepository.findById(uid).get();
+        Funcionario f = funcionarioRepository.findById(uid)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-            if(f.getStatus()){
-                throw new RuntimeException("Conta já habilitada");
-            }
-
-            f.setStatus(Funcionario.HABILITADO);
-            funcionarioRepository.save(f);
-
-            logFuncionarioServiceImpl.gerarLogHabilitado(keycloakService.recuperarUID(t), f.getId());
+        if (f.getStatus()) {
+            throw new RuntimeException("Conta já habilitada");
         }
-        catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
+        f.setStatus(Funcionario.HABILITADO);
+        funcionarioRepository.save(f);
+        logFuncionarioServiceImpl.gerarLogHabilitado(keycloakService.recuperarUID(t), f.getId());
     }
 
     @Override
     public void desabilitar(String uid, Jwt t) throws RuntimeException {
-        try {
-            Funcionario f = funcionarioRepository.findById(uid).get();
+        Funcionario f = funcionarioRepository.findById(uid)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-            if(!f.getStatus()) {
-                throw new RuntimeException("Conta ja desabilitada");
-            }
-
-            f.setStatus(Funcionario.DESABILITADO);
-            funcionarioRepository.save(f);
-
-            logFuncionarioServiceImpl.gerarLogDesativado(keycloakService.recuperarUID(t), f.getId());
+        if (!f.getStatus()) {
+            throw new RuntimeException("Conta já desabilitada");
         }
-        catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
+        f.setStatus(Funcionario.DESABILITADO);
+        funcionarioRepository.save(f);
+        logFuncionarioServiceImpl.gerarLogDesativado(keycloakService.recuperarUID(t), f.getId());
     }
 
     public List<Funcionario> findByStatus(Boolean status) {
         return funcionarioRepository.findByStatus(status);
     }
 
-    public BigDecimal getTotalValorBeneficios(Funcionario f){
-        if(f.getBeneficios().isEmpty()){
+    public List<Funcionario> findHabilitados() {
+        return findByStatus(Funcionario.HABILITADO);
+    }
+
+    public List<Funcionario> findDesabilitados() {
+        return findByStatus(Funcionario.DESABILITADO);
+    }
+
+    public BigDecimal getTotalValorBeneficios(Funcionario f) {
+        if (f.getBeneficios().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
         BigDecimal totalValorBeneficios = BigDecimal.ZERO;
-        for(FuncionarioBeneficio b : f.getBeneficios()){
+        for (FuncionarioBeneficio b : f.getBeneficios()) {
             totalValorBeneficios = totalValorBeneficios.add(b.getValor());
         }
 
         return totalValorBeneficios;
     }
 
-    public BigDecimal valorHoraExtra(Funcionario f){
+    public BigDecimal calcularValorHoraExtra(Funcionario f) {
         BigDecimal totalHoras = new BigDecimal(f.getHorasDiarias() * f.getDiasMensal());
-
-        return f.getSalarioBase().divide(totalHoras, 2, BigDecimal.ROUND_HALF_UP);
+        return f.getSalarioBase().divide(totalHoras, 2, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal getINSS(Funcionario f){
+    public BigDecimal getINSS(Funcionario f) {
         BigDecimal salario = f.getSalarioBase();
 
         BigDecimal faixa1 = new BigDecimal("1412.00");
@@ -132,8 +136,7 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         BigDecimal aliquota3 = new BigDecimal("0.12");
         BigDecimal aliquota4 = new BigDecimal("0.14");
 
-        BigDecimal inss = BigDecimal.ZERO;
-
+        BigDecimal inss;
         if (salario.compareTo(faixa1) <= 0) {
             inss = salario.multiply(aliquota1);
         } else if (salario.compareTo(faixa2) <= 0) {
@@ -157,15 +160,15 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         return inss.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal getFGST(Funcionario f){
+    public BigDecimal getFGTS(Funcionario f) {
         return f.getSalarioBase().multiply(new BigDecimal("0.08")).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal getIRRF(Funcionario f){
+    public BigDecimal getIRRF(Funcionario f) {
         BigDecimal deducaoDependente = new BigDecimal("189.59");
         BigDecimal baseIRRF = f.getSalarioBase().subtract(getINSS(f))
                 .subtract(deducaoDependente.multiply(new BigDecimal(f.getNumDependentes())));
-        BigDecimal irrf = BigDecimal.ZERO;
+        BigDecimal irrf;
 
         if (baseIRRF.compareTo(new BigDecimal("2112.00")) <= 0) {
             irrf = BigDecimal.ZERO;
@@ -186,20 +189,50 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         return irrf.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public int contarDiasUteis(int mes, int ano, boolean incluirSabado){
-        YearMonth month = YearMonth.of(ano, mes);
+    public int contarDiasUteis(int mes, int ano, boolean incluirSabado) {
         if (mes < 1 || mes > 12) throw new IllegalArgumentException("Mês inválido (1-12)");
+        YearMonth month = YearMonth.of(ano, mes);
         int diasUteis = 0;
 
-        for(int dia = 1; dia <= month.lengthOfMonth();dia++){
+        for (int dia = 1; dia <= month.lengthOfMonth(); dia++) {
             LocalDate data = LocalDate.of(ano, mes, dia);
             DayOfWeek diaSemana = data.getDayOfWeek();
-
-            if(diaSemana == DayOfWeek.SUNDAY) continue;
-            if(!incluirSabado && diaSemana == DayOfWeek.SATURDAY) continue;
-
-            diasUteis ++;
+            if (diaSemana == DayOfWeek.SUNDAY) continue;
+            if (!incluirSabado && diaSemana == DayOfWeek.SATURDAY) continue;
+            diasUteis++;
         }
         return diasUteis;
+    }
+
+    public List<FuncionarioBeneficio> listarBeneficios(Funcionario f) {
+        return new ArrayList<>(f.getBeneficios());
+    }
+
+    public Set<FuncionarioBeneficio> setBeneficiosUnicos(Funcionario f) {
+        return new HashSet<>(f.getBeneficios());
+    }
+
+    public Map<String, BigDecimal> mapearBeneficiosPorNome(Funcionario f) {
+        return f.getBeneficios().stream()
+                .collect(Collectors.toMap(
+                        b -> b.getBeneficio().getNome(),
+                        FuncionarioBeneficio::getValor,
+                        BigDecimal::add
+                ));
+    }
+
+    public Map<String, Funcionario> mapearFuncionarioPorCargo(List<Funcionario> funcionarios) {
+        return funcionarios.stream()
+                .collect(Collectors.toMap(
+                        Funcionario::getCargo,
+                        func -> func,
+                        (f1, f2) -> f1 // em caso de cargos repetidos, mantém o primeiro
+                ));
+    }
+
+    public List<String> listarNomesFuncionarios(List<Funcionario> funcionarios) {
+        return funcionarios.stream()
+                .map(Funcionario::getNome)
+                .toList();
     }
 }
