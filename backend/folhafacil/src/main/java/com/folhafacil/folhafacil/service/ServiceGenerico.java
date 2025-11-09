@@ -27,4 +27,8 @@ public abstract class ServiceGenerico<T, ID> {
     public List<T> listarTodos() {
         return repository.findAll();
     }
+    
+    public T atualizar(ID id, T entidadeAtualizada) {
+        return repository.save(entidadeAtualizada);
+    }
 }
