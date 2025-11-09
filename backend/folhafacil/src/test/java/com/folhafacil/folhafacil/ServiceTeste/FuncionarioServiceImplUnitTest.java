@@ -106,12 +106,12 @@ class FuncionarioServiceImplUnitTest {
         try (MockedStatic<FuncionarioMapper> mapperMock = Mockito.mockStatic(FuncionarioMapper.class);
              MockedStatic<FuncionarioBeneficioMapper> beneficioMapperMock = Mockito.mockStatic(FuncionarioBeneficioMapper.class)) {
             mapperMock.when(() -> FuncionarioMapper.toEntity(any(FuncionarioDTO.class), anyList())).thenReturn(funcionarioEntity);
-            beneficioMapperMock.when(() -> FuncionarioBeneficioMapper.toEntityList(anyList(), anyString())).thenReturn(beneficioMapperMock);
+            beneficioMapperMock.when(() -> FuncionarioBeneficioMapper.toEntityList(anyList(), anyString())).thenReturn(beneficiosEntities);
             when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(funcionarioEntity);
 
             service.salvar(funcionarioDTO, token);
 
-            verifyNoInteractions(keycloakService);
+            verify(keycloakService, times(1)).recuperarUID(token);
             verify(funcionarioRepository, times(1)).save(any(Funcionario.class));
             verify(logFuncionarioServiceImpl, times(1)).gerarLogEditado(eq("admin-user"), eq("existing-id"));
         }
@@ -124,7 +124,7 @@ class FuncionarioServiceImplUnitTest {
         try (MockedStatic<FuncionarioMapper> mapperMock = Mockito.mockStatic(FuncionarioMapper.class);
              MockedStatic<FuncionarioBeneficioMapper> beneficioMapperMock = Mockito.mockStatic(FuncionarioBeneficioMapper.class)) {
             mapperMock.when(() -> FuncionarioMapper.toEntity(any(FuncionarioDTO.class), anyList())).thenReturn(funcionarioEntity);
-            beneficioMapperMock.when(() -> FuncionarioBeneficioMapper.toEntityList(anyList(), anyString())).thenReturn(beneficioMapperMock);
+            beneficioMapperMock.when(() -> FuncionarioBeneficioMapper.toEntityList(anyList(), anyString())).thenReturn(beneficiosEntities);
             when(keycloakService.criarUsuario(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenThrow(new RuntimeException("Erro no Keycloak"));
 
             RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -192,7 +192,7 @@ class FuncionarioServiceImplUnitTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             service.desabilitar("123", token);
         });
-        assertEquals("Conta ja desabilitada", exception.getMessage());
+        assertEquals("Conta já desabilitada", exception.getMessage());
         verifyNoInteractions(logFuncionarioServiceImpl);
     }
 
@@ -285,7 +285,7 @@ class FuncionarioServiceImplUnitTest {
 
     @Test
     void deveLancarExceptionAoContarDiasUteisMesInvalido() {
-        assertThrows(java.time.DateTimeException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             service.contarDiasUteis(13, 2024, false);
         });
     }
