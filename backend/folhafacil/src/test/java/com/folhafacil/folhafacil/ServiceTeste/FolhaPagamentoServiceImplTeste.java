@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-class FolhaPagamentoServiceImplTest {
+class FolhaPagamentoServiceImplTeste {
 
     private FuncionarioServiceImpl funcionarioServiceImpl;
     private HoraExtraServiceImpl horaExtraServiceImpl;
@@ -71,8 +71,9 @@ class FolhaPagamentoServiceImplTest {
 
         funcionario = new Funcionario();
         funcionario.setId("1");
+        funcionario.setNome("João Silva");
         funcionario.setSalarioBase(BigDecimal.valueOf(1000));
-        funcionario.setStatus(true);
+        funcionario.setStatus(Funcionario.HABILITADO);
         funcionario.setCargo("CLT");
 
         funcionariosList = Arrays.asList(funcionario);
@@ -83,49 +84,35 @@ class FolhaPagamentoServiceImplTest {
 
         logFolhaPagamento = new LogFolhaPagamento();
         logFolhaPagamento.setId(1L);
-
-        doAnswer(invocation -> {
-            FolhaPagamento e = invocation.getArgument(0);
-            e.setData(dataInicio);
-            e.setStatus(StatusFolhaPagamento.PENDENTE);
-            e.setINSS(BigDecimal.valueOf(100));
-            e.setFGTS(BigDecimal.valueOf(80));
-            e.setIRRF(BigDecimal.valueOf(50));
-            e.setTotalValorImposto(BigDecimal.valueOf(230));
-            e.setTotalValorBeneficios(BigDecimal.valueOf(200));
-            e.setTotalHorasExtras(BigDecimal.valueOf(10));
-            e.setTotalValorHorasExtras(BigDecimal.valueOf(500));
-            e.setSalarioBruto(BigDecimal.valueOf(1000));
-            return e;
-        }).when(folhaPagamentoRepository).save(any(FolhaPagamento.class));
     }
 
     @Test
     void deveGerarFolhaPagamentoComSucesso() {
-        when(funcionarioServiceImpl.findByStatus(eq(true))).thenReturn(funcionariosList);
-        when(folhaPagamentoRepository.findByIdFuncionarioIdAndData(eq("1"), eq(dataInicio))).thenReturn(folhaPagamento);
-        when(logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada(eq("user-id"), eq(dataInicio))).thenReturn(logFolhaPagamento);
+        when(funcionarioServiceImpl.findByStatus(Funcionario.HABILITADO)).thenReturn(funcionariosList);
+        when(folhaPagamentoRepository.findByIdFuncionarioIdAndData("1", dataInicio)).thenReturn(folhaPagamento);
+        when(logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada("user-id", dataInicio)).thenReturn(logFolhaPagamento);
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.valueOf(100));
         when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.valueOf(80));
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.valueOf(200));
-        when(horaExtraServiceImpl.totalHorasNoMes(eq("1"), eq(dataInicio))).thenReturn(BigDecimal.valueOf(10));
+        when(horaExtraServiceImpl.totalHorasNoMes("1", dataInicio)).thenReturn(BigDecimal.valueOf(10));
         when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
-        when(horaExtraServiceImpl.findByFuncionarioAndMesAno(eq("1"), eq(dataInicio))).thenReturn(List.of(new HoraExtra()));
+        when(horaExtraServiceImpl.findByFuncionarioAndMesAno("1", dataInicio)).thenReturn(List.of(new HoraExtra()));
+        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(eq(1L), any(FolhaPagamento.class))).thenReturn(new LogSubFolhaPagamento());
 
         service.gerarFolhaPagamento(token);
 
-        verify(funcionarioServiceImpl, times(1)).findByStatus(eq(true));
-        verify(logFolhaPagamentoServiceImpl, times(1)).gerarLogGeradaAtualizada(eq("user-id"), eq(dataInicio));
-        verify(folhaPagamentoRepository, times(1)).findByIdFuncionarioIdAndData(eq("1"), eq(dataInicio));
+        verify(funcionarioServiceImpl, times(1)).findByStatus(Funcionario.HABILITADO);
+        verify(logFolhaPagamentoServiceImpl, times(1)).gerarLogGeradaAtualizada("user-id", dataInicio);
+        verify(folhaPagamentoRepository, times(1)).findByIdFuncionarioIdAndData("1", dataInicio);
         verify(logSubFolhaPagamentoServiceImpl, times(1)).gerarLogAtualizado(eq(1L), any(FolhaPagamento.class));
         verify(folhaPagamentoRepository, times(1)).save(any(FolhaPagamento.class));
     }
 
     @Test
     void deveLancarRuntimeExceptionAoGerarFolhaPagamentoFalha() {
-        when(funcionarioServiceImpl.findByStatus(eq(true))).thenThrow(new RuntimeException("Erro ao buscar funcionários"));
+        when(funcionarioServiceImpl.findByStatus(Funcionario.HABILITADO)).thenThrow(new RuntimeException("Erro ao buscar funcionários"));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             service.gerarFolhaPagamento(token);
@@ -139,24 +126,24 @@ class FolhaPagamentoServiceImplTest {
         when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.valueOf(80));
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.valueOf(200));
-        when(horaExtraServiceImpl.totalHorasNoMes(eq("1"), eq(dataInicio))).thenReturn(BigDecimal.valueOf(10));
+        when(horaExtraServiceImpl.totalHorasNoMes("1", dataInicio)).thenReturn(BigDecimal.valueOf(10));
         when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
-        when(horaExtraServiceImpl.findByFuncionarioAndMesAno(eq("1"), eq(dataInicio))).thenReturn(List.of(new HoraExtra()));
+        when(horaExtraServiceImpl.findByFuncionarioAndMesAno("1", dataInicio)).thenReturn(List.of(new HoraExtra()));
+        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        FolhaPagamento e = new FolhaPagamento();
-        FolhaPagamento result = service.gerarPorFuncionario(funcionario, dataInicio, e);
+        FolhaPagamento result = service.gerarPorFuncionario(funcionario, dataInicio, new FolhaPagamento());
 
         assertNotNull(result);
         assertEquals(StatusFolhaPagamento.PENDENTE, result.getStatus());
         assertEquals(dataInicio, result.getData());
-        assertEquals(0, BigDecimal.valueOf(100).compareTo(result.getINSS()));
-        assertEquals(0, BigDecimal.valueOf(80).compareTo(result.getFGTS()));
-        assertEquals(0, BigDecimal.valueOf(50).compareTo(result.getIRRF()));
-        assertEquals(0, BigDecimal.valueOf(230).compareTo(result.getTotalValorImposto()));
-        assertEquals(0, BigDecimal.valueOf(200).compareTo(result.getTotalValorBeneficios()));
-        assertEquals(0, BigDecimal.valueOf(10).compareTo(result.getTotalHorasExtras()));
-        assertEquals(0, BigDecimal.valueOf(500).compareTo(result.getTotalValorHorasExtras()));
-        assertEquals(0, BigDecimal.valueOf(1000).compareTo(result.getSalarioBruto()));
+        assertEquals(BigDecimal.valueOf(100), result.getINSS());
+        assertEquals(BigDecimal.valueOf(80), result.getFGTS());
+        assertEquals(BigDecimal.valueOf(50), result.getIRRF());
+        assertEquals(BigDecimal.valueOf(230), result.getTotalValorImposto());
+        assertEquals(BigDecimal.valueOf(200), result.getTotalValorBeneficios());
+        assertEquals(BigDecimal.valueOf(10), result.getTotalHorasExtras());
+        assertEquals(BigDecimal.valueOf(500), result.getTotalValorHorasExtras());
+        assertEquals(BigDecimal.valueOf(1000), result.getSalarioBruto());
         verify(folhaPagamentoRepository, times(1)).save(any(FolhaPagamento.class));
     }
 
@@ -177,12 +164,12 @@ class FolhaPagamentoServiceImplTest {
         when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.ZERO);
+        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        FolhaPagamento e = new FolhaPagamento();
-        FolhaPagamento result = service.gerarPorFuncionario(funcionario, dataInicio, e);
+        FolhaPagamento result = service.gerarPorFuncionario(funcionario, dataInicio, new FolhaPagamento());
 
-        assertEquals(0, BigDecimal.ZERO.compareTo(result.getTotalHorasExtras()));
-        assertEquals(0, BigDecimal.ZERO.compareTo(result.getTotalValorHorasExtras()));
+        assertEquals(BigDecimal.ZERO, result.getTotalHorasExtras());
+        assertEquals(BigDecimal.ZERO, result.getTotalValorHorasExtras());
         verify(horaExtraServiceImpl, never()).totalHorasNoMes(anyString(), any(LocalDate.class));
     }
 }
