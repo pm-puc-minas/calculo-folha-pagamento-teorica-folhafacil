@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-class FolhaPagamentoServiceImplUnitTest {
+class BeneficoServiceImplUnitTest {
 
     private FuncionarioServiceImpl funcionarioServiceImpl;
     private HoraExtraServiceImpl horaExtraServiceImpl;
@@ -71,6 +71,7 @@ class FolhaPagamentoServiceImplUnitTest {
 
         funcionario = new Funcionario();
         funcionario.setId("1");
+        funcionario.setNome("João Silva");
         funcionario.setSalarioBase(BigDecimal.valueOf(1000));
         funcionario.setStatus(Funcionario.HABILITADO);
         funcionario.setCargo("CLT"); // Não estagiário
@@ -98,7 +99,8 @@ class FolhaPagamentoServiceImplUnitTest {
         when(horaExtraServiceImpl.totalHorasNoMes("1", dataInicio)).thenReturn(BigDecimal.valueOf(10));
         when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(horaExtraServiceImpl.findByFuncionarioAndMesAno("1", dataInicio)).thenReturn(List.of(new HoraExtra()));
-        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenReturn(folhaPagamento);
+        // Return the argument saved so fields set in service are preserved
+        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(eq(1L), any(FolhaPagamento.class))).thenReturn(new LogSubFolhaPagamento());
 
         // Act
@@ -108,7 +110,7 @@ class FolhaPagamentoServiceImplUnitTest {
         verify(funcionarioServiceImpl, times(1)).findByStatus(Funcionario.HABILITADO);
         verify(logFolhaPagamentoServiceImpl, times(1)).gerarLogGeradaAtualizada("user-id", dataInicio);
         verify(folhaPagamentoRepository, times(1)).findByIdFuncionarioIdAndData("1", dataInicio);
-        verify(logSubFolhaPagamentoServiceImpl, times(1)).gerarLogAtualizado(1L, any(FolhaPagamento.class));
+        verify(logSubFolhaPagamentoServiceImpl, times(1)).gerarLogAtualizado(eq(1L), any(FolhaPagamento.class));
         verify(folhaPagamentoRepository, times(1)).save(any(FolhaPagamento.class));
     }
 
@@ -134,7 +136,7 @@ class FolhaPagamentoServiceImplUnitTest {
         when(horaExtraServiceImpl.totalHorasNoMes("1", dataInicio)).thenReturn(BigDecimal.valueOf(10));
         when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(horaExtraServiceImpl.findByFuncionarioAndMesAno("1", dataInicio)).thenReturn(List.of(new HoraExtra()));
-        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenReturn(folhaPagamento);
+        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         FolhaPagamento result = service.gerarPorFuncionario(funcionario, dataInicio, new FolhaPagamento());
@@ -174,7 +176,7 @@ class FolhaPagamentoServiceImplUnitTest {
         when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.ZERO);
-        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenReturn(folhaPagamento);
+        when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         FolhaPagamento result = service.gerarPorFuncionario(funcionario, dataInicio, new FolhaPagamento());
