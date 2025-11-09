@@ -241,7 +241,7 @@ class FuncionarioServiceImplUnitTest {
         funcionarioEntity.setDiasMensal(22);
         funcionarioEntity.setSalarioBase(BigDecimal.valueOf(3000));
 
-        BigDecimal result = service.valorHoraExtra(funcionarioEntity);
+        BigDecimal result = service.calcularValorHoraExtra(funcionarioEntity);
 
         assertEquals(0, BigDecimal.valueOf(17.05).compareTo(result));
     }
@@ -259,7 +259,7 @@ class FuncionarioServiceImplUnitTest {
     void deveCalcularFGSTComSucesso() {
         funcionarioEntity.setSalarioBase(BigDecimal.valueOf(3000));
 
-        BigDecimal result = service.getFGST(funcionarioEntity);
+        BigDecimal result = service.getFGTS(funcionarioEntity);
 
         assertEquals(0, BigDecimal.valueOf(240.00).compareTo(result));
     }

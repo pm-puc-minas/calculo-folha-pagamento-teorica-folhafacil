@@ -92,11 +92,11 @@ class FolhaPagamentoServiceImplUnitTest {
         when(folhaPagamentoRepository.findByIdFuncionarioIdAndData("1", dataInicio)).thenReturn(folhaPagamento);
         when(logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada("user-id", dataInicio)).thenReturn(logFolhaPagamento);
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.valueOf(100));
-        when(funcionarioServiceImpl.getFGST(funcionario)).thenReturn(BigDecimal.valueOf(80));
+        when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.valueOf(80));
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.valueOf(200));
         when(horaExtraServiceImpl.totalHorasNoMes("1", dataInicio)).thenReturn(BigDecimal.valueOf(10));
-        when(funcionarioServiceImpl.valorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
+        when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(horaExtraServiceImpl.findByFuncionarioAndMesAno("1", dataInicio)).thenReturn(List.of(new HoraExtra()));
         when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenReturn(folhaPagamento);
         when(logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(eq(1L), any(FolhaPagamento.class))).thenReturn(new LogSubFolhaPagamento());
@@ -128,11 +128,11 @@ class FolhaPagamentoServiceImplUnitTest {
     void deveGerarPorFuncionarioComSucesso() {
         // Arrange
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.valueOf(100));
-        when(funcionarioServiceImpl.getFGST(funcionario)).thenReturn(BigDecimal.valueOf(80));
+        when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.valueOf(80));
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.valueOf(200));
         when(horaExtraServiceImpl.totalHorasNoMes("1", dataInicio)).thenReturn(BigDecimal.valueOf(10));
-        when(funcionarioServiceImpl.valorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
+        when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(horaExtraServiceImpl.findByFuncionarioAndMesAno("1", dataInicio)).thenReturn(List.of(new HoraExtra()));
         when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenReturn(folhaPagamento);
 
@@ -171,7 +171,7 @@ class FolhaPagamentoServiceImplUnitTest {
         // Arrange
         funcionario.setCargo("ESTAGIARIO");
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.ZERO);
-        when(funcionarioServiceImpl.getFGST(funcionario)).thenReturn(BigDecimal.ZERO);
+        when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.ZERO);
         when(folhaPagamentoRepository.save(any(FolhaPagamento.class))).thenReturn(folhaPagamento);

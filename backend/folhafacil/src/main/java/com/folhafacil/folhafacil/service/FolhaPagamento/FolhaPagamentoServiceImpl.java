@@ -106,7 +106,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
             BigDecimal inss = funcionarioServiceImpl.getINSS(f);
             e.setINSS(inss);
 
-            BigDecimal fgst = funcionarioServiceImpl.getFGST(f);
+            BigDecimal fgst = funcionarioServiceImpl.getFGTS(f);
             e.setFGTS(fgst);
 
             BigDecimal irrf = funcionarioServiceImpl.getIRRF(f);
@@ -129,7 +129,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
                 totalHorasExtras = horaExtraServiceImpl.totalHorasNoMes(f.getId(), data);
 
                 if(!(totalHorasExtras.compareTo(BigDecimal.ZERO) <= 0)){
-                    totalValorHorasExtras = totalHorasExtras.multiply(funcionarioServiceImpl.valorHoraExtra(f));
+                    totalValorHorasExtras = totalHorasExtras.multiply(funcionarioServiceImpl.calcularValorHoraExtra(f));
                 }
             }
             List<FolhaPagamentoHoraExtra> novasHorasExtras =

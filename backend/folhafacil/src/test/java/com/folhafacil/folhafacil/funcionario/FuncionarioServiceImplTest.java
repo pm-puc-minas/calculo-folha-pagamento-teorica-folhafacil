@@ -142,7 +142,7 @@ public class FuncionarioServiceImplTest {
     void testGetFGTS() {
         Funcionario f = new Funcionario();
         f.setSalarioBase(new BigDecimal("2500.00"));
-        BigDecimal fgts = funcionarioService.getFGST(f);
+        BigDecimal fgts = funcionarioService.getFGTS(f);
         assertEquals(new BigDecimal("200.00"), fgts);
     }
 
@@ -161,7 +161,7 @@ public class FuncionarioServiceImplTest {
         f.setSalarioBase(new BigDecimal("2000.00"));
         f.setHorasDiarias(8);
         f.setDiasMensal(22);
-        BigDecimal valorHora = funcionarioService.valorHoraExtra(f);
+        BigDecimal valorHora = funcionarioService.calcularValorHoraExtra(f);
         assertEquals(new BigDecimal("11.36"), valorHora);
     }
 

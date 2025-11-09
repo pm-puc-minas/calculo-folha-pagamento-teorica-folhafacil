@@ -91,6 +91,12 @@
 			<artifactId>keycloak-admin-client</artifactId>
 			<version>24.0.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -103,12 +109,12 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<dependency>
-    <groupId>org.mockito</groupId>
-    <artifactId>mockito-inline</artifactId>
-    <scope>test</scope>
-</dependency>
 	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Maven Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2/</url>
+		</repository>
 		<repository>
 			<id>keycloak</id>
 			<name>Keycloak Repository</name>

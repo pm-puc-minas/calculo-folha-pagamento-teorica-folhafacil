@@ -23,7 +23,7 @@ class FolhafacilApplicationTests {
 
 	@Test
 	void contextLoads(){
-		asserNotNull(context, "O ApplicationContext tem que ser carregado");
+		assertNotNull(context, "O ApplicationContext tem que ser carregado");
 	}
 
 	@Test

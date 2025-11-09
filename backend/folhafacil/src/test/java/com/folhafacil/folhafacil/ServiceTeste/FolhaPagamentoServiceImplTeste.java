@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-class FolhaPagamentoServiceImplUnitTest {
+class FolhaPagamentoServiceImplTest {
 
     private FuncionarioServiceImpl funcionarioServiceImpl;
     private HoraExtraServiceImpl horaExtraServiceImpl;
@@ -106,11 +106,11 @@ class FolhaPagamentoServiceImplUnitTest {
         when(folhaPagamentoRepository.findByIdFuncionarioIdAndData(eq("1"), eq(dataInicio))).thenReturn(folhaPagamento);
         when(logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada(eq("user-id"), eq(dataInicio))).thenReturn(logFolhaPagamento);
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.valueOf(100));
-        when(funcionarioServiceImpl.getFGST(funcionario)).thenReturn(BigDecimal.valueOf(80));
+        when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.valueOf(80));
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.valueOf(200));
         when(horaExtraServiceImpl.totalHorasNoMes(eq("1"), eq(dataInicio))).thenReturn(BigDecimal.valueOf(10));
-        when(funcionarioServiceImpl.valorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
+        when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(horaExtraServiceImpl.findByFuncionarioAndMesAno(eq("1"), eq(dataInicio))).thenReturn(List.of(new HoraExtra()));
         when(logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(eq(1L), any(FolhaPagamento.class))).thenReturn(new LogSubFolhaPagamento());
 
@@ -136,11 +136,11 @@ class FolhaPagamentoServiceImplUnitTest {
     @Test
     void deveGerarPorFuncionarioComSucesso() {
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.valueOf(100));
-        when(funcionarioServiceImpl.getFGST(funcionario)).thenReturn(BigDecimal.valueOf(80));
+        when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.valueOf(80));
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.valueOf(200));
         when(horaExtraServiceImpl.totalHorasNoMes(eq("1"), eq(dataInicio))).thenReturn(BigDecimal.valueOf(10));
-        when(funcionarioServiceImpl.valorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
+        when(funcionarioServiceImpl.calcularValorHoraExtra(funcionario)).thenReturn(BigDecimal.valueOf(50));
         when(horaExtraServiceImpl.findByFuncionarioAndMesAno(eq("1"), eq(dataInicio))).thenReturn(List.of(new HoraExtra()));
 
         FolhaPagamento e = new FolhaPagamento();
@@ -174,7 +174,7 @@ class FolhaPagamentoServiceImplUnitTest {
     void deveGerarPorFuncionarioParaEstagiarioSemHorasExtras() {
         funcionario.setCargo("ESTAGIARIO");
         when(funcionarioServiceImpl.getINSS(funcionario)).thenReturn(BigDecimal.ZERO);
-        when(funcionarioServiceImpl.getFGST(funcionario)).thenReturn(BigDecimal.ZERO);
+        when(funcionarioServiceImpl.getFGTS(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getIRRF(funcionario)).thenReturn(BigDecimal.ZERO);
         when(funcionarioServiceImpl.getTotalValorBeneficios(funcionario)).thenReturn(BigDecimal.ZERO);
 
