@@ -33,7 +33,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class HoraExtraServiceImplUnitTest {
+class HoraExtraServiceImplTeste {
 
     @Mock
     private HoraExtraRepository horaExtraRepository;
@@ -58,7 +58,6 @@ class HoraExtraServiceImplUnitTest {
     @BeforeEach
     void setUp() {
         token = Mockito.mock(Jwt.class);
-        when(keycloakService.recuperarUID(token)).thenReturn("user-id");
 
         horaExtraDTO = new HoraExtraDTO();
         horaExtraDTO.setDescricao("Descrição teste");
@@ -115,23 +114,24 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveIniciarComSucesso() {
-        // Arrange
+
+        when(keycloakService.recuperarUID(token)).thenReturn("user-id");
         when(horaExtraRepository.save(any(HoraExtra.class))).thenReturn(horaExtraEntity);
 
-        // Act
+
         service.iniciar(horaExtraDTO, token);
 
-        // Assert
+
         verify(keycloakService, times(1)).recuperarUID(token);
         verify(horaExtraRepository, times(1)).save(any(HoraExtra.class));
     }
 
     @Test
     void deveLancarRuntimeExceptionAoIniciarFalha() {
-        // Arrange
+
         when(horaExtraRepository.save(any(HoraExtra.class))).thenThrow(new RuntimeException("Erro ao salvar"));
 
-        // Act & Assert
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             service.iniciar(horaExtraDTO, token);
         });
@@ -141,14 +141,14 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveFinalizarComSucesso() {
-        // Arrange
+
         when(horaExtraRepository.findById(eq(1L))).thenReturn(Optional.of(horaExtraEntity));
         when(horaExtraRepository.save(any(HoraExtra.class))).thenReturn(horaExtraEntity);
 
-        // Act
+
         service.finalizar(1L);
 
-        // Assert
+
         assertEquals(StatusHoraExtra.CONCLUIDA, horaExtraEntity.getStatus());
         verify(horaExtraRepository, times(1)).findById(eq(1L));
         verify(horaExtraRepository, times(1)).save(horaExtraEntity);
@@ -156,10 +156,10 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveLancarRuntimeExceptionAoFinalizarFalha() {
-        // Arrange
+
         when(horaExtraRepository.findById(eq(1L))).thenThrow(new RuntimeException("Erro ao encontrar"));
 
-        // Act & Assert
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             service.finalizar(1L);
         });
@@ -169,14 +169,14 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveCancelarComSucesso() {
-        // Arrange
+
         when(horaExtraRepository.findById(eq(1L))).thenReturn(Optional.of(horaExtraEntity));
         when(horaExtraRepository.save(any(HoraExtra.class))).thenReturn(horaExtraEntity);
 
-        // Act
+
         service.cancelar(1L);
 
-        // Assert
+
         assertEquals(StatusHoraExtra.CANCELADA, horaExtraEntity.getStatus());
         verify(horaExtraRepository, times(1)).findById(eq(1L));
         verify(horaExtraRepository, times(1)).save(horaExtraEntity);
@@ -184,10 +184,10 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveLancarRuntimeExceptionAoCancelarFalha() {
-        // Arrange
+
         when(horaExtraRepository.findById(eq(1L))).thenThrow(new RuntimeException("Erro ao encontrar"));
 
-        // Act & Assert
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             service.cancelar(1L);
         });
@@ -197,14 +197,12 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveListarMinhasHorasComSucesso() {
-        // Arrange
+
         when(keycloakService.recuperarUID(token)).thenReturn("user-id");
         when(horaExtraCustomRepository.buscar(any(HoraExtraFilterDTO.class))).thenReturn(responseDTOs);
 
-        // Act
         List<HoraExtraReponseDTO> result = service.minhasHoras(token);
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("user-id", result.get(0).getIdFuncionario());
@@ -214,44 +212,43 @@ class HoraExtraServiceImplUnitTest {
 
     @Test
     void deveCalcularTotalHorasNoMesComSucesso() {
-        // Arrange
-        LocalDate data = LocalDate.of(2025, 11, 1);
-        when(service.findByFuncionarioAndMesAno(eq("user-id"), eq(data))).thenReturn(horaExtrasList);
 
-        // Act
+        LocalDate data = LocalDate.of(2025, 11, 1);
+        when(horaExtraRepository.findByFuncionarioAndMesAno(eq("user-id"), eq(11), eq(2025))).thenReturn(horaExtrasList);
+
+
         BigDecimal result = service.totalHorasNoMes("user-id", data);
 
-        // Assert
-        // Hora 1: 8h, Hora 2: 3h = 11h
+
         assertEquals(0, BigDecimal.valueOf(11).compareTo(result));
     }
 
     @Test
     void deveCalcularTotalHorasNoMesZeroSemHorasConcluidas() {
-        // Arrange
+
         LocalDate data = LocalDate.of(2025, 11, 1);
         List<HoraExtra> emptyList = Arrays.asList(
                 new HoraExtra() {{ setDataFim(null); }}
         );
-        when(service.findByFuncionarioAndMesAno(eq("user-id"), eq(data))).thenReturn(emptyList);
+        when(horaExtraRepository.findByFuncionarioAndMesAno(eq("user-id"), eq(11), eq(2025))).thenReturn(emptyList);
 
-        // Act
+
         BigDecimal result = service.totalHorasNoMes("user-id", data);
 
-        // Assert
+
         assertEquals(0, BigDecimal.ZERO.compareTo(result));
     }
 
     @Test
     void deveListarHorasPorFuncionarioAndMesAnoComSucesso() {
-        // Arrange
+
         LocalDate data = LocalDate.of(2025, 11, 1);
         when(horaExtraRepository.findByFuncionarioAndMesAno(eq("user-id"), eq(11), eq(2025))).thenReturn(horaExtrasList);
 
-        // Act
+
         List<HoraExtra> result = service.findByFuncionarioAndMesAno("user-id", data);
 
-        // Assert
+
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(horaExtraRepository, times(1)).findByFuncionarioAndMesAno(eq("user-id"), eq(11), eq(2025));
