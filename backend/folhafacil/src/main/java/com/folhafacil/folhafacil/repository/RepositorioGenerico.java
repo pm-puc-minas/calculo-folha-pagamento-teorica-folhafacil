@@ -21,19 +21,31 @@ public class RepositorioGenerico<T> {
     }
 
     public void salvar(T entidade) {
+        if(entidade == null){
+            throw new IllegalArgumentException("Entidade nula nao pode ser salva");
+        }
         em.persist(entidade);
     }
 
     public T atualizar(T entidade) {
+        if(entidade == null){
+            throw new IllegalArgumentException("Entidade nula nao pode ser atualizada");
+        }   
         return em.merge(entidade);
     }
 
     public void deletar(Object id) {
         T entidade = em.find(classe, id);
-        if (entidade != null) em.remove(entidade);
+        if (entidade != null) {
+            em.remove(entidade);
+            throw new IllegalArgumentException("Entidade com ID " + id + " não encontrada para exclusão");
+        }
     }
 
     public T buscarPorId(Object id) {
+        if(id == null){
+            throw new IllegalArgumentException("ID nulo nao pode ser buscado");
+        }
         return em.find(classe, id);
     }
 

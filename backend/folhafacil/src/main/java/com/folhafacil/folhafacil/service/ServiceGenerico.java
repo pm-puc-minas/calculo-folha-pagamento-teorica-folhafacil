@@ -13,22 +13,34 @@ public abstract class ServiceGenerico<T, ID> {
     }
 
     public T salvar(T entidade) {
+        if(entidade == null){
+            throw new IllegalArgumentException("Entidade nula nao pode ser salva");
+        }
         return repository.save(entidade);
     }
 
     public void deletar(ID id) {
+        if (!repository.existsById(id)) {
+            throw new IllegalArgumentException("Entidade com ID " + id + " não encontrada para exclusão");
+        }
         repository.deleteById(id);
     }
 
     public Optional<T> buscarPorId(ID id) {
+        if (!repository.existsById(id)) {
+            throw new IllegalArgumentException("Entidade com ID " + id + " não encontrada");
+        }
         return repository.findById(id);
     }
 
     public List<T> listarTodos() {
         return repository.findAll();
     }
-    
+
     public T atualizar(ID id, T entidadeAtualizada) {
+        if (!repository.existsById(id)) {
+            throw new IllegalArgumentException("Entidade com ID " + id + " não encontrada para atualização");
+        }
         return repository.save(entidadeAtualizada);
     }
 }
