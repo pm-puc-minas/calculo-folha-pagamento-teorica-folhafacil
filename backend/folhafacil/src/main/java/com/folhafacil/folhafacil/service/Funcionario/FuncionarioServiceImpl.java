@@ -40,7 +40,7 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
     @Override
     public void salvar(FuncionarioDTO d, Jwt t) throws RuntimeException {
         try {
-            Funcionario entity = FuncionarioMapper.toEntity(
+            Funcionario e = FuncionarioMapper.toEntity(
                     d,
                     FuncionarioBeneficioMapper.toEntityList(d.getBeneficios(), d.getId())
             );
@@ -50,15 +50,15 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
                 String username = nameArr[0] + "." + nameArr[nameArr.length - 1];
                 String password = "FolhaFacil2025";
                 String uid = keycloakService.criarUsuario(username, d.getEmail(), nameArr[0], nameArr[nameArr.length - 1], password, d.getCargo());
-                d.setUsuario(username);
-                d.setId(uid);
-                d.setStatus(Funcionario.HABILITADO);
+                e.setUsuario(username);
+                e.setId(uid);
+                e.setStatus(Funcionario.HABILITADO);
 
-                funcionarioRepository.save(entity);
-                logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), d.getId());
+                funcionarioRepository.save(e);
+                logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), e.getId());
             } else {
-                funcionarioRepository.save(entity);
-                logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), d.getId());
+                funcionarioRepository.save(e);
+                logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), e.getId());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
