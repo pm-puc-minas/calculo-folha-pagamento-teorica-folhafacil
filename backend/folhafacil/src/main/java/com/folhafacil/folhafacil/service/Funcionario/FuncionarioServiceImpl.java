@@ -56,6 +56,7 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
 
                 funcionarioRepository.save(e);
                 logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), e.getId());
+                
             } else {
                 funcionarioRepository.save(e);
                 logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), e.getId());
@@ -235,4 +236,10 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
                 .map(Funcionario::getNome)
                 .toList();
     }
+
+    @Override
+    public List<Funcionario> listarTodos() {
+        return funcionarioRepository.findAll();
+    }
+
 }

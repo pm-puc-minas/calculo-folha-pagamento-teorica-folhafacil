@@ -15,8 +15,9 @@ import java.util.List;
 @Table(name = "Funcionario")
 public class Funcionario {
     @Id
-    @Column(name = "id", length = 50, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private String id; 
 
     @Column(name = "nome", length = 200, nullable = false)
     private String nome;
@@ -36,13 +37,13 @@ public class Funcionario {
     @Column(name = "dataNascimento", nullable = false)
     private LocalDate dataNascimento;
 
-    @Column(name = "cargo",length = 10, nullable = false)
+    @Column(name = "cargo", length = 100, nullable = false)
     private String cargo;
 
     @Column(name = "dataAdmissao", nullable = false)
     private LocalDate dataAdmissao;
 
-    @Column(name = "salarioBase",precision = 9, scale = 2, nullable = false)
+    @Column(name = "salarioBase", precision = 9, scale = 2, nullable = false)
     private BigDecimal salarioBase;
 
     @Column(name = "horasDiarias", nullable = false)
