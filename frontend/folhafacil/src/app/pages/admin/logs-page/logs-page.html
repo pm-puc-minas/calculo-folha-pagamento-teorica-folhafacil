@@ -1,3 +1,82 @@
+<p-dialog header="Sub Logs" (onHide)="closeModal()" [modal]="true" [(visible)]="isModal" [style]="{ width: '100rem' }" [breakpoints]="{ '1499px': '80vw', '575px': '90vw' }" [maximizable]="true">
+        <div class="card flex justify-center p-10">
+            <main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Logs</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="logsSubFolhaPagamentos || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="usuarioFuncionario" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Funcionario
+                                            <p-sortIcon field="usuarioFuncionario" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="mensagem" style="width:20%">
+                                        <div class="flex items-center gap-2">
+                                            Mensagem
+                                            <p-sortIcon field="mensagem" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="totalValorImposto" style="width:10%">
+                                        <div class="flex items-center gap-2">
+                                            Valor Impostos
+                                            <p-sortIcon field="totalValorImposto" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="totalValorBeneficios" style="width:10%">
+                                        <div class="flex items-center gap-2">
+                                            Valor Beneficios
+                                            <p-sortIcon field="totalValorBeneficios" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="totalHorasExtras" style="width:10%">
+                                        <div class="flex items-center gap-2">
+                                            Total Horas Extras
+                                            <p-sortIcon field="totalHorasExtras" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="totalValorHorasExtras" style="width:10%">
+                                        <div class="flex items-center gap-2">
+                                            Valor Horas Extra
+                                            <p-sortIcon field="totalValorHorasExtras" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="salarioBruto" style="width:10%">
+                                        <div class="flex items-center gap-2">
+                                            Salario Bruto
+                                            <p-sortIcon field="salarioBruto" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="tipo" style="width:10%">
+                                        <div class="flex items-center gap-2">
+                                            Tipo
+                                            <p-sortIcon field="tipo" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-logsSubFolhaPagamento>
+                                <tr>
+                                    <td ><p-avatar [label]="getAvatar(logsSubFolhaPagamento.usuarioFuncionario)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/> {{ logsSubFolhaPagamento.usuarioFuncionario }} </td>
+                                    <td class="warp-col">{{ logsSubFolhaPagamento.mensagem }}</td>
+                                    <td><p-tag [value]="'R$' + logsSubFolhaPagamento.totalValorImposto" severity="danger"></p-tag></td>
+                                    <td><p-tag [value]="'R$' + logsSubFolhaPagamento.totalValorBeneficios" severity="success"></p-tag></td>
+                                    <td>{{ getHoras(logsSubFolhaPagamento.totalHorasExtras) }}</td>
+                                    <td><p-tag [value]="'R$' + logsSubFolhaPagamento.totalValorHorasExtras" severity="success"></p-tag></td>
+                                    <td>R${{ logsSubFolhaPagamento.salarioBruto }}</td>
+                                    <td><p-tag [value]="logsSubFolhaPagamento.tipo" [severity]="getServerityTipoSubFolhaPagamento(logsSubFolhaPagamento.tipo)"></p-tag></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                    </div>
+                </main>
+        </div>
+</p-dialog>
 <main>
     <div class="flex flex-row space-x-2">
         <h1 class="text-2xl text-main-500">Filtros</h1>
@@ -69,7 +148,7 @@
                                     <td><p-avatar [label]="getAvatar(logsFuncionario.nomeManipulado)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/>{{ logsFuncionario.nomeManipulado }}</td>
                                     <td>{{ logsFuncionario.data | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                                     <td class="w-[60%]">{{ logsFuncionario.mensagem }}</td>
-                                    <td><p-tag [value]="logsFuncionario.tipo" [severity]="getServerityTipo(logsFuncionario.tipo)"></p-tag></td>
+                                    <td><p-tag [value]="logsFuncionario.tipo" [severity]="getServerityTipoFuncionario(logsFuncionario.tipo)"></p-tag></td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -82,7 +161,64 @@
                 </main>
             </p-tabpanel>
             <p-tabpanel value="1">
-    
+                <main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Logs</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="logsFolhaPagamentos || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="usuarioResponsavel" style="width:15%">
+                                        <div class="flex items-center gap-2">
+                                            Responsavel
+                                            <p-sortIcon field="usuarioResponsavel" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="data" style="width:15%">
+                                        <div class="flex items-center gap-2">
+                                            Data
+                                            <p-sortIcon field="data" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="mensagem" style="width:40%">
+                                        <div class="flex items-center gap-2">
+                                            Mensagem
+                                            <p-sortIcon field="mensagem" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="tipo" style="width:15%">
+                                        <div class="flex items-center gap-2">
+                                            Tipo
+                                            <p-sortIcon field="tipo" />
+                                        </div>
+                                    </th>
+                                    <th style="width:5%">
+                                        <div class="flex items-center gap-2">
+                                            Sub Logs
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-logsFolhaPagamento>
+                                <tr>
+                                    <td ><p-avatar [label]="getAvatar(logsFolhaPagamento.usuarioResponsavel)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/> {{ logsFolhaPagamento.usuarioResponsavel }} </td>
+                                    <td>{{ logsFolhaPagamento.data | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    <td class="warp-col">{{ logsFolhaPagamento.mensagem }}</td>
+                                    <td><p-tag [value]="logsFolhaPagamento.tipo" [severity]="getServerityTipoFolhaPagamento(logsFolhaPagamento.tipo)"></p-tag></td>
+                                    <td>
+                                        <p-button icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarSubLog(logsFolhaPagamento.id)" />
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500">
+                            <p-button label="Pesquisar" icon="pi pi-search" (click)="filter()"/> 
+                        </div>
+                    </div>
+                </main>
             </p-tabpanel>
         </p-tabpanels>
     </p-tabs>

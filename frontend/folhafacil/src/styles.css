@@ -45,6 +45,15 @@ body {
     background-color: #FF8466 !important;
 }
 
+.p-button.p-component.p-list {
+    background-color: #3E18B1 !important;
+    border: 2px solid #8C66FF !important;
+}
+
+.p-button.p-component.p-list:hover {
+    background-color: #8C66FF !important;
+}
+
 .p-button.p-component:hover {
     background-color: var(--color-main-500) !important; 
     color: white !important;

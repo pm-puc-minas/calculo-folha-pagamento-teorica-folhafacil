@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { TabsModule } from 'primeng/tabs';
 import { LogsService } from '../../../services/logs.service';
-import { LogFilterDTO, LogsFuncionarioResponseDTO } from '../../../models/logs.model';
+import { LogFilterDTO, LogFolhaPagamentoResponseDTO, LogFuncionarioResponseDTO, LogSubFolhaPagamentoResponseDTO } from '../../../models/logs.model';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
 import { DatePicker } from 'primeng/datepicker';
@@ -48,25 +48,61 @@ export class LogsPage{
     });
 	}
 
-  logsFuncionarios!: LogsFuncionarioResponseDTO[]
+  logsFuncionarios!: LogFuncionarioResponseDTO[]
+  logsFolhaPagamentos!: LogFolhaPagamentoResponseDTO[]
+  logsSubFolhaPagamentos!: LogSubFolhaPagamentoResponseDTO[]
+
+  isModal : boolean = false;
 
   ngOnInit(){
-    this.buscarLogsFuncionarios()
+    this.filter()
   }
 
   filter(){
     this.buscarLogsFuncionarios()
+    this.buscarLogsFolhaPagamento()
+  }
+
+  closeModal(){
+    this.logsSubFolhaPagamentos = []
   }
 
   buscarLogsFuncionarios(){
-    this.service.buscarFuncionarios(this.getrSearchForm()).subscribe({
-      next : (res: LogsFuncionarioResponseDTO[]) => {
+    this.service.buscarFuncionarios(this.getSearchForm()).subscribe({
+      next : (res: LogFuncionarioResponseDTO[]) => {
         if(res.length == 0){
-          this.actions.info("Nenhum registro encontrado")
+          this.actions.info("Nenhum log de Funcionario encontrado")
         }else{
           this.logsFuncionarios = [...res];
           this.cdr.markForCheck();
         }
+      },
+      error : () =>{
+      }
+    })
+  }
+
+  buscarLogsFolhaPagamento(){
+    this.service.buscarFolhaPagamento(this.getSearchForm()).subscribe({
+      next : (res: LogFolhaPagamentoResponseDTO[]) => {
+        if(res.length == 0){
+          this.actions.info("Nenhum log de folha encontrado")
+        }else{
+          this.logsFolhaPagamentos = [...res];
+          this.cdr.markForCheck();
+        }
+      },
+      error : () =>{
+      }
+    })
+  }
+
+  buscarSubLog(id: number){
+    this.service.buscarSubFolhaPagamento(id).subscribe({
+      next : (res: LogSubFolhaPagamentoResponseDTO[]) => {
+        this.logsSubFolhaPagamentos = [...res];
+        this.cdr.markForCheck();
+        this.isModal = true
       },
       error : () =>{
       }
@@ -80,7 +116,7 @@ export class LogsPage{
     });
   }
 
-  getrSearchForm(){
+  getSearchForm(){
     const f : LogFilterDTO = this.searchForm.value
     return f
   }
@@ -90,7 +126,7 @@ export class LogsPage{
     return `${ns[0][0]}${ns[1][0]}`
   }
 
-  getServerityTipo(c: any){
+  getServerityTipoFuncionario(c: string){
     switch (c) {
       case 'CRIADO':
         return 'success';
@@ -101,6 +137,34 @@ export class LogsPage{
       default:
         return 'warn'
     }
+  }
+
+  getServerityTipoFolhaPagamento(c: string){
+    switch (c) {
+      case 'PAGAMENTO':
+        return 'success';
+      case 'GERADA_ATUALIZADA':
+        return 'info';
+      default:
+        return 'warn'
+    }
+  }
+  getServerityTipoSubFolhaPagamento(c: string){
+    switch (c) {
+      case 'GERADO':
+        return 'info';
+      case 'ATUALIZADO':
+        return 'warn';
+      case 'PAGO':
+        return 'success';
+      default:
+        return 'danger'
+    }
+  }
+
+  getHoras(h: number){
+    if(h == 0 || h == null) return "0h"
+    return `${h.toFixed(0)}h ${((h%1) * 60).toFixed(0)}m`
   }
 
   get isFormEmpty(): boolean {

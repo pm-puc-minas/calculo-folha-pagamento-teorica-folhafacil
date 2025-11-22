@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../environment/environment";
-import { LogFilterDTO, LogsFuncionarioResponseDTO } from "../models/logs.model";
+import { LogFilterDTO, LogFolhaPagamentoResponseDTO, LogFuncionarioResponseDTO, LogSubFolhaPagamentoResponseDTO } from "../models/logs.model";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -12,7 +12,15 @@ export class LogsService{
 
     url = `${environment.API_URL}log/`
 
-    buscarFuncionarios(f: LogFilterDTO): Observable<LogsFuncionarioResponseDTO[]> {
-        return this.http.post<LogsFuncionarioResponseDTO[]>(`${this.url}funcionario`, {...f})
+    buscarFuncionarios(f: LogFilterDTO): Observable<LogFuncionarioResponseDTO[]> {
+        return this.http.post<LogFuncionarioResponseDTO[]>(`${this.url}funcionario`, {...f})
+    }
+
+    buscarFolhaPagamento(f: LogFilterDTO) : Observable<LogFolhaPagamentoResponseDTO[]> {
+        return this.http.post<LogFolhaPagamentoResponseDTO[]>(`${this.url}folha-pagamento`, {...f})
+    }
+
+    buscarSubFolhaPagamento(id: Number) : Observable<LogSubFolhaPagamentoResponseDTO[]>{
+        return this.http.get<LogSubFolhaPagamentoResponseDTO[]>(`${this.url}folha-pagamento/${id}/sub`)
     }
 }
