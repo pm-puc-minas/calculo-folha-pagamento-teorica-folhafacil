@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 })
 export class ActionsService {
     constructor(private messageService: MessageService) {}
+    
 
     private requestsCount = 0;
     private _loading = new BehaviorSubject<boolean>(false);
@@ -15,16 +16,16 @@ export class ActionsService {
     showLoad() {
         this.requestsCount++;
         if (this.requestsCount === 1) {
-        this._loading.next(true);
+            this._loading.next(true);
         }
     }
 
     hideLoad() {
         if (this.requestsCount > 0) {
-        this.requestsCount--;
+            this.requestsCount--;
         }
         if (this.requestsCount === 0) {
-        this._loading.next(false);
+            this._loading.next(false);
         }
     }
 

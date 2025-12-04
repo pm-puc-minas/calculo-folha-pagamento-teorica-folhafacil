@@ -1,10 +1,11 @@
 package com.folhafacil.folhafacil.service.FolhaPagamento;
 
-import com.folhafacil.folhafacil.dto.FolhaPagamento.StatusFolhaPagamento;
+import com.folhafacil.folhafacil.dto.FolhaPagamento.*;
 import com.folhafacil.folhafacil.entity.*;
 import com.folhafacil.folhafacil.infra.utils.CollectionUtils;
 import com.folhafacil.folhafacil.mapper.FolhaPagamentoBenficioMapper;
 import com.folhafacil.folhafacil.mapper.FolhaPagamentoHoraExtraMapper;
+import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoCustomRepository;
 import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoRepository;
 import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
 import com.folhafacil.folhafacil.service.HoraExtra.HoraExtraServiceImpl;
@@ -32,6 +33,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
     private final LogFolhaPagamentoServiceImpl logFolhaPagamentoServiceImpl;
     private final KeycloakService keycloakService;
     private final FolhaPagamentoRepository folhaPagamentoRepository;
+    private final FolhaPagamentoCustomRepository  folhaPagamentoCustomRepository;
     private final LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl;
 
     public FolhaPagamentoServiceImpl(
@@ -40,6 +42,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
             LogFolhaPagamentoServiceImpl logFolhaPagamentoServiceImpl,
             KeycloakService keycloakService,
             FolhaPagamentoRepository folhaPagamentoRepository,
+            FolhaPagamentoCustomRepository folhaPagamentoCustomRepository,
             LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl
     ) {
         super(folhaPagamentoRepository);
@@ -48,6 +51,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
         this.logFolhaPagamentoServiceImpl = logFolhaPagamentoServiceImpl;
         this.keycloakService = keycloakService;
         this.folhaPagamentoRepository = folhaPagamentoRepository;
+        this.folhaPagamentoCustomRepository = folhaPagamentoCustomRepository;
         this.logSubFolhaPagamentoServiceImpl = logSubFolhaPagamentoServiceImpl;
     }
 
@@ -60,19 +64,9 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
 
             LogFolhaPagamento lfp = logFolhaPagamentoServiceImpl.gerarLogGeradaAtualizada(keycloakService.recuperarUID(token), dataInicio);
 
-            //list por nome
-            fs.sort(Comparator.comparing(Funcionario::getNome));
-
-            //armazena cargo unico
-            Set<String> cargosUnicos = new HashSet<>();
-            fs.forEach(f -> cargosUnicos.add(f.getCargo()));
-            System.out.println("Cargos únicos: " + cargosUnicos);
-
-            Map<Funcionario, BigDecimal> mapSalarioLiquido = new HashMap<>();
-
             for(Funcionario f : fs) {
                 FolhaPagamento fp = folhaPagamentoRepository.findByIdFuncionarioIdAndData(f.getId(), dataInicio);
-                FolhaPagamento newFP = null;
+                FolhaPagamento newFP = new  FolhaPagamento();
 
                 if(fp == null) {
                     newFP = gerarPorFuncionario(f, dataInicio, new FolhaPagamento());
@@ -82,16 +76,8 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
                     LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogAtualizado(lfp.getId(), newFP);
                 }else if(fp.getStatus().equals(StatusFolhaPagamento.PAGO)){
                     LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogErro(lfp.getId(), fp);
-                    newFP = fp;
-                }
-
-                if(newFP != null){
-                    mapSalarioLiquido.put(f, newFP.getSalarioLiquido());
                 }
             }
-
-            mapSalarioLiquido.forEach((func, salario) -> System.out.println(func.getNome() + "- Salário Liquido R$" + salario));
-
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -120,6 +106,7 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
 
             List<FolhaPagamentoBeneficio> novosBeneficios =
                     FolhaPagamentoBenficioMapper.toList(f.getBeneficios(), e);
+
             CollectionUtils.replaceCollection(e.getBeneficios(), novosBeneficios);
 
             BigDecimal totalHorasExtras = BigDecimal.ZERO;
@@ -134,7 +121,9 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
             }
             List<FolhaPagamentoHoraExtra> novasHorasExtras =
                     FolhaPagamentoHoraExtraMapper.toList(horaExtraServiceImpl.findByFuncionarioAndMesAno(f.getId(), data), e);
+
             CollectionUtils.replaceCollection(e.getHorasExtras(), novasHorasExtras);
+
             e.setTotalHorasExtras(totalHorasExtras);
             e.setTotalValorHorasExtras(totalValorHorasExtras);
 
@@ -147,11 +136,24 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
                             .setScale(2, BigDecimal.ROUND_HALF_UP)
             );
 
-            e.setTotal(f.getSalarioBase().add(totalValorHorasExtras).add(totalValorBeneficios).subtract(totalValorImposto));
-
             return folhaPagamentoRepository.save(e);
         }catch(RuntimeException ex){
             throw new RuntimeException(ex.getMessage());
         }
+    }
+
+    @Override
+    public List<FolhaPagamentoResponseDTO> buscar(FolhaPagamentoFilterDTO f){
+        return folhaPagamentoCustomRepository.buscar(f);
+    }
+
+    @Override
+    public List<FolhaPagamentoBeneficioResponseDTO> buscarBeneficios(Long idFolha){
+        return folhaPagamentoCustomRepository.buscarBeneficios(idFolha);
+    }
+
+    @Override
+    public List<FolhaPagamentoHoraExtraResponseDTO> buscarHorasExtras(Long idFolha){
+        return folhaPagamentoCustomRepository.buscarHorasExtras(idFolha);
     }
 }

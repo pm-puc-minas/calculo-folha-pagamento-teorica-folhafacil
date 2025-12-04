@@ -6,6 +6,7 @@ import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.LogFolhaPagamento;
 import com.folhafacil.folhafacil.entity.LogSubFolhaPagamento;
 import com.folhafacil.folhafacil.entity.HoraExtra;
+import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoCustomRepository;
 import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoRepository;
 import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
 import com.folhafacil.folhafacil.service.HoraExtra.HoraExtraServiceImpl;
@@ -36,6 +37,7 @@ class FolhaPagamentoServiceImplTeste {
     private LogFolhaPagamentoServiceImpl logFolhaPagamentoServiceImpl;
     private KeycloakService keycloakService;
     private FolhaPagamentoRepository folhaPagamentoRepository;
+    private FolhaPagamentoCustomRepository folhaPagamentoCustomRepository;
     private LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl;
     private FolhaPagamentoServiceImpl service;
 
@@ -53,6 +55,7 @@ class FolhaPagamentoServiceImplTeste {
         logFolhaPagamentoServiceImpl = Mockito.mock(LogFolhaPagamentoServiceImpl.class);
         keycloakService = Mockito.mock(KeycloakService.class);
         folhaPagamentoRepository = Mockito.mock(FolhaPagamentoRepository.class);
+        folhaPagamentoCustomRepository = Mockito.mock(FolhaPagamentoCustomRepository.class);
         logSubFolhaPagamentoServiceImpl = Mockito.mock(LogSubFolhaPagamentoServiceImpl.class);
 
         service = new FolhaPagamentoServiceImpl(
@@ -61,6 +64,7 @@ class FolhaPagamentoServiceImplTeste {
                 logFolhaPagamentoServiceImpl,
                 keycloakService,
                 folhaPagamentoRepository,
+                folhaPagamentoCustomRepository,
                 logSubFolhaPagamentoServiceImpl
         );
 

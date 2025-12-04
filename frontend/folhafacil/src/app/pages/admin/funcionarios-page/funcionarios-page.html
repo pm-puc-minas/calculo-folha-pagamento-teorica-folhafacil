@@ -1,4 +1,40 @@
-
+<p-dialog header="Benefícios" (onHide)="closeModalBeneficios()" [modal]="true" [(visible)]="isModalBeneficios" [style]="{ width: '100rem' }" [breakpoints]="{ '1499px': '80vw', '575px': '90vw' }" [maximizable]="true">
+        <div class="card flex justify-center p-10">
+            <main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Benefícios</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="funcionariobeneficios || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="nomeBeneficio" style="width:50%">
+                                        <div class="flex items-center gap-2">
+                                            Benefício
+                                            <p-sortIcon field="nomeBeneficio" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="valor" style="width:50%">
+                                        <div class="flex items-center gap-2">
+                                            Valor
+                                            <p-sortIcon field="valor" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-funcionariobeneficio>
+                                <tr>
+                                    <td>{{ funcionariobeneficio.nomeBeneficio }}</td>
+                                    <td>{{ funcionariobeneficio.valor }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                    </div>
+                </main>
+        </div>
+</p-dialog>
 <p-dialog [header]="isEdit ? 'Editar Funcionário' : 'Criar Funcionário'" (onHide)="closeModal()" [modal]="true" [(visible)]="isModal" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
         <div class="card flex justify-center">
             <p-stepper [(value)]="steperValue" class="basis-[100%]">
@@ -14,12 +50,12 @@
                                 <div class="flex flex-col h-48">
                                     <div class="p-2 flex flex-col space-y-2">
                                         <p-floatlabel variant="on" styleClass="w-full">
-                                            <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="nome"/>
+                                            <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="nome" [disabled]="true"/>
                                             <label for="on_label">Nome</label>
                                         </p-floatlabel>
                                         <div class="grid grid-cols-2 gap-2 w-full">
                                             <p-floatlabel variant="on" styleClass="w-full">
-                                                <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="email"/>
+                                                <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="email" [disabled]="true"/>
                                                 <label for="on_label">Email</label>
                                             </p-floatlabel>
                                             <p-floatlabel variant="on" styleClass="w-full">
@@ -167,56 +203,110 @@
             </p-stepper>
         </div>
 </p-dialog>
-<section class="w-full">
-    <!-- filtro -->
-</section>
+<main>
+    <div class="flex flex-row space-x-2">
+        <h1 class="text-2xl text-main-500">Filtros</h1>
+        <p-button *ngIf="!isSearchFormEmpty()" label="Limpar" size="small" (click)="limparSearch()" icon="pi pi-filter-slash" iconPos="right"/> 
+    </div>
+    <form [formGroup]="searchForm" class="flex flex-row items-center center mt-1 space-x-2">
+        <p-floatlabel variant="on" styleClass="w-30">
+            <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="nome"/>
+            <label for="on_label">Nome</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on" styleClass="w-30">
+            <p-inputmask styleClass="w-full" id="on_label" mask="999.999.999-99" formControlName="cpf" [unmask]="true"/>
+            <label for="on_label">CPF</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on" styleClass="w-30">
+            <input pInputText id="on_label" autocomplete="off" class="w-full" formControlName="email"/>
+            <label for="on_label">Email</label>
+        </p-floatlabel>
+        <div class="w-50">
+            <p-floatlabel variant="on" styleClass="w-full">
+                <p-select inputId="on_label" [options]="cargos" optionLabel="name" optionValue="value" class="w-full" formControlName="cargo" />
+                <label for="on_label">Cargo</label>
+            </p-floatlabel>
+        </div>
+        <p-floatlabel class="w-70" variant="on">
+            <p-multiselect id="on_label"  [options]="beneficioObj" optionLabel="nome" optionValue="id" class="w-full" formControlName="beneficios" />
+            <label for="on_label">Benefícios</label>
+        </p-floatlabel>
+        <div class="w-30 flex flex-row items-center space-x-2">
+            <span class="text-main-500">Status:</span>
+            <p-selectbutton [options]="status" formControlName="status" optionLabel="label" optionValue="value" aria-labelledby="basic" />
+        </div>
+    </form>
+</main>
 <main class="w-full mt-5">
     <div class="w-full">
         <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Funcionários</div>
     </div>
     <div class="card">
-        <p-table [value]="dados" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+        <p-table [value]="funcionarios || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
             <ng-template #header class="bg-main-100">
                 <tr>
-                    <th pSortableColumn="nome" style="width:20%">
+                    <th pSortableColumn="nome" style="width:400px">
                         <div class="flex items-center gap-2">
                             Nome
                             <p-sortIcon field="nome" />
                         </div>
                     </th>
-                    <th pSortableColumn="telefone" style="width:20%">
+                    <th pSortableColumn="cargo" style="width:100px">
+                        <div class="flex items-center gap-2">
+                            Cargo
+                            <p-sortIcon field="telefone" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="status" style="width:200px">
+                        <div class="flex items-center gap-2">
+                            Status
+                            <p-sortIcon field="telefone" />
+                        </div>
+                    </th>
+                    <th style="width:50px">
+                        <div class="flex items-center gap-2">
+                            Benefícios
+                        </div>
+                    </th>
+                    <th pSortableColumn="salarioBase" style="width:250px">
+                        <div class="flex items-center gap-2">
+                            Salario
+                            <p-sortIcon field="salarioBase" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="telefone" style="width:250px">
                         <div class="flex items-center gap-2">
                             Telefone
                             <p-sortIcon field="telefone" />
                         </div>
                     </th>
-                    <th pSortableColumn="endereco" style="width:20%">
+                    <th pSortableColumn="cpf" style="width:250px">
                         <div class="flex items-center gap-2">
-                            Endereço
-                            <p-sortIcon field="endereco" />
+                            CPF
+                            <p-sortIcon field="telefone" />
                         </div>
                     </th>
-                    <th pSortableColumn="cargo" style="width:20%">
-                        <div class="flex items-center gap-2">
-                            Cargo
-                            <p-sortIcon field="cargo" />
-                        </div>
-                    </th>
-                    <th pSortableColumn="salario" style="width:20%">
-                        <div class="flex items-center gap-2">
-                            Salario
-                            <p-sortIcon field="salario" />
-                        </div>
-                    </th>
+                    <th style="width: 50px"></th>
                 </tr>
             </ng-template>
-            <ng-template #body let-dado>
+            <ng-template #body let-funcionario>
                 <tr>
-                    <td>{{ dado.nome }}</td>
-                    <td>{{ dado.telefone }}</td>
-                    <td>{{ dado.endereco }}</td>
-                    <td><p-tag [value]="dado.cargo" [severity]="getServerityCargo(dado.cargo)"></p-tag></td>
-                    <td>R${{ dado.salario }}</td>
+                    <td>{{ funcionario.nome }}</td>
+                    <td><p-tag [value]="funcionario.cargo" [severity]="getServerityCargo(funcionario.cargo)"></p-tag></td>
+                    <td>
+                        <p-selectButton 
+                        [options]="status"
+                        [(ngModel)]="funcionario.status"
+                        (onOptionClick)="alterarStatus(funcionario.id, funcionario.status)"
+                        optionLabel="label"
+                        optionValue="value">
+                        </p-selectButton>
+                    </td>
+                    <td><p-button icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarBeneficiosFuncionario(funcionario.id)" /></td>
+                    <td>R${{ funcionario.salarioBase }}</td>
+                    <td>{{ funcionario.telefone | mask:'telefone' }}</td>
+                    <td>{{ funcionario.cpf | mask:'cpf' }}</td>
+                    <td><p-button icon="pi pi-pencil" [rounded]="true" (click)="preencherFuncionarioForm(funcionario)" /></td>
                 </tr>
             </ng-template>
         </p-table>
@@ -225,7 +315,7 @@
         <div class="w-full p-4 bg-main-500">
             <div class="flex flex-row gap-x-4">
                 <p-button label="Novo" icon="pi pi-plus-circle" (click)="novo()" />
-                <p-button label="Pesquisar" icon="pi pi-search"/> 
+                <p-button label="Pesquisar" icon="pi pi-search" (click)="buscar()"/> 
             </div>
         </div>
     </div>

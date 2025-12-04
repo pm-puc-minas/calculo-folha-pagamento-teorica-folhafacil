@@ -1,4 +1,4 @@
-package com.folhafacil.folhafacil.dto.FuncionarioBeneficio;
+package com.folhafacil.folhafacil.dto.FolhaPagamento;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FuncionarioBeneficioDTO {
-    private Long idBeneficio;
+public class FolhaPagamentoBeneficioResponseDTO {
     private String nomeBeneficio;
-    private BigDecimal valor;
+    private BigDecimal valorBeneficio;
 }

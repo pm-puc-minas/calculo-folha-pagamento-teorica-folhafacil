@@ -13,4 +13,38 @@ export type FuncionarioDTO = {
     diasMensal: number;
     numDependentes: number;
     pensao: number;
+    beneficios: FuncionarioBeneficoDTO[]
+}
+
+export type FuncionarioBeneficoDTO = {
+    idBeneficio: number;
+    nomeBeneficio: string;
+    valor: number;
+}
+
+export type FuncionarioFilterDTO = {
+    nome: string;
+    cpf: string;
+    email: string;
+    cargo: string;
+    status : boolean;
+    beneficios: number[];
+}
+
+export type FuncionarioResponseDTO = {
+    id: string;
+    nome: string;
+    cpf: string;
+    telefone: string;
+    endereco: string;
+    email: string;
+    dataNascimento: Date;
+    cargo: string;
+    dataAdmissao: Date;
+    salarioBase: number;
+    horasDiarias: number;
+    diasMensal: number;
+    numDependentes: number;
+    pensao: number;
+    status: boolean
 }

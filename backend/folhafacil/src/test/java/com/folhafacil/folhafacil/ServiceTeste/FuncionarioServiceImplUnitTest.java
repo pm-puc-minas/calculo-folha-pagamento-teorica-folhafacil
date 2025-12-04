@@ -6,6 +6,7 @@ import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.FuncionarioBeneficio;
 import com.folhafacil.folhafacil.mapper.FuncionarioMapper;
 import com.folhafacil.folhafacil.mapper.FuncionarioBeneficioMapper;
+import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioCustomRepository;
 import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
 import com.folhafacil.folhafacil.service.KeycloakService;
 import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
@@ -33,6 +34,7 @@ class FuncionarioServiceImplUnitTest {
     private KeycloakService keycloakService;
     private LogFuncionarioServiceImpl logFuncionarioServiceImpl;
     private FuncionarioServiceImpl service;
+    private FuncionarioCustomRepository funcionarioCustomRepository;
 
     private Jwt token;
     private FuncionarioDTO funcionarioDTO;
@@ -46,11 +48,13 @@ class FuncionarioServiceImplUnitTest {
         funcionarioRepository = Mockito.mock(FuncionarioRepository.class);
         keycloakService = Mockito.mock(KeycloakService.class);
         logFuncionarioServiceImpl = Mockito.mock(LogFuncionarioServiceImpl.class);
+        funcionarioCustomRepository = Mockito.mock(FuncionarioCustomRepository.class);
 
         service = new FuncionarioServiceImpl(
                 funcionarioRepository,
                 keycloakService,
-                logFuncionarioServiceImpl
+                logFuncionarioServiceImpl,
+                funcionarioCustomRepository
         );
 
         token = Mockito.mock(Jwt.class);

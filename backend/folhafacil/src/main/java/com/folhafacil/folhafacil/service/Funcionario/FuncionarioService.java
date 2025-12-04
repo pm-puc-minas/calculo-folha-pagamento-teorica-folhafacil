@@ -1,6 +1,9 @@
 package com.folhafacil.folhafacil.service.Funcionario;
 
 import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioFilterDTO;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioResponseDTO;
+import com.folhafacil.folhafacil.dto.FuncionarioBeneficio.FuncionarioBeneficioDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
 
 import java.util.List;
@@ -15,5 +18,7 @@ public interface FuncionarioService {
 
     public void habilitar(String uid, Jwt t) throws RuntimeException;
 
-    public List<Funcionario> listarTodos() throws RuntimeException;
+    public List<FuncionarioResponseDTO> buscar(FuncionarioFilterDTO f);
+
+    public List<FuncionarioBeneficioDTO> buscarBeneficios(String uid);
 }

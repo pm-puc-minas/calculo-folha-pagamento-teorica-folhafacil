@@ -133,3 +133,12 @@ body {
   word-break: break-word;
   overflow-wrap: anywhere;
 }
+.p-checkbox-checked .p-checkbox-box {
+    background: var(--color-main-700) !important;
+    border-color: var(--color-main-700) !important;
+}
+
+.p-togglebutton-checked .p-togglebutton-content {
+    background: var(--color-main-500) !important;
+    color: white !important;
+}

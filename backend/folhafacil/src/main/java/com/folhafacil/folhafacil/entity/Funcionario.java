@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name = "Funcionario")
 public class Funcionario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private String id; 
 

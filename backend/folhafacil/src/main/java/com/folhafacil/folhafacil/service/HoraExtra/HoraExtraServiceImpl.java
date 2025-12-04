@@ -104,36 +104,4 @@ public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> imple
     public List<HoraExtra> findByFuncionarioAndMesAno(String uid, LocalDate data) {
         return horaExtraRepository.findByFuncionarioAndMesAno(uid, data.getMonthValue(), data.getYear());
     }
-
-    /** Retorna um Set com todos os IDs únicos de funcionários que têm horas extras registradas */
-    public Set<String> listarFuncionariosComHorasExtras() {
-        return horaExtraRepository.findAll()
-                .stream()
-                .map(h -> h.getIdFuncionario().getId())
-                .collect(Collectors.toSet());
-    }
-
-    /** Retorna uma lista com horas extras em andamento */
-    public List<HoraExtra> listarEmAndamento() {
-        return horaExtraRepository.findAll()
-                .stream()
-                .filter(h -> h.getStatus() == StatusHoraExtra.EM_ANDAMENTO)
-                .collect(Collectors.toList());
-    }
-
-    /** Retorna um Map com o total de horas concluídas por funcionário */
-    public Map<String, BigDecimal> totalPorFuncionario() {
-        Map<String, BigDecimal> mapa = new HashMap<>();
-
-        horaExtraRepository.findAll()
-                .stream()
-                .filter(h -> h.getStatus() == StatusHoraExtra.CONCLUIDA && h.getDataFim() != null)
-                .forEach(h -> {
-                    String idFunc = h.getIdFuncionario().getId();
-                    double horas = Duration.between(h.getDataInicio(), h.getDataFim()).toMinutes() / 60.0;
-                    mapa.merge(idFunc, BigDecimal.valueOf(horas), BigDecimal::add);
-                });
-
-        return mapa;
-    }
 }

@@ -1,10 +1,14 @@
 package com.folhafacil.folhafacil.service.Funcionario;
 
 import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioFilterDTO;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioResponseDTO;
+import com.folhafacil.folhafacil.dto.FuncionarioBeneficio.FuncionarioBeneficioDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.FuncionarioBeneficio;
 import com.folhafacil.folhafacil.mapper.FuncionarioBeneficioMapper;
 import com.folhafacil.folhafacil.mapper.FuncionarioMapper;
+import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioCustomRepository;
 import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
 import com.folhafacil.folhafacil.service.KeycloakService;
 import com.folhafacil.folhafacil.service.ServiceGenerico;
@@ -18,23 +22,25 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String> implements FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
     private final KeycloakService keycloakService;
     private final LogFuncionarioServiceImpl logFuncionarioServiceImpl;
+    private final FuncionarioCustomRepository funcionarioCustomRepository;
 
     public FuncionarioServiceImpl(
             FuncionarioRepository funcionarioRepository,
             KeycloakService keycloakService,
-            LogFuncionarioServiceImpl logFuncionarioServiceImpl
+            LogFuncionarioServiceImpl logFuncionarioServiceImpl,
+            FuncionarioCustomRepository funcionarioCustomRepository1
     ) {
         super(funcionarioRepository);
         this.funcionarioRepository = funcionarioRepository;
         this.keycloakService = keycloakService;
         this.logFuncionarioServiceImpl = logFuncionarioServiceImpl;
+        this.funcionarioCustomRepository = funcionarioCustomRepository1;
     }
 
     @Override
@@ -58,12 +64,27 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
                 logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), e.getId());
                 
             } else {
+                String[] nameArr = d.getNome().split(" ");
+                String username = nameArr[0] + "." + nameArr[nameArr.length - 1];
+                e.setUsuario(username);
+                keycloakService.removerUsuarioDeTodosOsGrupos(d.getId());
+                keycloakService.adicionarUsuarioAoGrupo(d.getId(),d.getCargo());
                 funcionarioRepository.save(e);
                 logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), e.getId());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @Override
+    public List<FuncionarioResponseDTO> buscar(FuncionarioFilterDTO f){
+        return funcionarioCustomRepository.buscar(f);
+    }
+
+    @Override
+    public List<FuncionarioBeneficioDTO> buscarBeneficios(String uid){
+        return funcionarioCustomRepository.buscarBeneficios(uid);
     }
 
     @Override
@@ -75,6 +96,7 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
             throw new RuntimeException("Conta já habilitada");
         }
 
+        keycloakService.ativarUsuario(uid);
         f.setStatus(Funcionario.HABILITADO);
         funcionarioRepository.save(f);
         logFuncionarioServiceImpl.gerarLogHabilitado(keycloakService.recuperarUID(t), f.getId());
@@ -82,6 +104,9 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
 
     @Override
     public void desabilitar(String uid, Jwt t) throws RuntimeException {
+        if(uid == keycloakService.recuperarUID(t)) {
+            throw new RuntimeException("Você não pode desabilitar sua propria conta");
+        }
         Funcionario f = funcionarioRepository.findById(uid)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
@@ -89,6 +114,7 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
             throw new RuntimeException("Conta já desabilitada");
         }
 
+        keycloakService.desativarUsuario(uid);
         f.setStatus(Funcionario.DESABILITADO);
         funcionarioRepository.save(f);
         logFuncionarioServiceImpl.gerarLogDesativado(keycloakService.recuperarUID(t), f.getId());
@@ -96,14 +122,6 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
 
     public List<Funcionario> findByStatus(Boolean status) {
         return funcionarioRepository.findByStatus(status);
-    }
-
-    public List<Funcionario> findHabilitados() {
-        return findByStatus(Funcionario.HABILITADO);
-    }
-
-    public List<Funcionario> findDesabilitados() {
-        return findByStatus(Funcionario.DESABILITADO);
     }
 
     public BigDecimal getTotalValorBeneficios(Funcionario f) {
@@ -204,42 +222,4 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         }
         return diasUteis;
     }
-
-    public List<FuncionarioBeneficio> listarBeneficios(Funcionario f) {
-        return new ArrayList<>(f.getBeneficios());
-    }
-
-    public Set<FuncionarioBeneficio> setBeneficiosUnicos(Funcionario f) {
-        return new HashSet<>(f.getBeneficios());
-    }
-
-    public Map<String, BigDecimal> mapearBeneficiosPorNome(Funcionario f) {
-        return f.getBeneficios().stream()
-                .collect(Collectors.toMap(
-                        b -> b.getBeneficio().getNome(),
-                        FuncionarioBeneficio::getValor,
-                        BigDecimal::add
-                ));
-    }
-
-    public Map<String, Funcionario> mapearFuncionarioPorCargo(List<Funcionario> funcionarios) {
-        return funcionarios.stream()
-                .collect(Collectors.toMap(
-                        Funcionario::getCargo,
-                        func -> func,
-                        (f1, f2) -> f1 // em caso de cargos repetidos, mantém o primeiro
-                ));
-    }
-
-    public List<String> listarNomesFuncionarios(List<Funcionario> funcionarios) {
-        return funcionarios.stream()
-                .map(Funcionario::getNome)
-                .toList();
-    }
-
-    @Override
-    public List<Funcionario> listarTodos() {
-        return funcionarioRepository.findAll();
-    }
-
 }

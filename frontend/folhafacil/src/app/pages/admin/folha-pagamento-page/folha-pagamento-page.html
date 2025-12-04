@@ -1,53 +1,204 @@
+<p-dialog header="Benefícios" (onHide)="closeModalBeneficios()" [modal]="true" [(visible)]="isModalBeneficios" [style]="{ width: '100rem' }" [breakpoints]="{ '1499px': '80vw', '575px': '90vw' }" [maximizable]="true">
+        <div class="card flex justify-center p-10">
+            <main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Benefícios</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="beneficios || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="nomeBeneficio" style="width:50%">
+                                        <div class="flex items-center gap-2">
+                                            Benefício
+                                            <p-sortIcon field="nomeBeneficio" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="valorBeneficio" style="width:50%">
+                                        <div class="flex items-center gap-2">
+                                            Valor
+                                            <p-sortIcon field="valorBeneficio" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-beneficio>
+                                <tr>
+                                    <td>{{ beneficio.nomeBeneficio }}</td>
+                                    <td>{{ beneficio.valorBeneficio }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                    </div>
+                </main>
+        </div>
+</p-dialog>
+<p-dialog header="Horas Extras" (onHide)="closeModalHorasExtras()" [modal]="true" [(visible)]="isModalHorasExtras" [style]="{ width: '100rem' }" [breakpoints]="{ '1499px': '80vw', '575px': '90vw' }" [maximizable]="true">
+        <div class="card flex justify-center p-10">
+            <main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Horas Extras</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="horasExtras || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="dataInicio" style="width:25%">
+                                        <div class="flex items-center gap-2">
+                                            Inicio
+                                            <p-sortIcon field="dataInicio" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="dataFim" style="width:25%">
+                                        <div class="flex items-center gap-2">
+                                            Fim
+                                            <p-sortIcon field="dataFim" />
+                                        </div>
+                                    </th>
+                                    <th style="width:25%">
+                                        <div class="flex items-center gap-2">
+                                            Total
+                                        </div>
+                                    </th>
+                                    <th style="width:25%">
+                                        <div class="flex items-center gap-2">
+                                            Valor
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-horasExtra>
+                                <tr>
+                                    <td>{{ horasExtra.dataInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    <td>{{ horasExtra.dataFim | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    <td>{{ getTotalHorasExtras(horasExtra.dataFim,horasExtra.dataInicio) }}</td>
+                                    <td> <p-tag [value]="'+R$' + getValorHorasExtras(horasExtra.dataFim,horasExtra.dataInicio,horasExtra.valorHora)" severity="success"></p-tag></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                    </div>
+                </main>
+        </div>
+</p-dialog>
 <main class="w-full mt-5">
     <div class="w-full">
         <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Folha Pagamento</div>
     </div>
     <div class="card">
-        <!-- <p-table [value]="dados" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+        <p-table [value]="folhaDePagamentos" [(selection)]="selectedItens" (selectionChange)="selectionChange($event)" dataKey="id" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
             <ng-template #header class="bg-main-100">
                 <tr>
-                    <th pSortableColumn="nome" style="width:20%">
+                    <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                    <th pSortableColumn="usuarioFuncionario" style="min-width:15rem">
                         <div class="flex items-center gap-2">
-                            Nome
-                            <p-sortIcon field="nome" />
+                            Funcionario
+                            <p-sortIcon field="usuarioFuncionario" />
                         </div>
                     </th>
-                    <th pSortableColumn="telefone" style="width:20%">
+                    <th pSortableColumn="data" style="min-width:12rem">
                         <div class="flex items-center gap-2">
-                            Telefone
-                            <p-sortIcon field="telefone" />
+                            Data
+                            <p-sortIcon field="data" />
                         </div>
                     </th>
-                    <th pSortableColumn="endereco" style="width:20%">
+                    <th pSortableColumn="status" style="min-width:12rem">
                         <div class="flex items-center gap-2">
-                            Endereço
-                            <p-sortIcon field="endereco" />
+                            Status
+                            <p-sortIcon field="status" />
                         </div>
                     </th>
-                    <th pSortableColumn="cargo" style="width:20%">
+                    <th pSortableColumn="inss" style="min-width:10rem">
                         <div class="flex items-center gap-2">
-                            Cargo
-                            <p-sortIcon field="cargo" />
+                            INSS
+                            <p-sortIcon field="inss" />
                         </div>
                     </th>
-                    <th pSortableColumn="salario" style="width:20%">
+                    <th pSortableColumn="fgts" style="min-width:10rem">
                         <div class="flex items-center gap-2">
-                            Salario
-                            <p-sortIcon field="salario" />
+                            FGTS
+                            <p-sortIcon field="fgts" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="irrf" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            IRRF
+                            <p-sortIcon field="irrf" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="totalValorImposto" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            Valor Impostos
+                            <p-sortIcon field="totalValorImposto" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="totalValorBeneficios" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            Valor Benefícios
+                            <p-sortIcon field="totalValorBeneficios" />
+                        </div>
+                    </th>
+                    <th style="width:5%">
+                        <div class="flex items-center gap-2">
+                            Benefícios
+                        </div>
+                    </th>
+                    <th pSortableColumn="totalHorasExtras" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            Total Horas Extras
+                            <p-sortIcon field="totalHorasExtras" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="totalValorHorasExtras" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            Valor Horas Extras
+                            <p-sortIcon field="totalValorHorasExtras" />
+                        </div>
+                    </th>
+                    <th style="width:5%">
+                        <div class="flex items-center gap-2">
+                            Horas Extras
+                        </div>
+                    </th>
+                    <th pSortableColumn="salarioBruto" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            Salario Bruto
+                            <p-sortIcon field="salarioBruto" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="salarioLiquido" style="min-width:10rem">
+                        <div class="flex items-center gap-2">
+                            Total
+                            <p-sortIcon field="salarioLiquido" />
                         </div>
                     </th>
                 </tr>
             </ng-template>
-            <ng-template #body let-dado>
+            <ng-template #body let-folhaDePagamento>
                 <tr>
-                    <td>{{ dado.nome }}</td>
-                    <td>{{ dado.telefone }}</td>
-                    <td>{{ dado.endereco }}</td>
-                    <td><p-tag [value]="dado.cargo" [severity]="getServerityCargo(dado.cargo)"></p-tag></td>
-                    <td>R${{ dado.salario }}</td>
+                    <td>
+                        <p-tableCheckbox [value]="folhaDePagamento" />
+                    </td>
+                    <td><p-avatar [label]="getAvatar(folhaDePagamento.usuarioFuncionario)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/>{{ folhaDePagamento.usuarioFuncionario }}</td>
+                    <td>{{ folhaDePagamento.data | date:'MMM/yyyy' }}</td>
+                    <td><p-tag [value]="folhaDePagamento.status" [severity]="getServityStatus(folhaDePagamento.status)"></p-tag></td>
+                    <td><p-tag [value]="'-R$' + folhaDePagamento.inss" severity="danger"></p-tag></td>
+                    <td><p-tag [value]="'-R$' + folhaDePagamento.fgts" severity="danger"></p-tag></td>
+                    <td><p-tag [value]="'-R$' + folhaDePagamento.irrf" severity="danger"></p-tag></td>
+                    <td><p-tag [value]="'-R$' + folhaDePagamento.totalValorImposto" severity="danger"></p-tag></td>
+                    <td><p-tag [value]="'+R$' + folhaDePagamento.totalValorBeneficios" severity="success"></p-tag></td>
+                    <td><p-button icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarBeneficios(folhaDePagamento.id)" /></td>
+                    <td>{{ getHoras(folhaDePagamento.totalHorasExtras) }}</td>
+                    <td><p-tag [value]="'+R$' + folhaDePagamento.totalValorHorasExtras" severity="success"></p-tag></td>
+                    <td><p-button icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarHorasExtras(folhaDePagamento.id)" /></td>
+                    <td>R${{ folhaDePagamento.salarioBruto }}</td>
+                    <td>R${{ folhaDePagamento.salarioLiquido }}</td>
                 </tr>
             </ng-template>
-        </p-table> -->
+        </p-table>
     </div>
     <div class="w-full">
         <div class="w-full p-4 bg-main-500">
@@ -66,7 +217,7 @@
                     </p-confirmpopup>
                     <p-button label="Gerar/Atualizar" icon="pi pi-sync" (onClick)="gerar($event)" />
                 </div>
-                <p-button label="Pesquisar" icon="pi pi-search"/> 
+                <p-button label="Pesquisar" icon="pi pi-search" (onClick)="buscar()"/> 
             </div>
         </div>
     </div>

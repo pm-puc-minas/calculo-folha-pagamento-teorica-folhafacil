@@ -10,18 +10,15 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class BeneficioCustomRepository extends RepositorioGenerico<Beneficio> {
-    
+@RequiredArgsConstructor
+public class BeneficioCustomRepository {
     private final EntityManager em;
-    public BeneficioCustomRepository(EntityManager em) {
-        super(Beneficio.class);
-        this.em = em;
-    }
 
     public List<BeneficioResponseDTO> buscar() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -31,6 +28,7 @@ public class BeneficioCustomRepository extends RepositorioGenerico<Beneficio> {
 
         Subquery<Long> sub = cq.subquery(Long.class);
         Root<FuncionarioBeneficio> fb = sub.from(FuncionarioBeneficio.class);
+
         sub.select(cb.count(fb));
         sub.where(cb.equal(fb.get("beneficio"), beneficioRoot));
 

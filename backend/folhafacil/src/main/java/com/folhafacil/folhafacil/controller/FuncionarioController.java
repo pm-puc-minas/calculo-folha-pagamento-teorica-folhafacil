@@ -1,6 +1,9 @@
 package com.folhafacil.folhafacil.controller;
 
 import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioDTO;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioFilterDTO;
+import com.folhafacil.folhafacil.dto.Funcionario.FuncionarioResponseDTO;
+import com.folhafacil.folhafacil.dto.FuncionarioBeneficio.FuncionarioBeneficioDTO;
 import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.service.Funcionario.FuncionarioService;
 
@@ -37,10 +40,15 @@ public class FuncionarioController {
         funcionarioService.desabilitar(uid, token);
     }
 
-    //@PreAuthorize("hasRole('FF_FUNCIONARIO_LISTAR')")
-    @GetMapping
-    public ResponseEntity<List<Funcionario>> listarTodos() {
-        List<Funcionario> funcionarios = funcionarioService.listarTodos();
-        return ResponseEntity.ok(funcionarios);
+    @PreAuthorize("hasRole('FF_FUNCIONARIO_LISTAR')")
+    @PostMapping(value = "buscar")
+    public List<FuncionarioResponseDTO> buscar(@RequestBody FuncionarioFilterDTO f) {
+        return funcionarioService.buscar(f);
+    }
+
+    @PreAuthorize("hasRole('FF_FUNCIONARIO_BENEFICIOS_LISTAR')")
+    @GetMapping(value = "{uid}/beneficios")
+    public List<FuncionarioBeneficioDTO> buscarBeneficios(@PathVariable String uid) {
+        return funcionarioService.buscarBeneficios(uid);
     }
 }

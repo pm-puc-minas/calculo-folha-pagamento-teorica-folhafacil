@@ -57,7 +57,7 @@ public class KeycloakService {
         return null;
     }
 
-    private void adicionarUsuarioAoGrupo(String userId, String nomeGrupo) {
+    public void adicionarUsuarioAoGrupo(String userId, String nomeGrupo) {
         String nomeGrupoLimpo = nomeGrupo.trim();
 
         List<GroupRepresentation> grupos = keycloak.realm(realm).groups().groups();
@@ -68,6 +68,15 @@ public class KeycloakService {
                 .orElseThrow(() -> new RuntimeException("Grupo não encontrado: " + nomeGrupoLimpo));
 
         keycloak.realm(realm).users().get(userId).joinGroup(grupo.getId());
+    }
+
+    public void removerUsuarioDeTodosOsGrupos(String userId) {
+        List<GroupRepresentation> gruposUsuario =
+                keycloak.realm(realm).users().get(userId).groups();
+
+        gruposUsuario.forEach(g -> {
+            keycloak.realm(realm).users().get(userId).leaveGroup(g.getId());
+        });
     }
 
     public String recuperarUID(Jwt token){

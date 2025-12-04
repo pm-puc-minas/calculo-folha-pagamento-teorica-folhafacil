@@ -59,9 +59,6 @@ public class FolhaPagamento {
     @Column(name = "salarioLiquido",precision = 9, scale = 2)
     private BigDecimal salarioLiquido;
 
-    @Column(name = "total", precision = 9, scale = 2)
-    private BigDecimal total;
-
     @OneToMany(mappedBy = "folhaPagamento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FolhaPagamentoBeneficio> beneficios = new ArrayList<>();
 
