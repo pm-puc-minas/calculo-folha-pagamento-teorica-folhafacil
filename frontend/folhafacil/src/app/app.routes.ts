@@ -10,6 +10,7 @@ import { MinhasHorasExtrasPage } from './pages/funcionario/minhas-horas-extras-p
 import { FolhaPagamentoPage } from './pages/admin/folha-pagamento-page/folha-pagamento-page';
 import { MeusBeneficiosPage } from './pages/funcionario/meus-beneficios-page/meus-beneficios-page';
 import { MeusPagamentosPage } from './pages/funcionario/meus-pagamentos-page/meus-pagamentos-page';
+import { DashboardPage } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -27,6 +28,11 @@ export const routes: Routes = [
 		component: MainPage,
 		canActivate:[RoleCanMatch],
 		children: [
+			{
+				path: "",
+				component: DashboardPage,
+				data: { public: true }
+			},
 			{
 				path: "admin",
 				children: [
@@ -53,7 +59,7 @@ export const routes: Routes = [
 						component: BeneficiosPage,
 						canActivate: [RoleCanMatch],
 						data : { role : 'FF_BENEFICIO_LISTAR'}
-					}
+					},
 				],
 			},
 			{

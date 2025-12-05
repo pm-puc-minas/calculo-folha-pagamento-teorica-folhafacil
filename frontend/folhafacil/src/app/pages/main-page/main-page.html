@@ -8,7 +8,14 @@
       <div class="bg-blue-300 text-blue-900 font-bold rounded-md w-8 h-8 flex items-center justify-center">
         F
       </div>
-      <span *ngIf="isExpanded" class="font-bold">Folha Fácil</span>
+      <span 
+        *ngIf="isExpanded" 
+        class="font-bold cursor-pointer" 
+        routerLink="/main"
+      >
+        Folha Fácil
+      </span>
+
     </div>
 
     <nav class="flex-1 overflow-y-auto">
