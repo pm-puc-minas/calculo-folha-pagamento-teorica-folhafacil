@@ -21,4 +21,6 @@ public interface FuncionarioService {
     public List<FuncionarioResponseDTO> buscar(FuncionarioFilterDTO f);
 
     public List<FuncionarioBeneficioDTO> buscarBeneficios(String uid);
+
+    public List<FuncionarioBeneficioDTO> buscarMeusBeneficios(Jwt j);
 }

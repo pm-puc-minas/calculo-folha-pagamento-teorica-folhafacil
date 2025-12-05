@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../environment/environment";
-import { BeneficioDTO, BeneficioResponseDTO } from "../models/beneficio.model";
+import { BeneficioDTO, BeneficioResponseDTO, BeneficioFuncionarioResponseDTO } from "../models/beneficio.model";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -19,6 +19,10 @@ export class BeneficioService{
 
     buscar(): Observable<BeneficioResponseDTO[]> {
         return this.http.get<BeneficioResponseDTO[]>(`${this.url}/buscar`)
+    }
+
+    buscarFuncionarios(id: number) : Observable<BeneficioFuncionarioResponseDTO[]> {
+        return this.http.get<BeneficioFuncionarioResponseDTO[]>(`${this.url}/${id}/funcionarios`)
     }
 
     excluir(id: number){

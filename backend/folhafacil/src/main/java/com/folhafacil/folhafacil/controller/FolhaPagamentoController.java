@@ -37,8 +37,15 @@ public class FolhaPagamentoController {
         return service.buscarBeneficios(idFolha);
     }
 
+    @PreAuthorize("hasRole('FF_FOLHA_PAGAMENTO_HORAS_EXTRAS_LISTAR')")
     @GetMapping(value = "{idFolha}/horas-extras")
     public List<FolhaPagamentoHoraExtraResponseDTO> buscarHorasExtras(@PathVariable Long idFolha){
         return service.buscarHorasExtras(idFolha);
+    }
+
+    @PreAuthorize("hasRole('FF_FOLHA_PAGAMENTO_MEUS_PAGAMENTOS')")
+    @GetMapping(value = "meus-pagamentos")
+    public List<FolhaPagamentoResponseDTO> meusPagamentos(@AuthenticationPrincipal Jwt jwt){
+        return service.meusBeneficios(jwt);
     }
 }

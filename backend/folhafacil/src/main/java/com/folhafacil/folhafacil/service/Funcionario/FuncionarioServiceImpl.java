@@ -88,6 +88,11 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
     }
 
     @Override
+    public List<FuncionarioBeneficioDTO> buscarMeusBeneficios(Jwt j){
+        return funcionarioCustomRepository.buscarBeneficios(keycloakService.recuperarUID(j));
+    }
+
+    @Override
     public void habilitar(String uid, Jwt t) throws RuntimeException {
         Funcionario f = funcionarioRepository.findById(uid)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));

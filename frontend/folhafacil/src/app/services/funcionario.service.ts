@@ -25,6 +25,10 @@ export class FuncionarioService{
         return this.http.get<FuncionarioBeneficoDTO[]>(`${this.url}/${uid}/beneficios`)
     }
 
+    buscarMeusBeneficios() : Observable<FuncionarioBeneficoDTO[]>{
+        return this.http.get<FuncionarioBeneficoDTO[]>(`${this.url}/meus-beneficios`)
+    }
+
     alterarStatus(uid: string, status: boolean){
         if(status){
             return this.http.get(`${this.url}/${uid}/habilitar`)

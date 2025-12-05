@@ -16,4 +16,6 @@ public interface FolhaPagamentoService {
     public List<FolhaPagamentoBeneficioResponseDTO> buscarBeneficios(Long idFolha);
 
     public List<FolhaPagamentoHoraExtraResponseDTO> buscarHorasExtras(Long idFolha);
+
+    public List<FolhaPagamentoResponseDTO> meusBeneficios(Jwt t);
 }

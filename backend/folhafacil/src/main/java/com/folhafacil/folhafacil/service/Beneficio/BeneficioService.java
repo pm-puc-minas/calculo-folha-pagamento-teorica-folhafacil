@@ -1,6 +1,7 @@
 package com.folhafacil.folhafacil.service.Beneficio;
 
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioDTO;
+import com.folhafacil.folhafacil.dto.Beneficio.BeneficioFuncionarioResponseDTO;
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioResponseDTO;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface BeneficioService {
     public List<BeneficioResponseDTO> buscar();
 
     public void deletar(Long id)throws RuntimeException;
+
+    public List<BeneficioFuncionarioResponseDTO> buscarFuncionarios(Long id);
 }

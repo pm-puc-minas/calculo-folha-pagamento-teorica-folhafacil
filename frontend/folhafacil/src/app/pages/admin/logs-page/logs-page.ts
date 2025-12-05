@@ -13,7 +13,6 @@ import { AvatarModule } from 'primeng/avatar';
 import { DatePicker } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { isFormEmpty } from '../../../shared/utils/form'
 import { ActionsService } from '../../../services/actions.service';
 
 @Component({
@@ -165,9 +164,5 @@ export class LogsPage{
   getHoras(h: number){
     if(h == 0 || h == null) return "0h"
     return `${h.toFixed(0)}h ${((h%1) * 60).toFixed(0)}m`
-  }
-
-  get isFormEmpty(): boolean {
-    return isFormEmpty(this.searchForm);
   }
 }

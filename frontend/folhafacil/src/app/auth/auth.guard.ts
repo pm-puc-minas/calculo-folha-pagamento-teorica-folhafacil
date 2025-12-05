@@ -1,18 +1,18 @@
 import { inject } from "@angular/core";
 import { CanMatchFn, Router, RedirectCommand } from "@angular/router";
-import { KeyCloackService } from "../services/keycloack.service";
+import { KeyCloakService } from "../services/keycloak.service";
 
 export const RoleCanMatch: CanMatchFn = (route, segments) => {
   const router = inject(Router);
-  const keycloackService = inject(KeyCloackService);
+  const keyCloakService = inject(KeyCloakService);
 
   const expectedRole = route.data?.['role'];
 
-  if (!keycloackService.isAuthenticated()) {
+  if (!keyCloakService.isAuthenticated()) {
     return new RedirectCommand(router.parseUrl("/login"));
   }
 
-  if (expectedRole && !keycloackService.hasRole(expectedRole)) {
+  if (expectedRole && !keyCloakService.hasRole(expectedRole)) {
     return new RedirectCommand(router.parseUrl("/no-permission"));
   }
 
@@ -21,9 +21,9 @@ export const RoleCanMatch: CanMatchFn = (route, segments) => {
 
 export const AuthCanMatch: CanMatchFn = (route, segments) => {
   const router = inject(Router);
-  const keycloackService = inject(KeyCloackService);
+  const keyCloakService = inject(KeyCloakService);
 
-  if (keycloackService.isAuthenticated()) {
+  if (keyCloakService.isAuthenticated()) {
     return new RedirectCommand(router.parseUrl("/main"));
   }
 

@@ -1,10 +1,10 @@
 import { HttpInterceptorFn, HttpErrorResponse  } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { KeyCloackService } from '../services/keycloack.service';
+import { KeyCloakService } from '../services/keycloak.service';
 import { catchError, switchMap, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const keycloakService = inject(KeyCloackService);
+  const keycloakService = inject(KeyCloakService);
   const token = keycloakService.getToken();
 
   if (req.headers.has('skipAuth')) {

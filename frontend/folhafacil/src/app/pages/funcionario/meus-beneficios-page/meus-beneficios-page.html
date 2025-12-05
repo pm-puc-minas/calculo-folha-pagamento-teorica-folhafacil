@@ -1,0 +1,33 @@
+<main class="w-full">
+                    <div class="w-full">
+                        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Benefícios</div>
+                    </div>
+                    <div class="card">
+                        <p-table [value]="beneficios || []" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="80vh"  [tableStyle]="{ 'min-width': '60rem' }">
+                            <ng-template #header class="bg-main-100">
+                                <tr>
+                                    <th pSortableColumn="nomeBeneficio" style="width:50%">
+                                        <div class="flex items-center gap-2">
+                                            Benefício
+                                            <p-sortIcon field="nomeBeneficio" />
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="valor" style="width:50%">
+                                        <div class="flex items-center gap-2">
+                                            Valor
+                                            <p-sortIcon field="valor" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-beneficio>
+                                <tr>
+                                    <td>{{ beneficio.nomeBeneficio }}</td>
+                                    <td>R${{ beneficio.valor }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="w-full">
+                    </div>
+                </main>

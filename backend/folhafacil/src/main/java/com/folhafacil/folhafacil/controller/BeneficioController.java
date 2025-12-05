@@ -1,6 +1,7 @@
 package com.folhafacil.folhafacil.controller;
 
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioDTO;
+import com.folhafacil.folhafacil.dto.Beneficio.BeneficioFuncionarioResponseDTO;
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioResponseDTO;
 import com.folhafacil.folhafacil.service.Beneficio.BeneficioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,12 @@ public class BeneficioController {
     @GetMapping(value = "buscar")
     public List<BeneficioResponseDTO> buscar(){
         return service.buscar();
+    }
+
+    @PreAuthorize("hasRole('FF_BENEFICIO_LISTAR')")
+    @GetMapping(value = "{id}/funcionarios")
+    public List<BeneficioFuncionarioResponseDTO> buscarFuncionarios(@PathVariable Long id) {
+        return service.buscarFuncionarios(id);
     }
 
     @PreAuthorize("hasRole('FF_BENEFICIO_DELETAR')")

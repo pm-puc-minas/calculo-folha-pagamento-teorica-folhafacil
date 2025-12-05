@@ -8,11 +8,13 @@ import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BeneficioDTO, BeneficioResponseDTO } from '../../../models/beneficio.model';
+import { BeneficioDTO, BeneficioFuncionarioResponseDTO, BeneficioResponseDTO } from '../../../models/beneficio.model';
 import { BeneficioService } from '../../../services/beneficio.service';
 import { ActionsService } from '../../../services/actions.service';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { AvatarModule } from 'primeng/avatar';
+
 
 @Component({
   selector: 'app-beneficios-page',
@@ -25,7 +27,8 @@ import { ConfirmationService } from 'primeng/api';
     FloatLabel,
     FormsModule,
     ReactiveFormsModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    AvatarModule
   ],
   templateUrl: './beneficios-page.html',
   styleUrl: './beneficios-page.css',
@@ -38,8 +41,11 @@ export class BeneficiosPage {
   confirmationService = inject(ConfirmationService)
 
   beneficios: BeneficioResponseDTO[] = []
+  funcionarios!: BeneficioFuncionarioResponseDTO[]
 
+  nomeBeneficio: string = ''
   isModal: boolean = false
+  isModalFuncionarios: boolean = false
   isEdit: boolean = false
 
 	beneficioForm: FormGroup;
@@ -96,8 +102,20 @@ export class BeneficiosPage {
     });
   }
 
-  verFuncionarios(id: number){
-    console.log(id)
+  verFuncionarios(id: number, uso: number, nome: string){
+    if(uso == 0){
+      this.actions.info("Sem funcuinarios beneficiarios")
+      return;
+    }
+
+    this.service.buscarFuncionarios(id).subscribe({
+      next : (res: BeneficioFuncionarioResponseDTO[]) =>{
+        this.funcionarios = [...res]
+        this.nomeBeneficio = nome
+        this.isModalFuncionarios = true
+        this.cdr.markForCheck();
+      }
+    })
   }
 
   resetBeneficioForm(){
@@ -145,5 +163,16 @@ export class BeneficiosPage {
     this.resetBeneficioForm()
     this.isModal = false
     this.isEdit = false
+  }
+
+  closeModalFuncionario(){
+    this.funcionarios = []
+    this.nomeBeneficio = ''
+    this.isModalFuncionarios = false
+  }
+
+  getAvatar(n: string){
+    const ns: string[] = n.split('.')
+    return `${ns[0][0]}${ns[1][0]}`
   }
 }

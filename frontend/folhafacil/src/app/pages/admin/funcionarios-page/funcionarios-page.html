@@ -25,7 +25,7 @@
                             <ng-template #body let-funcionariobeneficio>
                                 <tr>
                                     <td>{{ funcionariobeneficio.nomeBeneficio }}</td>
-                                    <td>{{ funcionariobeneficio.valor }}</td>
+                                    <td>R${{ funcionariobeneficio.valor }}</td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -206,7 +206,7 @@
 <main>
     <div class="flex flex-row space-x-2">
         <h1 class="text-2xl text-main-500">Filtros</h1>
-        <p-button *ngIf="!isSearchFormEmpty()" label="Limpar" size="small" (click)="limparSearch()" icon="pi pi-filter-slash" iconPos="right"/> 
+        <p-button label="Limpar" size="small" (click)="limparSearch()" icon="pi pi-filter-slash" iconPos="right"/> 
     </div>
     <form [formGroup]="searchForm" class="flex flex-row items-center center mt-1 space-x-2">
         <p-floatlabel variant="on" styleClass="w-30">

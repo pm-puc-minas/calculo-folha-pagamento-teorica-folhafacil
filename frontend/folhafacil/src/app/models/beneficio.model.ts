@@ -8,3 +8,9 @@ export type BeneficioResponseDTO = {
     nome: string;
     uso: number
 }
+
+export type BeneficioFuncionarioResponseDTO = {
+    nomeFuncionario: string;
+    usuarioFuncionario: string;
+    valor: number;
+}

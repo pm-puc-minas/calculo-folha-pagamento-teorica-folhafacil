@@ -1,18 +1,20 @@
 package com.folhafacil.folhafacil.repository.Beneficio;
 
+import com.folhafacil.folhafacil.dto.Beneficio.BeneficioFuncionarioResponseDTO;
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioResponseDTO;
+import com.folhafacil.folhafacil.dto.FolhaPagamento.FolhaPagamentoResponseDTO;
 import com.folhafacil.folhafacil.entity.Beneficio;
+import com.folhafacil.folhafacil.entity.Funcionario;
 import com.folhafacil.folhafacil.entity.FuncionarioBeneficio;
 import com.folhafacil.folhafacil.repository.RepositorioGenerico;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -40,5 +42,34 @@ public class BeneficioCustomRepository {
         ));
 
         return em.createQuery(cq).getResultList();
+    }
+
+    public List<BeneficioFuncionarioResponseDTO> buscarFuncionarios(Long id){
+        if(id == null){
+            return null;
+        }
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<BeneficioFuncionarioResponseDTO> cq = cb.createQuery(BeneficioFuncionarioResponseDTO.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        Root<FuncionarioBeneficio> root = cq.from(FuncionarioBeneficio.class);
+
+        Join<FuncionarioBeneficio, Funcionario> funcionarioJoin = root.join("funcionario");
+
+        cq.select(cb.construct(
+                BeneficioFuncionarioResponseDTO.class,
+                funcionarioJoin.get("nome"),
+                funcionarioJoin.get("usuario"),
+                root.get("valor")
+        ));
+
+        predicates.add(cb.equal(root.get("beneficio").get("id"), id));
+
+        predicates.add(cb.equal(funcionarioJoin.get("status"), true));
+        cq.where(cb.and(predicates.toArray(new Predicate[0])));
+
+        TypedQuery<BeneficioFuncionarioResponseDTO> typedQuery = em.createQuery(cq);
+        return typedQuery.getResultList();
     }
 }

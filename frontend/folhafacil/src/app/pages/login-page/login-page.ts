@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, } from "@angular/forms";
 import { Auth } from '../../models/auth.model';
-import { KeyCloackService } from '../../services/keycloack.service';
+import { KeyCloakService } from '../../services/keycloak.service';
 
 @Component({
   selector: 'app-login-page',
@@ -21,7 +21,7 @@ export class LoginPage {
   hide = true
 
 	authForm: FormGroup;
-  keycloackService = inject(KeyCloackService);
+  KeyCloakService = inject(KeyCloakService);
 
   constructor(private fb: FormBuilder) {
 		this.authForm = this.fb.group({
@@ -40,7 +40,7 @@ export class LoginPage {
 
   auth(){
     const login : Auth = this.getAuthForm()
-    this.keycloackService.login(login.user, login.pass)
+    this.KeyCloakService.login(login.user, login.pass)
   }
 
 }

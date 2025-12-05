@@ -8,7 +8,7 @@ import { ActionsService } from './actions.service';
   providedIn: 'root'
 })
 
-export class KeyCloackService {
+export class KeyCloakService {
   private keycloakUrl = 'http://localhost:8081/realms/folha-facil-realm/protocol/openid-connect/token';
   private clientId = 'folha-facil-app'; 
   private clientSecret = 'xjLWnPHFsMmc61h6ZiBRKZDmuA4yzZTe'; 
@@ -149,4 +149,10 @@ export class KeyCloackService {
     const decoded = this.getDecodedToken();
     return decoded?.name || null;
   }
+
+  redirectToForgotPassword() {
+    const url = `http://localhost:8081/realms/folha-facil-realm/login-actions/reset-credentials`;
+    window.location.href = url;
+  }
+
 }

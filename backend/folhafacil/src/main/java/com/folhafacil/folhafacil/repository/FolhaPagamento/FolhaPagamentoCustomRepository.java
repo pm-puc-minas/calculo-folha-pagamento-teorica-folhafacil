@@ -21,7 +21,6 @@ public class FolhaPagamentoCustomRepository {
     private final EntityManager em;
 
     public List<FolhaPagamentoResponseDTO> buscar(FolhaPagamentoFilterDTO f) {
-
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
         CriteriaQuery<FolhaPagamentoResponseDTO> query = cb.createQuery(FolhaPagamentoResponseDTO.class);
@@ -57,7 +56,7 @@ public class FolhaPagamentoCustomRepository {
         }
 
         if(!f.getFuncionarios().isEmpty()) {
-            predicates.add(cb.in(root.get("idFuncionario").get("id")));
+            predicates.add(root.get("idFuncionario").get("id").in(f.getFuncionarios()));
         }
 
         if(f.getStatus() != null) {
@@ -67,7 +66,6 @@ public class FolhaPagamentoCustomRepository {
         if(f.getTipoFuncionario() != null) {
             predicates.add(cb.equal(funcionarioJoin.get("tipo"), f.getTipoFuncionario()));
         }
-
 
         query.where(cb.and(predicates.toArray(new Predicate[0])));
 

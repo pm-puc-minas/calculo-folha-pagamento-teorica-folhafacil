@@ -10,13 +10,53 @@
         <p-button label="Salvar" icon="pi pi-check" iconPos="right" (onClick)="salvar()" [disabled]="!isValidForm()" styleClass="mt-2"/>
 </p-dialog>
 
+<p-dialog [header]="nomeBeneficio" (onHide)="closeModalFuncionario()" [modal]="true" [(visible)]="isModalFuncionarios" [style]="{ width: '100rem' }" [breakpoints]="{ '1499px': '80vw', '575px': '90vw' }" [maximizable]="true">
+        <main class="w-full">
+            <div class="w-full">
+                <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Funcionários</div>
+            </div>
+            <div class="card">
+                <p-table [value]="funcionarios || []" sortField="price" [sortOrder]="-1" [scrollable]="true"
+                    scrollHeight="80vh" [tableStyle]="{ 'min-width': '60rem' }">
+                    <ng-template #header class="bg-main-100">
+                        <tr>
+                            <th pSortableColumn="nome" style="width:60%">
+                                <div class="flex items-center gap-2">
+                                    Nome
+                                    <p-sortIcon field="nome" />
+                                </div>
+                            </th>
+                            <th pSortableColumn="valor" style="width:20%">
+                                <div class="flex items-center gap-2">
+                                    Valor
+                                    <p-sortIcon field="valor" />
+                                </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-funcionario>
+                        <tr>
+                            <td><p-avatar [label]="getAvatar(funcionario.usuarioFuncionario)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/> {{ funcionario.nomeFuncionario }}</td>
+                            <td>R${{ funcionario.valor }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="w-full">
+                <div class="w-full p-4 bg-main-500">
+                    <p-button label="Novo" icon="pi pi-plus-circle" (click)="novo()" />
+                </div>
+            </div>
+        </main>
+</p-dialog>
+
 <main class="w-full">
     <div class="w-full">
         <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Benefícios</div>
     </div>
     <div class="card">
         <p-table [value]="beneficios || []" sortField="price" [sortOrder]="-1" [scrollable]="true"
-            scrollHeight="60vh" [tableStyle]="{ 'min-width': '60rem' }">
+            scrollHeight="80vh" [tableStyle]="{ 'min-width': '60rem' }">
             <ng-template #header class="bg-main-100">
                 <tr>
                     <th pSortableColumn="nome" style="width:60%">
@@ -40,16 +80,16 @@
             <ng-template #body let-beneficio>
                 <tr>
                     <td>{{ beneficio.nome }}</td>
-                    <td 
-                    class="hover:underline hover:text-lg cursor-pointer transition-transform duration-300 ease-in-out"
-                    (click)="verFuncionarios(beneficio.id)"
-                    >
-                        {{ beneficio.uso }} Funcionários
+                    <td>
+                        <button pButton class="p-list" (click)="verFuncionarios(beneficio.id, beneficio.uso, beneficio.nome)">
+                            <i class="pi pi-list" pButtonIcon></i>
+                            <span pButtonLabel>{{ beneficio.uso }} Funcionários</span>
+                        </button>
                     </td>
                     <td>
                         <div class="w-full flex flex-row justify-center space-x-3">
                             <p-button icon="pi pi-pencil" [rounded]="true" (click)="edit(beneficio)" />
-                            <div class="card flex justify-center gap-2">
+                            <div *ngIf="beneficio.uso == 0" class="card flex justify-center gap-2">
                                 <p-confirmpopup #cp>
                                     <ng-template #headless let-message>
                                         <div class="rounded p-4">

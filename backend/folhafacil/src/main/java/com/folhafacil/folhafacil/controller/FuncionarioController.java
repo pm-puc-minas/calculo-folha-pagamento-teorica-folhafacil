@@ -51,4 +51,10 @@ public class FuncionarioController {
     public List<FuncionarioBeneficioDTO> buscarBeneficios(@PathVariable String uid) {
         return funcionarioService.buscarBeneficios(uid);
     }
+
+    @PreAuthorize("hasRole('FF_FUNCIONARIO_MEUS_BENEFICIOS_LISTAR')")
+    @GetMapping(value = "meus-beneficios")
+    public List<FuncionarioBeneficioDTO> buscarMeusBeneficios(@AuthenticationPrincipal Jwt token) {
+        return funcionarioService.buscarMeusBeneficios(token);
+    }
 }

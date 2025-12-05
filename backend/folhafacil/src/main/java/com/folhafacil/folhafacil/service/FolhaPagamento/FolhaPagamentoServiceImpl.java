@@ -18,12 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, Long> implements FolhaPagamentoService {
@@ -155,5 +150,15 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
     @Override
     public List<FolhaPagamentoHoraExtraResponseDTO> buscarHorasExtras(Long idFolha){
         return folhaPagamentoCustomRepository.buscarHorasExtras(idFolha);
+    }
+
+    @Override
+    public List<FolhaPagamentoResponseDTO> meusBeneficios(Jwt t){
+        FolhaPagamentoFilterDTO f = new FolhaPagamentoFilterDTO();
+        List<String> listUIds = new ArrayList<>();
+        listUIds.add(keycloakService.recuperarUID(t));
+        f.setFuncionarios(listUIds);
+
+        return folhaPagamentoCustomRepository.buscar(f);
     }
 }

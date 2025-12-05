@@ -23,7 +23,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { SelectButton } from 'primeng/selectbutton';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MaskPipe } from '../../../shared/mask-pipe'
-
+import { isFormEmpty } from '../../../shared/utils/form'
 
 @Component({
   selector: 'app-funcionarios-page',
@@ -326,9 +326,5 @@ export class FuncionariosPage {
       default:
         return 'info'
     }
-  }
-
-  isSearchFormEmpty(): boolean {
-    return Object.values(this.searchForm).every(v => v == null || v === '');
   }
 }

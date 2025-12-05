@@ -28,4 +28,8 @@ export class FolhaPagamentoService{
     buscarHorasExtras(id: number) : Observable<FolhaPagamentoHoraExtraResponseDTO[]>{
         return this.http.get<FolhaPagamentoHoraExtraResponseDTO[]>(`${this.url}/${id}/horas-extras`)
     }
+
+    meusPagamentos() : Observable<FolhaPagamentoResponseDTO[]>{
+        return this.http.get<FolhaPagamentoResponseDTO[]>(`${this.url}/meus-pagamentos`)
+    }
 }

@@ -1,6 +1,7 @@
 package com.folhafacil.folhafacil.service.Beneficio;
 
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioDTO;
+import com.folhafacil.folhafacil.dto.Beneficio.BeneficioFuncionarioResponseDTO;
 import com.folhafacil.folhafacil.dto.Beneficio.BeneficioResponseDTO;
 import com.folhafacil.folhafacil.entity.Beneficio;
 import com.folhafacil.folhafacil.mapper.BeneficioMapper;
@@ -54,29 +55,9 @@ public class BeneficoServiceImpl extends ServiceGenerico<Beneficio, Long> implem
             throw new RuntimeException(e.getMessage());
         }
     }
-    
-    public Set<String> listarNomesUnicos() {
-        List<Beneficio> beneficios = beneficioRepository.findAll();
-        Set<String> nomes = new HashSet<>();
-        for (Beneficio b : beneficios) {
-            nomes.add(b.getNome());
-        }
-        return nomes;
-    }
-    
-    public Map<String, List<Beneficio>> agruparPorNome() {
-        List<Beneficio> beneficios = beneficioRepository.findAll();
-        Map<String, List<Beneficio>> mapa = new HashMap<>();
-        for (Beneficio b : beneficios) {
-            mapa.computeIfAbsent(b.getNome(), k -> new ArrayList<>()).add(b);
-        }
-        return mapa;
-    }
-    
-    public List<Beneficio> filtrarPorNomeMinimo(String prefixo) {
-        List<Beneficio> beneficios = beneficioRepository.findAll();
-        return beneficios.stream()
-                .filter(b -> b.getNome().startsWith(prefixo))
-                .toList();
+
+    @Override
+    public List<BeneficioFuncionarioResponseDTO> buscarFuncionarios(Long id){
+        return beneficioCustomRepository.buscarFuncionarios(id);
     }
 }

@@ -8,6 +8,8 @@ import { LogsPage } from './pages/admin/logs-page/logs-page';
 import { BeneficiosPage } from './pages/admin/beneficios-page/beneficios-page';
 import { MinhasHorasExtrasPage } from './pages/funcionario/minhas-horas-extras-page/minhas-horas-extras-page';
 import { FolhaPagamentoPage } from './pages/admin/folha-pagamento-page/folha-pagamento-page';
+import { MeusBeneficiosPage } from './pages/funcionario/meus-beneficios-page/meus-beneficios-page';
+import { MeusPagamentosPage } from './pages/funcionario/meus-pagamentos-page/meus-pagamentos-page';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -62,6 +64,18 @@ export const routes: Routes = [
 						component: MinhasHorasExtrasPage,
 						canActivate: [RoleCanMatch],
 						data: { role : 'FF_MINHA_HORA_EXTRA_LISTAR'}
+					},
+					{
+						path: "meus-beneficios",
+						component: MeusBeneficiosPage,
+						canActivate: [RoleCanMatch],
+						data: { role : 'FF_FUNCIONARIO_MEUS_BENEFICIOS_LISTAR'}
+					},
+					{
+						path: "meus-pagamentos",
+						component: MeusPagamentosPage,
+						canActivate: [RoleCanMatch],
+						data: { role : 'FF_FOLHA_PAGAMENTO_MEUS_PAGAMENTOS'}
 					},
 				]
 			}

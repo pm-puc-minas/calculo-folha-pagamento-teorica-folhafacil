@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MiniMenuNavItem } from '../../models/router.model';
 import { MiniMenuNav } from '../../components/mini-menu-nav/mini-menu-nav';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { KeyCloackService } from '../../services/keycloack.service';
+import { KeyCloakService } from '../../services/keycloak.service';
 import { ActionsService } from '../../services/actions.service';
 import { Toast } from 'primeng/toast';
 
@@ -27,7 +27,7 @@ import { Toast } from 'primeng/toast';
   styleUrl: './main-page.css'
 })
 export class MainPage {
-  keyclaockService = inject(KeyCloackService);
+  keyclaokService = inject(KeyCloakService);
 
   isExpanded = true;
 
@@ -52,28 +52,28 @@ export class MainPage {
         routes: []
       }
 
-      if(this.keyclaockService.hasRole("FF_FUNCIONARIOS_LISTAR")){
+      if(this.keyclaokService.hasRole("FF_FUNCIONARIOS_LISTAR")){
           route.routes.push({
             name: 'Funcionários',
             route: 'admin/funcionarios'
           })
       }
 
-      if(this.keyclaockService.hasRole("FF_FOLHA_PAGAMENTO_LISTAR")){
+      if(this.keyclaokService.hasRole("FF_FOLHA_PAGAMENTO_LISTAR")){
         route.routes.push({
           name: 'Folha Pagamento',
           route: 'admin/folha-pagamento'
         })
       }
 
-      if(this.keyclaockService.hasRole("FF_LOGS_LISTAR")){
+      if(this.keyclaokService.hasRole("FF_LOGS_LISTAR")){
         route.routes.push({
           name: 'Logs',
           route: 'admin/logs'
         })
       }
 
-      if(this.keyclaockService.hasRole("FF_BENEFICIO_LISTAR")){
+      if(this.keyclaokService.hasRole("FF_BENEFICIO_LISTAR")){
         route.routes.push({
           name: 'Benefícios',
           route: 'admin/beneficios'
@@ -91,10 +91,24 @@ export class MainPage {
       routes: []
     }
 
-    if(this.keyclaockService.hasRole("FF_MINHA_HORA_EXTRA_LISTAR")){
+    if(this.keyclaokService.hasRole("FF_MINHA_HORA_EXTRA_LISTAR")){
       route.routes.push({
         name: 'Hora Extra',
         route: 'funcionario/hora-extra'
+      })
+    }
+
+    if(this.keyclaokService.hasRole("FF_FUNCIONARIO_MEUS_BENEFICIOS_LISTAR")){
+      route.routes.push({
+        name: 'Meus Benefícios',
+        route: 'funcionario/meus-beneficios'
+      })
+    }
+
+    if(this.keyclaokService.hasRole("FF_FOLHA_PAGAMENTO_MEUS_PAGAMENTOS")){
+      route.routes.push({
+        name: 'Meus Pagamentos',
+        route: 'funcionario/meus-pagamentos'
       })
     }
 
@@ -104,10 +118,15 @@ export class MainPage {
   }
 
   logOut(){
-    this.keyclaockService.logout()
+    this.keyclaokService.logout()
   }
 
   toggleSidebar() {
     this.isExpanded = !this.isExpanded;
   }
+
+  forgotPassword() {
+    this.keyclaokService.redirectToForgotPassword();
+  }
+
 }
