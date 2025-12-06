@@ -37,25 +37,38 @@ export class LoginPage {
   auth() {
     const login: Auth = this.getAuthForm();
 
+    Swal.fire({
+      title: 'Entrando...',
+      text: 'Aguarde um momento',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     this.KeyCloakService.login(login.user, login.pass).subscribe({
       next: (res) => {
+        Swal.close();
+
         localStorage.setItem('access_token', res.access_token);
         localStorage.setItem('refresh_token', res.refresh_token);
 
         Swal.fire({
           icon: 'success',
           title: 'Login realizado!',
-          timer: 1600,
+          text: 'Bem-vindo ao Folha Fácil',
+          timer: 1500,
           showConfirmButton: false,
+        }).then(() => {
+          this.router.navigate(['/main']);
         });
-
-        this.router.navigate(['/main']);
       },
+
       error: (err) => {
+        Swal.close();
+
         Swal.fire({
           icon: 'error',
-          title: 'Usuário ou senha incorretos',
-          text: 'Verifique os dados e tente novamente.',
+          title: 'Erro no login',
+          text: 'Usuário ou senha incorretos.',
         });
       },
     });
