@@ -1,37 +1,38 @@
 <main class="w-full h-full flex f-row relative">
-    <div class="h-full w-64 bg-main-500"></div>
-    <div class="form-block">
-        <form class="form-container" [formGroup]="authForm">
-           <h1 class="text-main-500 text-3xl border-b-4 border-main-500 w-[50%]">Login</h1>
-           <div class="body-box">
-                <div class="input-box">
-                    <label for="user" class="font-medium text-1xl">Usuário:</label>
-                    <input type="text" name="user" id="user" formControlName="user">
-                </div>
-                <div class="input-box">
-                    <label for="password" class="font-medium text-1xl">Senha:</label>
-                    <div class="pass-box flex f-row items-center">
-                        <input
-                        [type]="hide ? 'password' : 'text'"
-                        name="pass"
-                        id="pass"
-                        formControlName="pass"
-                        >
-                        <button
-                        type="button"
-                        mat-icon-button
-                        (click)="hide = !hide"
-                        class="ml-2 bg-main-500 hide cursor-pointer"
-                        >
-                        <mat-icon style="color: white;">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                        </button>
-                    </div>
-                    </div>
-                </div>
-            <div class="body-box">
-                    <button class="auth-btn text-white text-xl2 bg-main-500 cursor-pointer" (click)="auth()">Entrar</button>
-                    <span class="text-main-700 hover:text-main-100 font-medium cursor-pointer">Esqueci minha senha</span>
-            </div>
-        </form>
-    </div>
+  <div class="h-full w-64 bg-main-500"></div>
+  <div class="form-block">
+    <form class="form-container" [formGroup]="authForm">
+      <h1 class="text-main-500 text-3xl border-b-4 border-main-500 w-[50%]">Login</h1>
+      <div class="body-box">
+        <div class="input-box">
+          <label for="user" class="font-medium text-1xl">Usuário:</label>
+          <input type="text" name="user" id="user" formControlName="user" />
+        </div>
+        <div class="input-box">
+          <label for="password" class="font-medium text-1xl">Senha:</label>
+          <div class="pass-box flex f-row items-center">
+            <input
+              [type]="hide ? 'password' : 'text'"
+              name="pass"
+              id="pass"
+              formControlName="pass"
+            />
+            <button
+              type="button"
+              mat-icon-button
+              (click)="hide = !hide"
+              class="ml-2 bg-main-500 hide cursor-pointer"
+            >
+              <mat-icon style="color: white">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="body-box">
+        <button class="auth-btn text-white text-xl2 bg-main-500 cursor-pointer" (click)="auth()">
+          Entrar
+        </button>
+      </div>
+    </form>
+  </div>
 </main>

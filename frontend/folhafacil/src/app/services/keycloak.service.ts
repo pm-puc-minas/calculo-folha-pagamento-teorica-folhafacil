@@ -5,13 +5,13 @@ import { throwError, of, switchMap, catchError } from 'rxjs';
 import { ActionsService } from './actions.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class KeyCloakService {
-  private keycloakUrl = 'http://localhost:8081/realms/folha-facil-realm/protocol/openid-connect/token';
-  private clientId = 'folha-facil-app'; 
-  private clientSecret = 'xjLWnPHFsMmc61h6ZiBRKZDmuA4yzZTe'; 
+  private keycloakUrl =
+    'http://localhost:8081/realms/folha-facil-realm/protocol/openid-connect/token';
+  private clientId = 'folha-facil-app';
+  private clientSecret = 'xjLWnPHFsMmc61h6ZiBRKZDmuA4yzZTe';
   private storageKey = 'access_token';
 
   constructor(private http: HttpClient, private router: Router, private actions: ActionsService) {}
@@ -22,19 +22,9 @@ export class KeyCloakService {
       .set('grant_type', 'password')
       .set('username', username)
       .set('password', password)
-      .set('client_secret', this.clientSecret)
+      .set('client_secret', this.clientSecret);
 
-    return this.http.post<any>(this.keycloakUrl, body).subscribe({
-      next: (res) => {
-        localStorage.setItem(this.storageKey, res.access_token);
-        localStorage.setItem('refresh_token', res.refresh_token);
-        this.router.navigate(['/main']);
-      },
-      error: (err) => {
-        this.actions.danger(err)
-        console.error('Erro no login', err);
-      }
-    });
+    return this.http.post<any>(this.keycloakUrl, body);
   }
 
   refreshToken() {
@@ -64,7 +54,6 @@ export class KeyCloakService {
     );
   }
 
-
   logout() {
     localStorage.removeItem(this.storageKey);
     localStorage.removeItem('refresh_token');
@@ -72,7 +61,7 @@ export class KeyCloakService {
   }
 
   getToken(): string | null {
-    if (typeof window === "undefined") return null;
+    if (typeof window === 'undefined') return null;
     return localStorage.getItem(this.storageKey);
   }
 
@@ -108,10 +97,9 @@ export class KeyCloakService {
 
     const userRoles = [...realmRoles, ...resourceRoles];
 
-    return requiredRoles.every(role => userRoles.includes(role));
+    return requiredRoles.every((role) => userRoles.includes(role));
   }
 
-  
   hasAnyRole(requiredRoles: string[]): boolean {
     const decoded = this.getDecodedToken();
     if (!decoded) return false;
@@ -121,9 +109,8 @@ export class KeyCloakService {
 
     const userRoles = [...realmRoles, ...resourceRoles];
 
-    return requiredRoles.some(role => userRoles.includes(role));
+    return requiredRoles.some((role) => userRoles.includes(role));
   }
-
 
   getUserRoles(): string[] {
     const decoded = this.getDecodedToken();
@@ -154,5 +141,4 @@ export class KeyCloakService {
     const url = `http://localhost:8081/realms/folha-facil-realm/login-actions/reset-credentials`;
     window.location.href = url;
   }
-
 }
