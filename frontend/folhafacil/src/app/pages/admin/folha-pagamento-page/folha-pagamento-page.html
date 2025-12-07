@@ -90,10 +90,12 @@
         <p-button label="Limpar" size="small" (click)="limparSearch()" icon="pi pi-filter-slash" iconPos="right"/> 
     </div>
     <form [formGroup]="searchForm" class="flex flex-row items-center center mt-1 space-x-2">
-        <p-floatlabel variant="on" styleClass="w-30">
-            <p-datepicker inputId="on_label" class="w-full" showIcon iconDisplay="input" dateFormat="mm/yy" view="month" [readonlyInput]="true" appendTo="body" formControlName="data" fluid/>
-            <label for="on_label">Data</label>
-        </p-floatlabel>
+        <div class="w-70">
+            <p-floatlabel variant="on" styleClass="w-full">
+                <p-datepicker inputId="on_label" class="w-full" showIcon iconDisplay="input" dateFormat="mm/yy" view="month" [readonlyInput]="true" appendTo="body" formControlName="data" fluid/>
+                <label for="on_label">Data</label>
+            </p-floatlabel>
+        </div>
         <p-floatlabel class="w-70" variant="on">
             <p-multiselect id="on_label"  [options]="funcionarios" optionLabel="nome" optionValue="id" class="w-full" formControlName="funcionarios" />
             <label for="on_label">Funcionários</label>
@@ -259,6 +261,30 @@
                         </ng-template>
                     </p-confirmpopup>
                     <p-button label="Pagar" icon="pi pi-wallet" (onClick)="pagar($event)" />
+                </div>
+                <div class="card flex justify-center">
+                    <p-button label="Exportar" icon="pi pi-file-export" (onClick)="toggle($event)"/>
+                    <p-popover #op>
+                        <div class="flex flex-col gap-4 rounded">
+                            <div>
+                                <span class="font-medium block mb-2">Deseja exportar para qual tipo de arquivo?</span>
+                                <form [formGroup]="exportarForm">
+                                    <div class="flex items-center">
+                                        <p-checkbox inputId="horasExtras" binary="true" formControlName="horasExtras" />
+                                        <label for="horasExtras" class="ml-2"> Exibir horas extras </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <p-checkbox inputId="beneficios" binary="true" formControlName="beneficios" />
+                                        <label for="beneficios" class="ml-2"> Exibir benefícios </label>
+                                    </div>
+                                </form>
+                                <div class="flex items-center gap-2 mt-4">
+                                    <p-button (onClick)="exportar('excel')" icon="pi pi-file-excel" label="Excel" size="small" />
+                                    <p-button (onClick)="exportar('pdf')" icon="pi pi-file-pdf" label="PDF" styleClass="p-danger" size="small"/>
+                                </div>
+                            </div>
+                        </div>
+                    </p-popover>
                 </div>
             </div>
         </div>

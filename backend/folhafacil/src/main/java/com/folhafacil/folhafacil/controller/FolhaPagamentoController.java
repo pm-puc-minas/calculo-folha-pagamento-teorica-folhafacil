@@ -6,11 +6,15 @@ import com.folhafacil.folhafacil.dto.FolhaPagamento.FolhaPagamentoHoraExtraRespo
 import com.folhafacil.folhafacil.dto.FolhaPagamento.FolhaPagamentoResponseDTO;
 import com.folhafacil.folhafacil.service.FolhaPagamento.FolhaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,6 +33,31 @@ public class FolhaPagamentoController {
     @PostMapping(value = "pagar")
     public void pagarFolhaPagamento(@RequestBody List<Long> ids,@AuthenticationPrincipal Jwt token) throws RuntimeException{
         service.pagarFolhaPagamento(ids, token);
+    }
+
+    @PreAuthorize("hasRole('FF_FOLHA_PAGAMENTO_EXPORTAR')")
+    @PostMapping(value = "exportar")
+    public ResponseEntity<byte[]> exportar(
+            @RequestBody List<Long> ids,
+            @RequestParam String type,
+            @RequestParam Boolean horaExtra,
+            @RequestParam Boolean beneficios
+    ) throws IOException {
+
+        byte[] arquivo = service.exportar(type, horaExtra, beneficios, ids);
+
+        String filename = type.equals("excel") ?
+                "folhas_pagamento_" + LocalDate.now() + ".xlsx" :
+                "folhas_pagamento_" + LocalDate.now() + ".pdf";
+
+        MediaType contentType = type.equals("excel") ?
+                MediaType.APPLICATION_OCTET_STREAM :
+                MediaType.APPLICATION_PDF;
+
+        return ResponseEntity.ok()
+                .contentType(contentType)
+                .header("Content-Disposition", "attachment; filename=" + filename)
+                .body(arquivo);
     }
 
     @PreAuthorize("hasRole('FF_FOLHA_PAGAMENTO_LISTAR')")

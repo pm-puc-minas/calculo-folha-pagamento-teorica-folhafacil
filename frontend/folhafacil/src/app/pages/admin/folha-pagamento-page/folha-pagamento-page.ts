@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Table } from 'primeng/table';
@@ -19,6 +19,9 @@ import { FuncionarioService } from '../../../services/funcionario.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FuncionarioFilterDTO, FuncionarioResponseDTO } from '../../../models/funcionario.model';
 import { Select } from 'primeng/select';
+import { Checkbox } from 'primeng/checkbox';
+import { Popover } from 'primeng/popover';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-folha-pagamento-page',
@@ -35,12 +38,16 @@ import { Select } from 'primeng/select';
     ReactiveFormsModule,
     ConfirmPopupModule,
     MultiSelectModule,
-    Select
+    Select,
+    Checkbox,
+    Popover,
+    PopoverModule
   ],
   templateUrl: './folha-pagamento-page.html',
   styleUrl: './folha-pagamento-page.css',
   providers: [ConfirmationService]
 })
+
 export class FolhaPagamentoPage {
   service = inject(FolhaPagamentoService)
   funcionarisoService = inject(FuncionarioService)
@@ -49,6 +56,7 @@ export class FolhaPagamentoPage {
   cdr = inject(ChangeDetectorRef)
 
   searchForm: FormGroup;
+  exportarForm: FormGroup;
 
   folhaDePagamentos!: FolhaPagamentoResponseDTO[]
   beneficios!: FolhaPagamentoBeneficioResponseDTO[]
@@ -72,18 +80,29 @@ export class FolhaPagamentoPage {
     {label: "PAGO", value: "PAGO"}
   ]
 
+  @ViewChild('op') op!: Popover;
+
   constructor(private fb: FormBuilder) {
     this.searchForm = this.fb.group({
-      ids: [[]],
       data: [new Date(this.hoje.getFullYear(), this.hoje.getMonth(), 1)],
       funcionarios: [[]],
       status: [],
       tipoFuncionario: []
     });
+
+    this.exportarForm = this.fb.group({
+      type: [],
+      horasExtras: [false],
+      beneficios: [false]
+    })
 	}
 
   ngOnInit(){
     this.buscarFuncionarios()
+  }
+
+  toggle(event: any) {
+    this.op.toggle(event);
   }
 
   selectIds(){
@@ -134,7 +153,6 @@ export class FolhaPagamentoPage {
       next : (res: FuncionarioResponseDTO[]) =>{
         this.funcionarios = [...res]
         this.cdr.markForCheck();
-        console.log(res)
       }
     })
   }
@@ -197,9 +215,34 @@ export class FolhaPagamentoPage {
         })
       },
       reject: () => {
-        console.log('sai')
       }
     });
+  }
+
+  exportar(type: string){
+    this.exportarForm.get("type")?.setValue(type);
+    
+    this.service.exportar(this.selectIds(), this.exportarForm.value).subscribe(res => {
+      const contentDisposition = res.headers.get('Content-Disposition');
+      let fileName = 'arquivo.bin';
+
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match && match[1]) {
+          fileName = match[1];
+        }
+      }
+
+      const blob = new Blob([res.body as BlobPart], {
+        type: res.headers.get('Content-Type') || 'application/octet-stream'
+      });
+
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    });
+
   }
 
   getServityStatus(s: string){

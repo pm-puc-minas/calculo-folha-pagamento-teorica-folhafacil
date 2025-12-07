@@ -43,10 +43,9 @@ export class MeusPagamentosPage {
       next: (res: FolhaPagamentoResponseDTO[]) => {
         if(res.length > 0){
           this.pagamentos = [...res]
-          console.log(this.pagamentos)
+          this.cdr.markForCheck()
         }else{
           this.actions.info("Sem pagamentos encontrados")
-          this.cdr.markForCheck()
         }
       },
     })

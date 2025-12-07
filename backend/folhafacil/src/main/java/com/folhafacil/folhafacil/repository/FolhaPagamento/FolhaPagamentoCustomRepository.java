@@ -73,6 +73,49 @@ public class FolhaPagamentoCustomRepository {
         return typedQuery.getResultList();
     }
 
+    public List<FolhaPagamentoResponseDTO> buscar(List<Long> ids){
+        if(ids.isEmpty()){
+            return null;
+        }
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+
+        CriteriaQuery<FolhaPagamentoResponseDTO> query = cb.createQuery(FolhaPagamentoResponseDTO.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        Root<FolhaPagamento> root = query.from(FolhaPagamento.class);
+
+        Join<FolhaPagamento, Funcionario> funcionarioJoin = cb.treat(
+                root.join("idFuncionario", JoinType.INNER), Funcionario.class
+        );
+
+        query.select(cb.construct(
+                FolhaPagamentoResponseDTO.class,
+                root.get("id"),
+                root.get("idFuncionario").get("id"),
+                funcionarioJoin.get("usuario"),
+                root.get("status"),
+                root.get("data"),
+                root.get("INSS"),
+                root.get("FGTS"),
+                root.get("IRRF"),
+                root.get("totalValorImposto"),
+                root.get("totalValorBeneficios"),
+                root.get("totalHorasExtras"),
+                root.get("totalValorHorasExtras"),
+                root.get("salarioBruto"),
+                root.get("salarioLiquido")
+        ));
+
+        predicates.add(root.get("id").in(ids));
+
+        query.where(cb.and(predicates.toArray(new Predicate[0])));
+
+        TypedQuery<FolhaPagamentoResponseDTO> typedQuery = em.createQuery(query);
+        return typedQuery.getResultList();
+    }
+
     public List<FolhaPagamentoBeneficioResponseDTO> buscarBeneficios(Long idFolha){
         if(idFolha == null){
             return null;

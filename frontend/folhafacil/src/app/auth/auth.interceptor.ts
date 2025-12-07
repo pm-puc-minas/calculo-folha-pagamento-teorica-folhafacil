@@ -32,7 +32,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return next(retryReq);
           }),
           catchError((refreshErr) => {
-            console.error('Falha ao renovar o token', refreshErr);
             keycloakService.logout();
             return throwError(() => refreshErr);
           })

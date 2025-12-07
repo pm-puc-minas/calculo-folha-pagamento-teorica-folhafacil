@@ -25,6 +25,25 @@ export class FolhaPagamentoService{
         return this.http.post<FolhaPagamentoResponseDTO[]>(`${this.url}/buscar`, {... f})
     }
 
+    exportar(ids: number[], form: any) {
+        const params = {
+            type: form.type,
+            horaExtra: form.horasExtras,
+            beneficios: form.beneficios
+        };
+
+        return this.http.post(
+            `${this.url}/exportar`,
+            ids,                              
+            {
+            params,
+            responseType: 'arraybuffer',
+            observe: 'response'
+            }
+        );
+    }
+
+
     buscarBeneficios(id: number) : Observable<FolhaPagamentoBeneficioResponseDTO[]>{
         return this.http.get<FolhaPagamentoBeneficioResponseDTO[]>(`${this.url}/${id}/beneficios`)
     }

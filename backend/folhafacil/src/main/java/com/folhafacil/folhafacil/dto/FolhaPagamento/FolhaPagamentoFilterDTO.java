@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class FolhaPagamentoFilterDTO {
-    private List<Long> ids;
     private LocalDate data;
     private List<String> funcionarios;
     private StatusFolhaPagamento status;

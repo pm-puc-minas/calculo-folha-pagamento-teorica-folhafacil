@@ -47,7 +47,6 @@ export class KeyCloakService {
         return of(res.access_token);
       }),
       catchError((err) => {
-        console.error('Erro ao renovar o token', err);
         this.logout();
         return throwError(() => err);
       })

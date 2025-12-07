@@ -27,7 +27,6 @@ export type FolhaPagamentoHoraExtraResponseDTO = {
 }
 
 export type FolhaPagamentoFilterDTO = {
-    ids: number[];
     data: Date;
     funcionarios: string[];
     status: string;

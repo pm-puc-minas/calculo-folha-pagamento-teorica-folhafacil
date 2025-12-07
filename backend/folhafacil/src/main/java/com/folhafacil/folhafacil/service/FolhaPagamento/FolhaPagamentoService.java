@@ -6,6 +6,7 @@ import com.folhafacil.folhafacil.dto.FolhaPagamento.FolhaPagamentoHoraExtraRespo
 import com.folhafacil.folhafacil.dto.FolhaPagamento.FolhaPagamentoResponseDTO;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface FolhaPagamentoService {
@@ -14,6 +15,8 @@ public interface FolhaPagamentoService {
     public void pagarFolhaPagamento(List<Long> ids, Jwt token) throws RuntimeException;
 
     public List<FolhaPagamentoResponseDTO> buscar(FolhaPagamentoFilterDTO f);
+
+    public byte[] exportar(String type, Boolean horasExtras, Boolean beneficios, List<Long> ids) throws IOException ;
 
     public List<FolhaPagamentoBeneficioResponseDTO> buscarBeneficios(Long idFolha);
 
