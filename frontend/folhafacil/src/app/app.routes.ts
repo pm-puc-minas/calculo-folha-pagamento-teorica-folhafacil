@@ -11,6 +11,7 @@ import { FolhaPagamentoPage } from './pages/admin/folha-pagamento-page/folha-pag
 import { MeusBeneficiosPage } from './pages/funcionario/meus-beneficios-page/meus-beneficios-page';
 import { MeusPagamentosPage } from './pages/funcionario/meus-pagamentos-page/meus-pagamentos-page';
 import { DashboardPage } from './pages/dashboard/dashboard';
+import { HorasExtrasPage } from './pages/admin/horas-extras-page/horas-extras-page';
 
 export const routes: Routes = [
 	{ path: "", redirectTo: "login", pathMatch: "full" },
@@ -60,6 +61,12 @@ export const routes: Routes = [
 						canActivate: [RoleCanMatch],
 						data : { role : 'FF_BENEFICIO_LISTAR'}
 					},
+					{
+						path: "horas-extras",
+						component: HorasExtrasPage,
+						canActivate: [RoleCanMatch],
+						data: { role: 'FF_HORAS_EXTRAS_LISTAR'}
+					}
 				],
 			},
 			{

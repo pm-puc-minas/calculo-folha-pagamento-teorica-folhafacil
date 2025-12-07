@@ -17,6 +17,10 @@ export class FolhaPagamentoService{
         return this.http.get(`${this.url}/gerar`)
     }
 
+    pagar(ids: number[]){
+        return this.http.post(`${this.url}/pagar`, ids)
+    }
+
     buscar(f: FolhaPagamentoFilterDTO) : Observable<FolhaPagamentoResponseDTO[]>{
         return this.http.post<FolhaPagamentoResponseDTO[]>(`${this.url}/buscar`, {... f})
     }

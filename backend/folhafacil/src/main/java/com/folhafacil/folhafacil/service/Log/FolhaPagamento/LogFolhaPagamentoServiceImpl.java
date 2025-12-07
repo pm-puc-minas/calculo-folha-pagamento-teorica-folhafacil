@@ -41,6 +41,20 @@ public class LogFolhaPagamentoServiceImpl implements LogFolhaPagamentoService {
         return logFolhaPagamentoRepository.save(e);
     }
 
+    public LogFolhaPagamento gerarLogPagamento(String uid, int size){
+        LogFolhaPagamento e = new LogFolhaPagamento();
+
+        Funcionario f = new Funcionario();
+        f.setId(uid);
+        e.setIdResponsavel(f);
+
+        e.setMensagem("O usuário " + uid + " realizou o pagamento referenta a " +  size + " folhas");
+        e.setData(LocalDateTime.now());
+        e.setTipo(TipoLogFolhaPagamento.PAGAMENTO);
+
+        return logFolhaPagamentoRepository.save(e);
+    }
+
     @Override
     public List<LogFolhaPagamentoResponseDTO> buscar(LogFilterDTO filter){
         return logFolhaPagamentoCustomRepository.buscar(filter);

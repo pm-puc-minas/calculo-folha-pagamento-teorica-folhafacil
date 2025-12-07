@@ -66,17 +66,24 @@ export class MainPage {
         })
       }
 
-      if(this.keyclaokService.hasRole("FF_LOGS_LISTAR")){
-        route.routes.push({
-          name: 'Logs',
-          route: 'admin/logs'
-        })
-      }
-
       if(this.keyclaokService.hasRole("FF_BENEFICIO_LISTAR")){
         route.routes.push({
           name: 'Benefícios',
           route: 'admin/beneficios'
+        })
+      }
+
+      if(this.keyclaokService.hasRole("FF_HORAS_EXTRAS_LISTAR")){
+        route.routes.push({
+          name: 'Horas Extras',
+          route: 'admin/horas-extras'
+        })
+      }
+
+      if(this.keyclaokService.hasRole("FF_LOGS_LISTAR")){
+        route.routes.push({
+          name: 'Logs',
+          route: 'admin/logs'
         })
       }
 
@@ -93,7 +100,7 @@ export class MainPage {
 
     if(this.keyclaokService.hasRole("FF_MINHA_HORA_EXTRA_LISTAR")){
       route.routes.push({
-        name: 'Hora Extra',
+        name: 'Minhas Horas Extras',
         route: 'funcionario/hora-extra'
       })
     }

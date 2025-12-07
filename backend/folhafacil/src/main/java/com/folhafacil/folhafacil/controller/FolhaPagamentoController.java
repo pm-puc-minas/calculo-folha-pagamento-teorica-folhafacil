@@ -25,6 +25,12 @@ public class FolhaPagamentoController {
         service.gerarFolhaPagamento(jtw);
     }
 
+    @PreAuthorize("hasRole('FF_FOLHA_PAGAMENTO_PAGAR')")
+    @PostMapping(value = "pagar")
+    public void pagarFolhaPagamento(@RequestBody List<Long> ids,@AuthenticationPrincipal Jwt token) throws RuntimeException{
+        service.pagarFolhaPagamento(ids, token);
+    }
+
     @PreAuthorize("hasRole('FF_FOLHA_PAGAMENTO_LISTAR')")
     @PostMapping(value = "buscar")
     public List<FolhaPagamentoResponseDTO> buscar(@RequestBody FolhaPagamentoFilterDTO f){

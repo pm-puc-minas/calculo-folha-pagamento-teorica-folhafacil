@@ -78,6 +78,26 @@ public class FolhaPagamentoServiceImpl extends ServiceGenerico<FolhaPagamento, L
         }
     }
 
+    @Override
+    public void pagarFolhaPagamento(List<Long> ids, Jwt token) throws RuntimeException{
+        try {
+            int size = ids.size();
+            LogFolhaPagamento lfp = logFolhaPagamentoServiceImpl.gerarLogPagamento(keycloakService.recuperarUID(token),size);
+            for(Long id : ids){
+                FolhaPagamento fp = folhaPagamentoRepository.findById(id).get();
+                if(fp.getStatus().equals(StatusFolhaPagamento.PAGO)){
+                    LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogErro(lfp.getId(), fp);
+                }else if(fp.getStatus().equals(StatusFolhaPagamento.PENDENTE)){
+                    fp.setStatus(StatusFolhaPagamento.PAGO);
+                    folhaPagamentoRepository.save(fp);
+                    LogSubFolhaPagamento lsfp = logSubFolhaPagamentoServiceImpl.gerarLogPago(lfp.getId(), fp);
+                }
+            }
+        }catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public FolhaPagamento gerarPorFuncionario(Funcionario f, LocalDate data, FolhaPagamento e) throws RuntimeException {
         try{
             e.setIdFuncionario(f);

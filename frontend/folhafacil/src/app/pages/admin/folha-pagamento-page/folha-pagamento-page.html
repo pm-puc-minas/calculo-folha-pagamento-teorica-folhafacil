@@ -84,18 +84,46 @@
                 </main>
         </div>
 </p-dialog>
+<main>
+    <div class="flex flex-row space-x-2">
+        <h1 class="text-2xl text-main-500">Filtros</h1>
+        <p-button label="Limpar" size="small" (click)="limparSearch()" icon="pi pi-filter-slash" iconPos="right"/> 
+    </div>
+    <form [formGroup]="searchForm" class="flex flex-row items-center center mt-1 space-x-2">
+        <p-floatlabel variant="on" styleClass="w-30">
+            <p-datepicker inputId="on_label" class="w-full" showIcon iconDisplay="input" dateFormat="mm/yy" view="month" [readonlyInput]="true" appendTo="body" formControlName="data" fluid/>
+            <label for="on_label">Data</label>
+        </p-floatlabel>
+        <p-floatlabel class="w-70" variant="on">
+            <p-multiselect id="on_label"  [options]="funcionarios" optionLabel="nome" optionValue="id" class="w-full" formControlName="funcionarios" />
+            <label for="on_label">Funcionários</label>
+        </p-floatlabel>
+        <div class="w-50">
+            <p-floatlabel variant="on" styleClass="w-full">
+                <p-select inputId="on_label" [options]="cargos" optionLabel="name" optionValue="value" class="w-full" formControlName="tipoFuncionario" />
+                <label for="on_label">Cargo</label>
+            </p-floatlabel>
+        </div>
+        <div class="w-50">
+            <p-floatlabel variant="on" styleClass="w-full">
+                <p-select inputId="on_label" [options]="status" optionLabel="label" optionValue="value" class="w-full" formControlName="status" />
+                <label for="on_label">Status</label>
+            </p-floatlabel>
+        </div>
+    </form>
+</main>
 <main class="w-full mt-5">
     <div class="w-full">
         <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Folha Pagamento</div>
     </div>
     <div class="card">
-        <p-table [value]="folhaDePagamentos" [(selection)]="selectedItens" (selectionChange)="selectionChange($event)" dataKey="id" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
+        <p-table [value]="folhaDePagamentos" [(selection)]="selectedItens" dataKey="id" sortField="price" [sortOrder]="-1" [scrollable]="true" scrollHeight="60vh"  [tableStyle]="{ 'min-width': '60rem' }">
             <ng-template #header class="bg-main-100">
                 <tr>
                     <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
                     <th pSortableColumn="usuarioFuncionario" style="min-width:15rem">
                         <div class="flex items-center gap-2">
-                            Funcionario
+                            Funcionário
                             <p-sortIcon field="usuarioFuncionario" />
                         </div>
                     </th>
@@ -190,10 +218,10 @@
                     <td><p-tag [value]="'-R$' + folhaDePagamento.irrf" severity="danger"></p-tag></td>
                     <td><p-tag [value]="'-R$' + folhaDePagamento.totalValorImposto" severity="danger"></p-tag></td>
                     <td><p-tag [value]="'+R$' + folhaDePagamento.totalValorBeneficios" severity="success"></p-tag></td>
-                    <td><p-button icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarBeneficios(folhaDePagamento.id)" /></td>
+                    <td><p-button *ngIf="folhaDePagamento.totalValorBeneficios > 0" icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarBeneficios(folhaDePagamento.id)" /></td>
                     <td>{{ getHoras(folhaDePagamento.totalHorasExtras) }}</td>
                     <td><p-tag [value]="'+R$' + folhaDePagamento.totalValorHorasExtras" severity="success"></p-tag></td>
-                    <td><p-button icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarHorasExtras(folhaDePagamento.id)" /></td>
+                    <td><p-button *ngIf="folhaDePagamento.totalValorHorasExtras > 0" icon="pi pi-list" [rounded]="true" styleClass="p-list" (onClick)="buscarHorasExtras(folhaDePagamento.id)" /></td>
                     <td>R${{ folhaDePagamento.salarioBruto }}</td>
                     <td>R${{ folhaDePagamento.salarioLiquido }}</td>
                 </tr>
@@ -218,6 +246,20 @@
                     <p-button label="Gerar/Atualizar" icon="pi pi-sync" (onClick)="gerar($event)" />
                 </div>
                 <p-button label="Pesquisar" icon="pi pi-search" (onClick)="buscar()"/> 
+                <div class="card flex justify-center gap-2">
+                    <p-confirmpopup #cp>
+                        <ng-template #headless let-message>
+                            <div class="rounded p-4">
+                                <span>{{ message.message }}</span>
+                                <div class="flex items-center gap-2 mt-4">
+                                    <p-button (onClick)="cp.onAccept()" label="Pagar" size="small" />
+                                    <p-button (onClick)="cp.onReject()" label="Cancelar" styleClass="p-danger" size="small"/>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-confirmpopup>
+                    <p-button label="Pagar" icon="pi pi-wallet" (onClick)="pagar($event)" />
+                </div>
             </div>
         </div>
     </div>

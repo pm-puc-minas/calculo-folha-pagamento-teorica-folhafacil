@@ -83,6 +83,11 @@ public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> imple
     }
 
     @Override
+    public List<HoraExtraReponseDTO> buscar(HoraExtraFilterDTO f){
+        return horaExtraCustomRepository.buscar(f);
+    }
+
+    @Override
     public List<HoraExtraReponseDTO> minhasHoras(Jwt jwt) {
         String uid = keycloakService.recuperarUID(jwt);
         HoraExtraFilterDTO f = new HoraExtraFilterDTO();

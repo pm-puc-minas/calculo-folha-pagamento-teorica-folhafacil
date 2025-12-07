@@ -15,6 +15,7 @@ public class HoraExtraReponseDTO {
     private Long id;
     private String idFuncionario;
     private String usuario;
+    private String nomeFuncionario;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
     private String descricao;

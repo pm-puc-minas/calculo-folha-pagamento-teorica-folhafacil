@@ -23,7 +23,6 @@ import { CarouselModule } from 'primeng/carousel';
 import { SelectButton } from 'primeng/selectbutton';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MaskPipe } from '../../../shared/mask-pipe'
-import { isFormEmpty } from '../../../shared/utils/form'
 
 @Component({
   selector: 'app-funcionarios-page',

@@ -40,6 +40,7 @@ public class HoraExtraCustomRepository extends RepositorioGenerico<HoraExtra> {
                 root.get("id"),
                 root.get("idFuncionario").get("id"),
                 funcionarioJoin.get("usuario"),
+                funcionarioJoin.get("nome"),
                 root.get("dataInicio"),
                 root.get("dataFim"),
                 root.get("descricao"),

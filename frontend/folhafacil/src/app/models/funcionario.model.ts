@@ -23,11 +23,11 @@ export type FuncionarioBeneficoDTO = {
 }
 
 export type FuncionarioFilterDTO = {
-    nome: string;
-    cpf: string;
-    email: string;
-    cargo: string;
-    status : boolean;
+    nome: string | null;
+    cpf: string | null;
+    email: string | null;
+    cargo: string | null;
+    status : boolean | null;
     beneficios: number[];
 }
 

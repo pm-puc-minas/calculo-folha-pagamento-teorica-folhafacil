@@ -11,6 +11,8 @@ import java.util.List;
 public interface FolhaPagamentoService {
     public void gerarFolhaPagamento(Jwt token) throws RuntimeException;
 
+    public void pagarFolhaPagamento(List<Long> ids, Jwt token) throws RuntimeException;
+
     public List<FolhaPagamentoResponseDTO> buscar(FolhaPagamentoFilterDTO f);
 
     public List<FolhaPagamentoBeneficioResponseDTO> buscarBeneficios(Long idFolha);

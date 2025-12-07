@@ -73,4 +73,9 @@ export class LoginPage {
       },
     });
   }
+
+  forgotPassword() {
+    this.KeyCloakService.redirectToForgotPassword();
+  }
+
 }

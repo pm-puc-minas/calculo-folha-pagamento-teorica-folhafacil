@@ -1,0 +1,100 @@
+<main>
+    <div class="flex flex-row space-x-2">
+        <h1 class="text-2xl text-main-500">Filtros</h1>
+        <p-button label="Limpar" size="small" (click)="limparSearch()" icon="pi pi-filter-slash" iconPos="right"/> 
+    </div>
+    <form [formGroup]="searchForm" class="flex flex-row items-center center mt-1 space-x-2">
+        <div class="w-70">
+            <p-floatlabel variant="on" styleClass="w-full">
+                <p-select inputId="on_label" [options]="funcionarios" optionLabel="nome" optionValue="id" class="w-full" formControlName="idFuncionario" />
+                <label for="on_label">Funcionário</label>
+            </p-floatlabel>
+        </div> 
+        <p-floatlabel variant="on" styleClass="w-30">
+            <p-datepicker inputId="on_label" showIcon iconDisplay="input" dateFormat="dd/mm/yy" appendTo="body" formControlName="dataInicio" fluid/>
+            <label for="on_label">Data Inicial</label>
+        </p-floatlabel>
+        <h2 class="text-xl text-main-500">-</h2>
+        <p-floatlabel variant="on" styleClass="w-30">
+            <p-datepicker inputId="on_label" showIcon iconDisplay="input" dateFormat="dd/mm/yy" appendTo="body" formControlName="dataFim" fluid/>
+            <label for="on_label">Data Final</label>
+        </p-floatlabel>
+    </form>
+</main>
+<main class="w-full mt-5">
+    <div class="w-full">
+        <div class="w-full p-4 bg-main-500 text-center text-white text-1xl font-semibold">Horas Extras</div>
+    </div>
+    <div class="card">
+        <p-table [value]="horaExtras || []" sortField="price" [sortOrder]="-1" [scrollable]="true"
+            scrollHeight="60vh" [tableStyle]="{ 'min-width': '60rem' }">
+            <ng-template #header class="bg-main-100">
+                <tr>
+                    <th pSortableColumn="nomeFuncionario" style="width:30%">
+                        Funcionário
+                        <p-sortIcon field="nomeFuncionario" />
+                    </th>
+                    <th pSortableColumn="dataInicio" style="width:15%">
+                        <div class="flex items-center gap-2">
+                            Inicio
+                            <p-sortIcon field="dataInicio" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="dataFim" style="width:15%">
+                        <div class="flex items-center gap-2">
+                            Fim
+                            <p-sortIcon field="dataFim" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="descricao" style="width:40%">
+                        <div class="flex items-center gap-2">
+                            Descrição
+                            <p-sortIcon field="descricao" />
+                        </div>
+                    </th>
+                    <th pSortableColumn="status" style="width:150px">
+                        <div class="flex items-center gap-2">
+                            Status
+                            <p-sortIcon field="status" />
+                        </div>
+                    </th>
+                    <th style="width:50px">
+                        <div class="flex items-center gap-2">
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-horaExtra>
+                <tr>
+                    <td><p-avatar [label]="getAvatar(horaExtra.usuario)" class="mr-2" [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle"/>{{ horaExtra.nomeFuncionario }}</td>
+                    <td>{{ horaExtra.dataInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>{{ horaExtra.dataFim | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td class="warp-col">{{ horaExtra.descricao }}</td>
+                    <td><p-tag [value]="horaExtra.status" [severity]="getServerityStatus(horaExtra.status)"></p-tag></td>
+                    <td>
+                        <div class="w-full flex flex-row justify-center space-x-3" *ngIf="horaExtra.status == 'CONCLUIDA'">
+                            <div class="card flex justify-center gap-2">
+                                <p-confirmpopup #cp>
+                                    <ng-template #headless let-message>
+                                        <div class="rounded p-4">
+                                            <span>{{ message.message }}</span>
+                                            <div class="flex items-center gap-2 mt-4">
+                                                <p-button (onClick)="cp.onAccept()" label="Cancelar" size="small" styleClass="p-danger" />
+                                                <p-button (onClick)="cp.onReject()" label="Sair" [text]="true" size="small"/>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </p-confirmpopup>
+                                <p-button icon="pi pi-times" [rounded]="true" styleClass="p-danger" (onClick)="cancelar($event, horaExtra.id)" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="w-full">
+        <div class="w-full p-4 bg-main-500">
+            <p-button label="Pesquisar" icon="pi pi-search" (onClick)="buscar()"/> 
+        </div>
+    </div>

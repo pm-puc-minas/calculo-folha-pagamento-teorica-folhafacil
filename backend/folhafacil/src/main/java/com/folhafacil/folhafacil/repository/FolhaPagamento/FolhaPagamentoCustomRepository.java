@@ -64,7 +64,7 @@ public class FolhaPagamentoCustomRepository {
         }
 
         if(f.getTipoFuncionario() != null) {
-            predicates.add(cb.equal(funcionarioJoin.get("tipo"), f.getTipoFuncionario()));
+            predicates.add(cb.equal(funcionarioJoin.get("cargo"), f.getTipoFuncionario()));
         }
 
         query.where(cb.and(predicates.toArray(new Predicate[0])));

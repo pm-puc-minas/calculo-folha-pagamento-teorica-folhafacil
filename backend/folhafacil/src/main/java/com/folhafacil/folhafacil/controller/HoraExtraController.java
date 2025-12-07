@@ -24,6 +24,12 @@ public class HoraExtraController {
         service.iniciar(d,jwt);
     }
 
+    @PreAuthorize("hasRole('FF_HORAS_EXTRAS_LISTAR')")
+    @PostMapping(value = "buscar")
+    public List<HoraExtraReponseDTO> buscar(@RequestBody HoraExtraFilterDTO f){
+        return service.buscar(f);
+    }
+
     @PreAuthorize("hasRole('FF_HORA_EXTRA_FINALIZAR')")
     @GetMapping(value = "{id}/finalizar")
     public void finalizar(@PathVariable Long id){

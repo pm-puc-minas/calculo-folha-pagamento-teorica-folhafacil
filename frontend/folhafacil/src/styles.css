@@ -142,3 +142,22 @@ body {
     background: var(--color-main-500) !important;
     color: white !important;
 }
+
+.hover{
+    color: var(--color-main-500);
+    cursor: pointer;
+}
+
+.p-datepicker-month-selected{
+    background: var(--color-main-700) !important;
+}
+
+.p-multiselect-option.p-multiselect-option-selected.p-focus{
+    background: var(--color-main-100) !important;
+    color: var(--color-main-700) !important;
+}
+
+.p-select-option.p-select-option-selected{
+    background: var(--color-main-100) !important;
+    color: var(--color-main-700) !important;
+}
