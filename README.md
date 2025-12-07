@@ -168,3 +168,10 @@ docker-compose up -d
 
 🟢 **Pronto!**  
 Seu ambiente **Folha Fácil** estará configurado e pronto para uso.
+
+
+
+
+**Video da aplicação Rodando**
+
+https://youtu.be/b9YxsdeF5Y0
