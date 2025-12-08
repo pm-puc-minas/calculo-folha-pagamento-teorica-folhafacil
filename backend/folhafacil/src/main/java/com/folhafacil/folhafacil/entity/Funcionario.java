@@ -9,11 +9,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Persistable;
+
 @Entity
 @Getter
 @Setter
 @Table(name = "Funcionario")
-public class Funcionario {
+public class Funcionario implements Persistable<String> {
     @Id
     @Column(name = "id", nullable = false)
     private String id; 
@@ -67,4 +69,23 @@ public class Funcionario {
 
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FuncionarioBeneficio> beneficios = new ArrayList<>();
+
+    @Transient // Indica que este campo não vai para o banco de dados
+    private boolean isNew = true;
+
+    @Override
+    public boolean isNew() {
+        return isNew;
+    }
+
+    // Se carregou do banco, não é novo
+    @PostLoad
+    void markNotNew() {
+        this.isNew = false;
+    }
+
+    // Permite mudar manualmente se precisarmos forçar uma atualização
+    public void setNew(boolean value) {
+        this.isNew = value;
+    }
 }

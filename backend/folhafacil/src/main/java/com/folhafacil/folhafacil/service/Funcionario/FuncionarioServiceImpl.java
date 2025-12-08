@@ -43,6 +43,20 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         this.funcionarioCustomRepository = funcionarioCustomRepository1;
     }
 
+    private String recuperarIdSeguro(Jwt t) {
+        try {
+            if (t != null) {
+                String uid = keycloakService.recuperarUID(t);
+                if (uid != null && !uid.isBlank()) {
+                    return uid;
+                }
+            }
+        } catch (Exception e) {
+            // Ignora erro de token e retorna padrão
+        }
+        return "SISTEMA"; 
+    }
+
     @Override
     public void salvar(FuncionarioDTO d, Jwt t) throws RuntimeException {
         try {
@@ -52,25 +66,40 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
             );
 
             if (d.getId() == null) {
-                String[] nameArr = d.getNome().split(" ");
+                String[] nameArr = d.getNome().trim().split("\\s+");
                 String username = nameArr[0] + "." + nameArr[nameArr.length - 1];
+                username = username.toLowerCase();
                 String password = "FolhaFacil2025";
+                
                 String uid = keycloakService.criarUsuario(username, d.getEmail(), nameArr[0], nameArr[nameArr.length - 1], password, d.getCargo());
+                
                 e.setUsuario(username);
                 e.setId(uid);
-                e.setStatus(Funcionario.HABILITADO);
+                e.setStatus(Funcionario.HABILITADO); // Na criação, forçamos HABILITADO
 
                 funcionarioRepository.save(e);
-                logFuncionarioServiceImpl.gerarLogCriado(keycloakService.recuperarUID(t), e.getId());
+                
+                logFuncionarioServiceImpl.gerarLogCriado(recuperarIdSeguro(t), e.getId());
                 
             } else {
-                String[] nameArr = d.getNome().split(" ");
+                String[] nameArr = d.getNome().trim().split("\\s+");
                 String username = nameArr[0] + "." + nameArr[nameArr.length - 1];
+                username = username.toLowerCase();
                 e.setUsuario(username);
+
+                Optional<Funcionario> existente = funcionarioRepository.findById(d.getId());
+                if (existente.isPresent()) {
+                    e.setStatus(existente.get().getStatus());
+                } else {
+                    e.setStatus(Funcionario.HABILITADO); // Fallback se não encontrar
+                }
+
+                e.setNew(false);
+
                 keycloakService.removerUsuarioDeTodosOsGrupos(d.getId());
                 keycloakService.adicionarUsuarioAoGrupo(d.getId(),d.getCargo());
                 funcionarioRepository.save(e);
-                logFuncionarioServiceImpl.gerarLogEditado(keycloakService.recuperarUID(t), e.getId());
+                logFuncionarioServiceImpl.gerarLogEditado(recuperarIdSeguro(t), e.getId());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
@@ -104,11 +133,13 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         keycloakService.ativarUsuario(uid);
         f.setStatus(Funcionario.HABILITADO);
         funcionarioRepository.save(f);
-        logFuncionarioServiceImpl.gerarLogHabilitado(keycloakService.recuperarUID(t), f.getId());
+        logFuncionarioServiceImpl.gerarLogHabilitado(recuperarIdSeguro(t), f.getId());
     }
 
     @Override
     public void desabilitar(String uid, Jwt t) throws RuntimeException {
+        String idLogado = recuperarIdSeguro(t);
+
         if(uid == keycloakService.recuperarUID(t)) {
             throw new RuntimeException("Você não pode desabilitar sua propria conta");
         }
@@ -122,7 +153,7 @@ public class FuncionarioServiceImpl extends ServiceGenerico<Funcionario, String>
         keycloakService.desativarUsuario(uid);
         f.setStatus(Funcionario.DESABILITADO);
         funcionarioRepository.save(f);
-        logFuncionarioServiceImpl.gerarLogDesativado(keycloakService.recuperarUID(t), f.getId());
+        logFuncionarioServiceImpl.gerarLogDesativado(idLogado, f.getId());
     }
 
     public List<Funcionario> findByStatus(Boolean status) {

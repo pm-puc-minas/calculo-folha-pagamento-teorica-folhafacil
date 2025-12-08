@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class LogFilterDTO {
+    private Long id;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
 }

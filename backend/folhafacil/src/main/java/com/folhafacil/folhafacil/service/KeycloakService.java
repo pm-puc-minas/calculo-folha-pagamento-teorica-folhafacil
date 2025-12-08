@@ -36,6 +36,7 @@ public class KeycloakService {
         user.setFirstName(primeiroNome);
         user.setLastName(ultimoNome);
         user.setEnabled(true);
+        user.setEmailVerified(true);
 
         var response = usersResource.create(user);
         if (response.getStatus() == 201) {
@@ -53,7 +54,18 @@ public class KeycloakService {
             }
 
             return userId;
+        }else if (response.getStatus() == 409) {
+            List<UserRepresentation> existentes = usersResource.search(username);
+            if (!existentes.isEmpty()) {
+                String existingId = existentes.get(0).getId();
+                // Garante que ele esteja no grupo certo mesmo se já existia
+                if (nomeGrupo != null && !nomeGrupo.isBlank()) {
+                    try { adicionarUsuarioAoGrupo(existingId, nomeGrupo); } catch (Exception ignored) {}
+                }
+                return existingId;
+            }
         }
+        
         return null;
     }
 

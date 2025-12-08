@@ -42,14 +42,28 @@ public class HoraExtraServiceImpl extends ServiceGenerico<HoraExtra, Long> imple
     @Override
     public void iniciar(HoraExtraDTO d, Jwt token) throws RuntimeException {
         try {
-            String uid = keycloakService.recuperarUID(token);
             HoraExtra e = new HoraExtra();
 
             Funcionario f = new Funcionario();
-            f.setId(uid);
-            e.setIdFuncionario(f);
+            try {
+                f.setNew(false); // Dizemos que este funcionário JÁ EXISTE no banco
+            } catch (Exception ignored) {}
 
-            e.setDataInicio(LocalDateTime.now());
+            if (d.getIdFuncionario() != null && !d.getIdFuncionario().isBlank()) {
+                f.setId(d.getIdFuncionario());
+            } else {
+                f.setId(keycloakService.recuperarUID(token));
+            }
+            e.setIdFuncionario(f);
+            // ---------------------------------------------------------
+
+            // Usa a data passada no JSON, ou Agora se estiver vazia
+            if (d.getDataInicio() != null) {
+                e.setDataInicio(d.getDataInicio());
+            } else {
+                e.setDataInicio(LocalDateTime.now());
+            }
+            
             e.setDescricao(d.getDescricao());
             e.setStatus(StatusHoraExtra.EM_ANDAMENTO);
 

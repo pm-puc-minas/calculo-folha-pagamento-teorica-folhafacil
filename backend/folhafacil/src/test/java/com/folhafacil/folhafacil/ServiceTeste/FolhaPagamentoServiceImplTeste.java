@@ -8,6 +8,7 @@ import com.folhafacil.folhafacil.entity.LogSubFolhaPagamento;
 import com.folhafacil.folhafacil.entity.HoraExtra;
 import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoCustomRepository;
 import com.folhafacil.folhafacil.repository.FolhaPagamento.FolhaPagamentoRepository;
+import com.folhafacil.folhafacil.repository.Funcionario.FuncionarioRepository;
 import com.folhafacil.folhafacil.service.Funcionario.FuncionarioServiceImpl;
 import com.folhafacil.folhafacil.service.HoraExtra.HoraExtraServiceImpl;
 import com.folhafacil.folhafacil.service.KeycloakService;
@@ -25,6 +26,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -39,6 +41,7 @@ class FolhaPagamentoServiceImplTeste {
     private FolhaPagamentoRepository folhaPagamentoRepository;
     private FolhaPagamentoCustomRepository folhaPagamentoCustomRepository;
     private LogSubFolhaPagamentoServiceImpl logSubFolhaPagamentoServiceImpl;
+    private FuncionarioRepository funcionarioRepository;
     private FolhaPagamentoServiceImpl service;
 
     private Jwt token;
@@ -57,6 +60,7 @@ class FolhaPagamentoServiceImplTeste {
         folhaPagamentoRepository = Mockito.mock(FolhaPagamentoRepository.class);
         folhaPagamentoCustomRepository = Mockito.mock(FolhaPagamentoCustomRepository.class);
         logSubFolhaPagamentoServiceImpl = Mockito.mock(LogSubFolhaPagamentoServiceImpl.class);
+        funcionarioRepository = Mockito.mock(FuncionarioRepository.class);
 
         service = new FolhaPagamentoServiceImpl(
                 funcionarioServiceImpl,
@@ -65,7 +69,8 @@ class FolhaPagamentoServiceImplTeste {
                 keycloakService,
                 folhaPagamentoRepository,
                 folhaPagamentoCustomRepository,
-                logSubFolhaPagamentoServiceImpl
+                logSubFolhaPagamentoServiceImpl,
+                funcionarioRepository
         );
 
         token = Mockito.mock(Jwt.class);
@@ -88,6 +93,9 @@ class FolhaPagamentoServiceImplTeste {
 
         logFolhaPagamento = new LogFolhaPagamento();
         logFolhaPagamento.setId(1L);
+
+        // Importante: Configura o mock para devolver o funcionario quando o serviço chamar findById
+        when(funcionarioRepository.findById(anyString())).thenReturn(Optional.of(funcionario));
     }
 
     @Test
